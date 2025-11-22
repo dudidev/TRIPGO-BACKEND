@@ -1,9 +1,9 @@
-import { UsuarioRepo } from "../repositories/usuarioRepo";
-import { Usuario } from "../models/usuarioModel";
-import { hashPassword, comparePassword } from "../utils/password";
-import { signToken } from "../utils/jwt";
+const { UsuarioRepo } = require("../repositories/usuarioRepo");
+const { Usuario } = require("../models/usuarioModel");
+const { hashPassword, comparePassword } = require("../utils/password");
+const { signToken } = require("../utils/jwt");
 
-export class UsuarioService {
+class UsuarioService {
     static async crear(usuario: Usuario) {
         usuario.password_u = await hashPassword(usuario.password_u);
         const result = await UsuarioRepo.crear(usuario);
@@ -23,3 +23,4 @@ export class UsuarioService {
         return { user, token };
     }
 }
+module.exports = { UsuarioService };
