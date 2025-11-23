@@ -3,5 +3,4 @@ const {ServicioEstablecimientoController} = require("../controllers/servicioEsta
 
 const router = Router();
 router.post("/", ServicioEstablecimientoController.crear);
-
 module.exports = router;
