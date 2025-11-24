@@ -1,8 +1,8 @@
 
-import { pool } from "../config/db";
-import { Ubicacion } from "../models/ubicacionModel";
+const { pool } = require("../config/db");
+import type{ Ubicacion } from "../models/ubicacionModel";
 
-export class UbicacionRepo {
+class UbicacionRepo {
     static async listar() {
         const [rows] = await pool.query(`SELECT * FROM ubicaciones`);
         return rows;
@@ -16,3 +16,5 @@ export class UbicacionRepo {
         return { insertId: (res as any).insertId };
     }
 }
+
+module.exports = { UbicacionRepo };

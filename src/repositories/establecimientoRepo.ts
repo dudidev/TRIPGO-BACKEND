@@ -1,8 +1,8 @@
 // src/repositories/Establecimiento.repo.ts
-import { pool } from "../config/db";
-import { Establecimiento } from "../models/establecimientoModel";
+const { pool } = require("../config/db");
+import type { Establecimiento } from "../models/establecimientoModel";
 
-export class EstablecimientoRepo {
+class EstablecimientoRepo {
     static async listar() {
         const [rows] = await pool.query(`SELECT * FROM establecimiento`);
         return rows;
@@ -17,3 +17,4 @@ export class EstablecimientoRepo {
         return { insertId: (res as any).insertId };
     }
 }
+module.exports = { EstablecimientoRepo };

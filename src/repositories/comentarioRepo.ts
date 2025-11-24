@@ -1,6 +1,6 @@
 // src/repositories/Comentario.repo.ts
 const { pool } = require("../config/db");
-import { Comentario } from "../models/comentarioModel";
+import type { Comentario } from "../models/comentarioModel";
 
 class ComentarioRepo {
     static async crear(c: Comentario) {

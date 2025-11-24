@@ -1,7 +1,7 @@
-import { pool } from "../config/db";
-import { Usuario } from "../models/usuarioModel";
+const { pool } = require("../config/db");
+import type { Usuario } from "../models/usuarioModel";
 
-export class UsuarioRepo {
+class UsuarioRepo {
     static async crear(usuario: Usuario) {
         const [result] = await pool.query(
             `INSERT INTO usuarios (nombre_usuario, correo_usuario, password_u, rol) VALUES (?, ?, ?, ?)`,
@@ -21,3 +21,5 @@ export class UsuarioRepo {
         return rows;
     }
 }
+
+module.exports = { UsuarioRepo };
