@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const routes = require("./routes");
 const authRoutes = require("./routes/authRoutes");
-const pool = require("./config/db");
+const { pool } = require("./config/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
 
 dotenv.config();
