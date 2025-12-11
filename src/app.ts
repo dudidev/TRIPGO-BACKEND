@@ -6,6 +6,9 @@ const routes = require("./routes");
 const authRoutes = require("./routes/authRoutes");
 const { pool } = require("./config/db");
 const { errorHandler } = require("./middlewares/errorMiddleware");
+// al principio del archivo, junto a otras requires
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 
 dotenv.config();
 const app = express();
@@ -20,6 +23,15 @@ app.use("/api/auth", authRoutes);
 app.get("/", (req, res) => {
     res.send("Servidor funcionando correctamente 🚀");
 });
+
+// Sirve el JSON del spec: /api/docs.json
+app.get("/api/docs.json", (_req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
+
+// Sirve la UI de Swagger en /api/docs
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
 
 app.use(errorHandler);
 
