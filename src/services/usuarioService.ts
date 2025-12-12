@@ -1,5 +1,5 @@
 const { UsuarioRepo } = require("../repositories/usuarioRepo");
-const { Usuario } = require("../models/usuarioModel");
+import type { Usuario } from "../models/usuarioModel";
 const { hashPassword, comparePassword } = require("../utils/password");
 const { signToken } = require("../utils/jwt");
 
