@@ -11,7 +11,7 @@
     // See also https://aka.ms/tsconfig/module
     "module": "commonjs",
     "target": "es2020",
-    "types": [],
+    "types": ["node"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -43,6 +43,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
   },
-  "include": ["src"],
+  "include": ["src", "test-ssl.js"],
   "exclude": ["node_modules"]
 }
