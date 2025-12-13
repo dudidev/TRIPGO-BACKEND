@@ -1,7 +1,10 @@
 // src/services/Tipo.service.ts
-const { TipoRepo } =  require("../repositories/tipoRepo");
+const { TipoRepo } = require("../repositories/tipoRepo");
+
 class TipoService {
-    static async listar() { return TipoRepo.listar(); }
+    static async listar() {
+        return await TipoRepo.listar();
+    }
 }
 
 module.exports = { TipoService };

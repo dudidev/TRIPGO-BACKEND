@@ -1,4 +1,4 @@
-const { pool } = require("../config/db");
+const pool = require("../config/db");
 import type { Tipo } from "../models/tipoModel";
 
 class TipoRepo {
@@ -7,4 +7,5 @@ class TipoRepo {
         return rows;
     }
 }
+
 module.exports = { TipoRepo };
