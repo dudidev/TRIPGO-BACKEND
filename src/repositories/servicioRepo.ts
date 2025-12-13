@@ -1,4 +1,4 @@
-const { pool } = require("../config/db");
+const pool  = require("../config/db");
 import type { Servicio } from "../models/servicioModel";
 
 class ServicioRepo {
@@ -11,7 +11,6 @@ class ServicioRepo {
             `INSERT INTO servicios (nombre_servicio, descripcion, disponibilidad) VALUES (?, ?, ?)`,
             [s.nombre_servicio, s.descripcion, s.disponibilidad ? 1 : 0]
         );
-        // @ts-ignore
         return { insertId: (res as any).insertId };
     }
 }
