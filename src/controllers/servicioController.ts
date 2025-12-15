@@ -1,6 +1,6 @@
 // src/controllers/Servicio.controller.ts
 import type { Request, Response } from "express";
-const { ServicioService } = require("../services/servicioService");
+const  {ServicioService}  = require("../services/servicioService");
 
 class ServicioController {
     static async listar(req: Request, res: Response) {
