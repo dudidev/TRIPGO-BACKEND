@@ -1,5 +1,5 @@
 // src/repositories/Comentario.repo.ts
-const { pool } = require("../config/db");
+const pool = require("../config/db");
 import type { Comentario } from "../models/comentarioModel";
 
 class ComentarioRepo {
