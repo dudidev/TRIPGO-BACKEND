@@ -1,20 +1,17 @@
-// src/routes/index.ts
-const { Router } = require("express");
-import usuarioRoutes = require("./usuarioRoutes");
-import ubicacionRoutes = require("./ubicacionRoutes");
-import tipoRoutes = require("./tipoRoutes");
-import establecimientoRoutes = require("./establecimientoRoutes");
-import servicioRoutes = require("./servicioRoutes");
-import servicioEstablecimientoRoutes = require("./servicioEstablecimientosRoutes");
-import visitaRoutes = require("./visitaRoutes");
-import comentarioRoutes = require("./comentarioRoutes");
-import planeadorRoutes = require("./planeadorRoutes");
-import detallePlaneadorRoutes = require("./detallePlaneadorRoutes");
+const Router  = require("express");
+const usuarioRoutes = require("./usuarioRoutes");
+const tipoRoutes = require("./tipoRoutes");
+const establecimientoRoutes = require("./establecimientoRoutes");
+const servicioRoutes = require("./servicioRoutes");
+const servicioEstablecimientoRoutes = require("./servicioEstablecimientosRoutes");
+const visitaRoutes = require("./visitaRoutes");
+const comentarioRoutes = require("./comentarioRoutes");
+const planeadorRoutes = require("./planeadorRoutes");
+const detallePlaneadorRoutes = require("./detallePlaneadorRoutes");
 
 const router = Router();
 
 router.use("/usuarios", usuarioRoutes);
-router.use("/ubicaciones", ubicacionRoutes);
 router.use("/tipos", tipoRoutes);
 router.use("/establecimientos", establecimientoRoutes);
 router.use("/servicios", servicioRoutes);
