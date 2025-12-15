@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const SECRET_KEY = "clave_super_secreta"; // usa una variable de entorno en producción
+const SECRET_KEY = process.env.JWT_SECRET;
 const users: any[] = []; // simulación de base de datos temporal
 
 const registerUser = async (email: string, password: string) => {
