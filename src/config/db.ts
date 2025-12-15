@@ -3,11 +3,18 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
+const isProduction = process.env.NODE_ENV === "production";
 
-const sslOptions =
-  process.env.NODE_ENV === "production"
-    ? { rejectUnauthorized: true }
-    : { rejectUnauthorized: false };
+const sslOptions = isProduction
+  ? {
+      rejectUnauthorized: true,
+      ca: process.env.DB_SSL_CA
+        ? process.env.DB_SSL_CA.replace(/\\n/g, "\n")
+        : undefined,
+    }
+  : {
+      rejectUnauthorized: false,
+    };
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,               // tripgo-database.mysql.database.azure.com
