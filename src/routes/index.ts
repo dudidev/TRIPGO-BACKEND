@@ -1,4 +1,4 @@
-const Router  = require("express");
+const express  = require("express");
 const usuarioRoutes = require("./usuarioRoutes");
 const tipoRoutes = require("./tipoRoutes");
 const establecimientoRoutes = require("./establecimientoRoutes");
@@ -9,7 +9,7 @@ const comentarioRoutes = require("./comentarioRoutes");
 const planeadorRoutes = require("./planeadorRoutes");
 const detallePlaneadorRoutes = require("./detallePlaneadorRoutes");
 
-const router = Router();
+const router = express.Router();
 
 router.use("/usuarios", usuarioRoutes);
 router.use("/tipos", tipoRoutes);
