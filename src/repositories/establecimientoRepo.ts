@@ -1,5 +1,5 @@
 // src/repositories/Establecimiento.repo.ts
-const { pool } = require("../config/db");
+const pool = require("../config/db");
 import type { Establecimiento } from "../models/establecimientoModel";
 
 class EstablecimientoRepo {
