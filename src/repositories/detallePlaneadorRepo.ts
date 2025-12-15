@@ -1,5 +1,5 @@
-// src/repositories/DetallePlaneador.repo.ts
-const { pool } = require("../config/db");
+
+const pool = require("../config/db");
 import type { DetallePlaneador } from "../models/detallePlaneadorModel";
 
 class DetallePlaneadorRepo {
