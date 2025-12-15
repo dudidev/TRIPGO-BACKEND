@@ -11,7 +11,7 @@ class UsuarioService {
     }
 
     static async listar() {
-        return UsuarioRepo.listar();
+        return await UsuarioRepo.listar();
     }
 
     static async login(correo: string, password: string) {

@@ -1,4 +1,4 @@
 const { DetallePlaneadorRepo } = require("../repositories/detallePlaneadorRepo");
-class DetallePlaneadorService { static async crear(d: any) { return DetallePlaneadorRepo.crear(d); } }
+class DetallePlaneadorService { static async crear(d: any) { return await DetallePlaneadorRepo.crear(d); } }
 
 module.exports = { DetallePlaneadorService };
