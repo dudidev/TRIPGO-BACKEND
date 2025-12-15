@@ -1,4 +1,4 @@
-const { pool } = require("../config/db");
+const pool  = require("../config/db");
 import type { ServicioEstablecimiento } from "../models/servicioEstablecimiento";
 
 class ServicioEstablecimientoRepo {
