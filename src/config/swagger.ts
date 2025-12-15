@@ -4,17 +4,17 @@ const swaggerDefinition = {
   info: {
     title: "TripGO API",
     version: "1.0.0",
-    description: "API backend de TripGO — documentación generada con swagger-jsdoc",
+    description: "Doccumentación oficial del Backend de TripGO",
     contact: {
       name: "TripGO Team",
-      email: "dev@tripgo.example"
+      email: ""
     }
   },
   servers: [
     {
       url: process.env.NODE_ENV === "production"
-        ? `https://${process.env.AZURE_WEBSITE_HOSTNAME || "your-production-host"}`
-        : `http://localhost:${process.env.PORT || 4000}`,
+        ? `https://${process.env.AZURE_WEBSITE_HOSTNAME}`
+        : `http://localhost:${process.env.PORT}`,
       description: process.env.NODE_ENV === "production" ? "Producción" : "Desarrollo"
     }
   ],
@@ -39,12 +39,7 @@ const options = {
   swaggerDefinition,
   // Reemplaza las rutas si tu proyecto las tiene en src/routes, src/controllers, etc.
   apis: [
-    "./src/routes/*.ts",
-    "./src/controllers/*.ts",
-    "./src/models/*.ts",
-    // si usas js:
-    "./src/routes/*.js",
-    "./src/controllers/*.js"
+    "./src/routes/*.ts"
   ]
 };
 
