@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const routes = require("./routes");
 const authRoutes = require("./routes/authRoutes");
 const pool = require("./config/db");
-const {errorHandler}  = require("./middlewares/errorMiddleware");
+const { errorHandler } = require("./middlewares/errorMiddleware");
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
@@ -13,7 +13,14 @@ const swaggerSpec = require("./config/swagger");
 dotenv.config();
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        "http://localhost:4200",
+        "https://tripgoesp.netlify.app/"
+    ],
+    credentials: true
+}));
+
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
