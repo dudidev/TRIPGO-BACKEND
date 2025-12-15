@@ -1,21 +1,21 @@
 const { Router } = require("express");
-const { UsuarioController } = require("../controllers/usuarioControllers");
+const { register, login } = require("../controllers/authController");
 
 const router = Router();
 
 /**
  * @swagger
  * tags:
- *   name: Usuarios
- *   description: Gestión de usuarios
+ *   name: Auth
+ *   description: Autenticación de usuarios
  */
 
 /**
  * @swagger
- * /api/usuarios:
+ * /auth/register:
  *   post:
- *     summary: Crear un nuevo usuario
- *     tags: [Usuarios]
+ *     summary: Registrar un nuevo usuario
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -23,7 +23,6 @@ const router = Router();
  *           schema:
  *             type: object
  *             required:
- *               - nombre
  *               - email
  *               - password
  *             properties:
@@ -38,36 +37,18 @@ const router = Router();
  *                 example: 123456
  *     responses:
  *       201:
- *         description: Usuario creado correctamente
+ *         description: Usuario registrado correctamente
  *       400:
  *         description: Error en los datos enviados
  */
-router.post("/", UsuarioController.crear);
+router.post("/register", register);
 
 /**
  * @swagger
- * /api/usuarios:
- *   get:
- *     summary: Listar todos los usuarios
- *     tags: [Usuarios]
- *     responses:
- *       200:
- *         description: Lista de usuarios
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- */
-router.get("/", UsuarioController.listar);
-
-/**
- * @swagger
- * /api/usuarios/login:
+ * /auth/login:
  *   post:
- *     summary: Login de usuario
- *     tags: [Usuarios]
+ *     summary: Iniciar sesión
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -86,10 +67,10 @@ router.get("/", UsuarioController.listar);
  *                 example: 123456
  *     responses:
  *       200:
- *         description: Login exitoso
+ *         description: Login exitoso, retorna token JWT
  *       401:
  *         description: Credenciales inválidas
  */
-router.post("/login", UsuarioController.login);
+router.post("/login", login);
 
 module.exports = router;

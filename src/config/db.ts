@@ -1,14 +1,26 @@
-import mysql from "mysql2/promise";
-import dotenv from "dotenv";
+const mysql = require("mysql2/promise");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
-export const pool = mysql.createPool({
-    host: process.env.DB_HOST || "localhost",
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASS || "",
-    database: process.env.DB_NAME || "tripgo",
-    waitForConnections: true,
-    connectionLimit: parseInt(process.env.DB_CONN_LIMIT || "10", 10),
-    queueLimit: 0
+
+const sslOptions =
+  process.env.NODE_ENV === "production"
+    ? { rejectUnauthorized: true }
+    : { rejectUnauthorized: false };
+
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,               // tripgo-database.mysql.database.azure.com
+  user: process.env.DB_USER,               // tripgoAdmin
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  port: Number(process.env.DB_PORT) || 3306,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  ssl: sslOptions,
 });
+
+module.exports = pool;
+
+console.log("SSL usado:", sslOptions);

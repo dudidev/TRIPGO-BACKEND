@@ -1,7 +1,7 @@
-import { pool } from "../config/db";
-import { ServicioEstablecimiento } from "../models/servicioEstablecimiento";
+const pool  = require("../config/db");
+import type { ServicioEstablecimiento } from "../models/servicioEstablecimiento";
 
-export class ServicioEstablecimientoRepo {
+class ServicioEstablecimientoRepo {
     static async crear(s: ServicioEstablecimiento) {
         await pool.query(
             `INSERT INTO servicios_establecimiento (id_servicios, id_establecimiento, precio) VALUES (?, ?, ?)`,
@@ -10,3 +10,4 @@ export class ServicioEstablecimientoRepo {
         return { ok: true };
     }
 }
+module.exports = { ServicioEstablecimientoRepo };

@@ -1,21 +1,21 @@
 const { Router } = require("express");
-const {DetallePlaneadorController} = require("../controllers/detallePlaneadorController");
+const {ServicioEstablecimientoController} = require("../controllers/servicioEstablecimientoController");
 
 const router = Router();
 
 /**
  * @swagger
  * tags:
- *   name: DetallesPlaneador
- *   description: Gestión de detalles del planeador
+ *   name: ServiciosEstablecimientos
+ *   description: Relación entre servicios y establecimientos
  */
 
 /**
  * @swagger
- * /api/detalles-planeador:
+ * /api/servicios-establecimientos:
  *   post:
- *     summary: Crear detalle del planeador
- *     tags: [DetallesPlaneador]
+ *     summary: Asignar servicio a un establecimiento
+ *     tags: [ServiciosEstablecimientos]
  *     requestBody:
  *       required: true
  *       content:
@@ -23,21 +23,20 @@ const router = Router();
  *           schema:
  *             type: object
  *             required:
- *               - planeador_id
+ *               - servicio_id
  *               - establecimiento_id
  *             properties:
- *               planeador_id:
+ *               servicio_id:
  *                 type: integer
- *                 example: 1
+ *                 example: 2
  *               establecimiento_id:
  *                 type: integer
  *                 example: 5
  *     responses:
  *       201:
- *         description: Detalle del planeador creado
+ *         description: Servicio asignado al establecimiento
  *       400:
  *         description: Error en los datos
  */
-router.post("/", DetallePlaneadorController.crear);
-
+router.post("/", ServicioEstablecimientoController.crear);
 module.exports = router;

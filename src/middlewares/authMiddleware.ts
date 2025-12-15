@@ -1,22 +1,26 @@
-// src/middlewares/auth.ts
-import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "../utils/jwt";
+import type { Request, Response, NextFunction } from "express";
+const jwt = require("jsonwebtoken");
+const dotenv =  require("dotenv");
 
-export interface AuthRequest extends Request {
-    user?: any;
-}
+dotenv.config();
 
-export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
-    const header = req.headers.authorization;
-    if (!header || !header.startsWith("Bearer ")) {
-        return res.status(401).json({ ok: false, message: "No token provided" });
+const JWT_SECRET = process.env.JWT_SECRET;
+
+const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1]; // formato: Bearer <token>
+
+    if (!token) {
+        return res.status(401).json({ error: "Token requerido" });
     }
-    const token = header.split(" ")[1];
+
     try {
-        const payload = verifyToken(token);
-        req.user = payload;
+        const decoded = jwt.verify(token, JWT_SECRET);
+        (req as any).user = decoded; // guardamos los datos del usuario en la request
         next();
-    } catch (err) {
-        return res.status(401).json({ ok: false, message: "Invalid token" });
+    } catch (error) {
+        return res.status(403).json({ error: "Token inválido o expirado" });
     }
 };
+
+module.exports = { verifyToken };

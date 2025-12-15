@@ -1,8 +1,8 @@
 // src/repositories/Comentario.repo.ts
-import { pool } from "../config/db";
-import { Comentario } from "../models/comentarioModel";
+const pool = require("../config/db");
+import type { Comentario } from "../models/comentarioModel";
 
-export class ComentarioRepo {
+class ComentarioRepo {
     static async crear(c: Comentario) {
         const [res] = await pool.query(
             `INSERT INTO comentarios (comentario, id_usuario, id_ubicacion, id_establecimiento) VALUES (?, ?, ?, ?)`,
@@ -16,3 +16,5 @@ export class ComentarioRepo {
         return rows;
     }
 }
+
+module.exports = { ComentarioRepo };
