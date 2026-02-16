@@ -16,7 +16,7 @@ const app = express();
 app.use(cors({
     origin: [
         "http://localhost:4200",
-        "https://tripgoesp.netlify.app/"
+        "https://tripgoquindio.vercel.app/"
     ],
     credentials: true
 }));
@@ -47,7 +47,6 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(errorHandler);
 
-// Verificar conexión a la base de datos
 (async () => {
     try {
         const connection = await pool.getConnection();
