@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api", routes);
 app.use("/api/auth", authRoutes);
 app.get("/", (req, res) => {
-    res.send("Servidor funcionando correctamente 🚀");
+    res.send("Servidor funcionando correctamente");
 });
 
 
@@ -51,17 +51,11 @@ app.use(errorHandler);
 (async () => {
     try {
         const connection = await pool.getConnection();
-        console.log("✅ Conectado a la base de datos MySQL");
+        console.log("Conectado a la base de datos MySQL");
         connection.release();
     } catch (error) {
-        console.error("❌ Error al conectar a la base de datos:", error);
+        console.error("Error al conectar a la base de datos:", error);
     }
 })();
-
-// Puerto
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
 
 module.exports = app;
