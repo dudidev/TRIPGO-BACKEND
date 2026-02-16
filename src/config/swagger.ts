@@ -13,7 +13,7 @@ const swaggerDefinition = {
   servers: [
     {
       url: process.env.NODE_ENV === "production"
-        ? `https://tripgo-backend-arehbhbubshxdpg7.canadacentral-01.azurewebsites.net/`
+        ? `https://tripgo-backend-arehbhbubshxdpg7.chilecentral-01.azurewebsites.net/api`
         : `http://localhost:${process.env.PORT}`,
       description: process.env.NODE_ENV === "production" ? "Producción" : "Desarrollo"
     }
