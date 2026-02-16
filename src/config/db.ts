@@ -13,13 +13,9 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-
-  // 🔐 SSL correcto para Azure MySQL Flexible Server
   ssl: {
     rejectUnauthorized: false
   }
 });
 
 module.exports = pool;
-
-console.log("✅ Pool MySQL creado con SSL de Azure");
