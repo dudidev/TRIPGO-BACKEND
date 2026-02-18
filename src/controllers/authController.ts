@@ -3,7 +3,7 @@ const pool = require("../config/db");
 const bcrypt =  require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_tripgo";
 
 const register = async (req: Request, res: Response) => {
     try {
@@ -70,7 +70,7 @@ const login = async (req: Request, res: Response) => {
         const token = jwt.sign(
             { id: user.id, correo: user.correo_usuario, rol: user.rol },
             JWT_SECRET,
-            { expiresIn: "2h" }
+            { expiresIn: "10min" }
         );
 
         res.json({
