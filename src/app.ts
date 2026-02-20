@@ -19,9 +19,9 @@ const corsOptions = {
     origin: (origin, cb) => {
         if (!origin) return cb(null, true);
         
-        const allowedOrigins = [
-            "http://localhost:4200",
-            "https://tripgoquindio.vercel.app"
+        const allowedOrigins = ["*"
+            //"http://localhost:4200",
+            //"https://tripgoquindio.vercel.app"
         ];
         
         if (allowedOrigins.includes(origin) || vercelPreviewRegex.test(origin)) {
