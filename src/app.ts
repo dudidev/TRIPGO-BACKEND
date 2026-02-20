@@ -13,7 +13,14 @@ const swaggerSpec = require("./config/swagger");
 dotenv.config();
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        "http://localhost:4200",
+        "https://tripgoquindio.vercel.app/",
+        "https://tripgo-git-develop-dudidevs-projects.vercel.app/"
+    ],
+    credentials: true
+}));
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,7 +39,7 @@ if (process.env.NODE_ENV === "production") {
     });
 
     app.use(
-        "/api/docs",
+        "/docs",
         swaggerUi.serve,
         swaggerUi.setup(swaggerSpec, { explorer: true })
     );
