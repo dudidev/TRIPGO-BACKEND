@@ -30,7 +30,7 @@ app.use(cors({
 
         return callback(new Error(`CORS bloqueado para origin: ${origin}`));
     },
-    credentials: false,
+    //credentials: false,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
