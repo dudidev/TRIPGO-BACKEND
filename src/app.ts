@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const routes = require("./routes");
 const authRoutes = require("./routes/authRoutes");
 const pool = require("./config/db");
-const {errorHandler}  = require("./middlewares/errorMiddleware");
+const { errorHandler } = require("./middlewares/errorMiddleware");
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
@@ -13,14 +13,30 @@ const swaggerSpec = require("./config/swagger");
 dotenv.config();
 const app = express();
 
+const allowedOrigins = [
+    "http://localhost:4200",
+    "https://tripgoquindio.vercel.app",
+    "https://tripgo-git-develop-dudidevs-projects.vercel.app"
+];
+
 app.use(cors({
-    origin: [
-        "http://localhost:4200",
-        "https://tripgoquindio.vercel.app/",
-        "https://tripgo-git-develop-dudidevs-projects.vercel.app/"
-    ],
-    credentials: true
+    origin: function (origin, callback) {
+        // Permite llamadas sin Origin (Postman, curl, server-to-server)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        return callback(new Error(`CORS bloqueado para origin: ${origin}`));
+    },
+    credentials: false,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+// Responder preflight SIEMPRE
+app.options("*", cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
