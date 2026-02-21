@@ -12,7 +12,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/tipos:
+ * /tipos:
  *   get:
  *     summary: Listar tipos
  *     tags: [Tipos]

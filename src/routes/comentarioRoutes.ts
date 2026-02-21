@@ -12,7 +12,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/comentarios:
+ * /comentarios:
  *   post:
  *     summary: Crear un comentario
  *     tags: [Comentarios]
@@ -46,7 +46,7 @@ router.post("/", ComentarioController.crear);
 
 /**
  * @swagger
- * /api/comentarios/ubicacion/{id}:
+ * /comentarios/ubicacion/{id}:
  *   get:
  *     summary: Listar comentarios por ubicación
  *     tags: [Comentarios]
