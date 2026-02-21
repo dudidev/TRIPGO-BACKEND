@@ -18,12 +18,12 @@ const vercelPreviewRegex = /^https:\/\/tripgo-git-.+-dudidevs-projects\.vercel\.
 const corsOptions = {
     origin: (origin, cb) => {
         if (!origin) return cb(null, true);
-        
+
         const allowedOrigins = [
             "http://localhost:4200",
             "https://tripgoquindio.vercel.app"
         ];
-        
+
         if (allowedOrigins.includes(origin) || vercelPreviewRegex.test(origin)) {
             return cb(null, true);
         }
@@ -40,10 +40,10 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api", routes);
-app.use("/api/auth", authRoutes);
+app.use("/", routes);
+app.use("/auth", authRoutes);
 
-app.get("/", (req, res) => {
+app.get("/status", (req, res) => {
     res.send("Servidor funcionando correctamente");
 });
 
@@ -59,7 +59,11 @@ if (process.env.NODE_ENV === "production") {
         swaggerUi.setup(swaggerSpec, { explorer: true })
     );
 }
-
+app.use(
+    "/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, { explorer: true })
+);
 app.use(errorHandler);
 
 // Verificar conexión a la base de datos
