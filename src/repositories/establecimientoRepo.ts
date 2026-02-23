@@ -7,6 +7,20 @@ class EstablecimientoRepo {
         const [rows] = await pool.query(`SELECT * FROM establecimiento`);
         return rows;
     }
+
+    static async listarPorTownYCategory(town: string, category: string) {
+    const sql = `
+      SELECT e.*, t.nombre_tipo
+      FROM establecimiento e
+      JOIN tipos t ON e.tipo = t.id_tipo
+      WHERE LOWER(e.ubicacion) = LOWER(?)
+        AND LOWER(t.nombre_tipo) = LOWER(?)
+    `;
+
+    const [rows] = await pool.query(sql, [town, category]);
+    return rows;
+  }
+  
     static async crear(e: Establecimiento) {
         const [res] = await pool.query(
             `INSERT INTO establecimiento (nombre_establecimiento, direccion, ubicacion, horario_apertura, horario_cierre, estado, descripcion, id_propietario, telefono, correo, tipo)
@@ -16,5 +30,9 @@ class EstablecimientoRepo {
         // @ts-ignore
         return { insertId: (res as any).insertId };
     }
+
+
+
+    
 }
 module.exports = { EstablecimientoRepo };
