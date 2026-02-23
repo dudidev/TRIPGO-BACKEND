@@ -13,29 +13,14 @@ const swaggerSpec = require("./config/swagger");
 dotenv.config();
 const app = express();
 
-const vercelPreviewRegex = /^https:\/\/tripgo-git-.+-dudidevs-projects\.vercel\.app$/;
+app.use(cors({
+    origin: [
+        "http://localhost:4200",
+        "https://tripgoquindio.vercel.app/"
+    ],
+    credentials: true
+}));
 
-const corsOptions = {
-    origin: (origin, cb) => {
-        if (!origin) return cb(null, true);
-
-        const allowedOrigins = [
-            "http://localhost:4200",
-            "https://tripgoquindio.vercel.app"
-        ];
-
-        if (allowedOrigins.includes(origin) || vercelPreviewRegex.test(origin)) {
-            return cb(null, true);
-        }
-
-        console.log(`❌ CORS bloqueado: ${origin}`); // Para debug
-        return cb(new Error(`CORS bloqueado: ${origin}`));
-    },
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-};
-
-app.use(cors(corsOptions));
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -66,7 +51,6 @@ app.use(
 );
 app.use(errorHandler);
 
-// Verificar conexión a la base de datos
 (async () => {
     try {
         const connection = await pool.getConnection();

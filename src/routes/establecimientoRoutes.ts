@@ -3,6 +3,13 @@ const { EstablecimientoController } = require("../controllers/establecimientoCon
 
 const router = Router();
 
+
+
+/**
+ * 🔥 FILTRADO POR PUEBLO + CATEGORIA
+ * GET /api/establecimientos/:town/:category
+ */
+router.get("/:town/:category", EstablecimientoController.listarPorTownYCategory);
 /**
  * @swagger
  * tags:
@@ -38,12 +45,44 @@ router.get("/", EstablecimientoController.listar);
  *               - nombre
  *               - direccion
  *             properties:
- *               nombre:
+ *               nombre_establecimiento:
  *                 type: string
- *                 example: Hotel TripGO
+ *                 example: "Hotel TripGO"
  *               direccion:
  *                 type: string
- *                 example: Calle 123 #45-67
+ *                 example: "Calle 123 #45-67"
+ *               horario_apertura:
+ *                 type: string
+ *                 format: time
+ *                 example: "08:00:00"
+ *               horario_cierre:
+ *                 type: string
+ *                 format: time
+ *                 example: "20:00:00"
+ *               estado:
+ *                 type: string
+ *                 enum:
+ *                   - activo
+ *                   - inactivo
+ *                 example: "activo"
+ *               descripcion:
+ *                 type: string
+ *                 example: "Un lugar acogedor para todo tipo de viajeros."
+ *               id_propietario:
+ *                 type: integer
+ *                 example: 5
+ *               telefono:
+ *                 type: string
+ *                 example: "+573112345678"
+ *               correo:
+ *                 type: string
+ *                 example: "hotel@tripgo.com"
+ *               tipo:
+ *                 type: integer
+ *                 example: 2
+ *               comentarios:
+ *                 type: string
+ *                 example: "Excelente servicio y ubicación."
  *     responses:
  *       201:
  *         description: Establecimiento creado
