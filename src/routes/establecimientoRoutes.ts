@@ -19,7 +19,7 @@ router.get("/:town/:category", EstablecimientoController.listarPorTownYCategory)
 
 /**
  * @swagger
- * /api/establecimientos:
+ * /establecimientos:
  *   get:
  *     summary: Listar establecimientos
  *     tags: [Establecimientos]
@@ -31,7 +31,7 @@ router.get("/", EstablecimientoController.listar);
 
 /**
  * @swagger
- * /api/establecimientos:
+ * /establecimientos:
  *   post:
  *     summary: Crear establecimiento
  *     tags: [Establecimientos]

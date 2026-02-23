@@ -12,7 +12,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/servicios-establecimientos:
+ * /servicios-establecimientos:
  *   post:
  *     summary: Asignar servicio a un establecimiento
  *     tags: [ServiciosEstablecimientos]

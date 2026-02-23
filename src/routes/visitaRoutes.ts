@@ -12,7 +12,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/visitas:
+ * /visitas:
  *   post:
  *     summary: Registrar una visita
  *     tags: [Visitas]

@@ -7,7 +7,7 @@ const swaggerDefinition = {
     description: "Doccumentación oficial del Backend de TripGO",
     contact: {
       name: "TripGO Team",
-      email: ""
+      email: "teamtripgo@outlook.com"
     }
   },
   servers: [
