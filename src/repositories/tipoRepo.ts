@@ -6,6 +6,18 @@ class TipoRepo {
         const [rows] = await pool.query(`SELECT * FROM tipos`);
         return rows;
     }
+
+    static async listarPorUbicacion(town: string) {
+    const sql = `
+      SELECT DISTINCT t.id_tipo, t.nombre_tipo
+      FROM establecimiento e
+      JOIN tipos t ON e.tipo = t.id_tipo
+      WHERE LOWER(e.ubicacion) = LOWER(?)
+      ORDER BY t.nombre_tipo
+    `;
+    const [rows] = await pool.query(sql, [town]);
+    return rows;
+  }
     static async crear(t: Tipo) {
         const [res] = await pool.query(
             `INSERT INTO tipos (nombre_tipo) VALUES (?)`,
