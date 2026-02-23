@@ -3,6 +3,13 @@ const { EstablecimientoController } = require("../controllers/establecimientoCon
 
 const router = Router();
 
+
+
+/**
+ * 🔥 FILTRADO POR PUEBLO + CATEGORIA
+ * GET /api/establecimientos/:town/:category
+ */
+router.get("/:town/:category", EstablecimientoController.listarPorTownYCategory);
 /**
  * @swagger
  * tags:
