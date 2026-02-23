@@ -8,18 +8,16 @@ class EstablecimientoRepo {
         return rows;
     }
 
-    static async listarPorTownYCategory(town: string, category: string) {
-    const sql = `
-      SELECT e.*, t.nombre_tipo
-      FROM establecimiento e
-      JOIN tipos t ON e.tipo = t.id_tipo
-      WHERE LOWER(e.ubicacion) = LOWER(?)
-        AND LOWER(t.nombre_tipo) = LOWER(?)
-    `;
-
-    const [rows] = await pool.query(sql, [town, category]);
-    return rows;
-  }
+   static async listarPorUbicacionYTipo(town: string, idTipo: number) {
+  const sql = `
+    SELECT e.*
+    FROM establecimiento e
+    WHERE LOWER(e.ubicacion) = LOWER(?)
+      AND e.tipo = ?
+  `;
+  const [rows] = await pool.query(sql, [town, idTipo]);
+  return rows;
+}
   
     static async crear(e: Establecimiento) {
         const [res] = await pool.query(

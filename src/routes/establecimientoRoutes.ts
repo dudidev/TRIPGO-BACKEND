@@ -5,11 +5,8 @@ const router = Router();
 
 
 
-/**
- * 🔥 FILTRADO POR PUEBLO + CATEGORIA
- * GET /api/establecimientos/:town/:category
- */
-router.get("/:town/:category", EstablecimientoController.listarPorTownYCategory);
+// ✅ /api/establecimientos/:town/tipo/:idTipo
+router.get("/:town/tipo/:idTipo", EstablecimientoController.listarPorUbicacionYTipo);
 /**
  * @swagger
  * tags:

@@ -8,13 +8,11 @@ class EstablecimientoController {
     res.json({ ok: true, data: rows });
   }
 
-  // ✅ NUEVO: filtrar por pueblo (ubicacion) y categoría (tipo unido con tipos)
-  static async listarPorTownYCategory(req: Request, res: Response) {
-    const { town, category } = req.params;
-
-    const rows = await EstablecimientoService.listarPorTownYCategory(town, category);
-    res.json({ ok: true, data: rows });
-  }
+  static async listarPorUbicacionYTipo(req: Request, res: Response) {
+  const { town, idTipo } = req.params;
+  const rows = await EstablecimientoService.listarPorUbicacionYTipo(town, Number(idTipo));
+  res.json({ ok: true, data: rows });
+}
 
   static async crear(req: Request, res: Response) {
     const r = await EstablecimientoService.crear(req.body);

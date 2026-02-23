@@ -3,6 +3,9 @@ const { TipoController } = require("../controllers/tipoController");
 
 const router = Router();
 
+
+
+router.get("/por-ubicacion/:town", TipoController.listarPorUbicacion);
 /**
  * @swagger
  * tags:

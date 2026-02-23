@@ -21,6 +21,7 @@ router.use("/comentarios", comentarioRoutes);
 router.use("/planeador", planeadorRoutes);
 router.use("/detalles-planeador", detallePlaneadorRoutes);
 
+
 router.get("/", (req, res) => res.json({ ok: true, message: "API TripGO" }));
 
 module.exports = router;
