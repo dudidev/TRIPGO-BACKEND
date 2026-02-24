@@ -12,7 +12,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/usuarios:
+ * /usuarios:
  *   post:
  *     summary: Crear un nuevo usuario
  *     tags: [Usuarios]
@@ -46,7 +46,7 @@ router.post("/", UsuarioController.crear);
 
 /**
  * @swagger
- * /api/usuarios:
+ * /usuarios:
  *   get:
  *     summary: Listar todos los usuarios
  *     tags: [Usuarios]
@@ -64,7 +64,7 @@ router.get("/", UsuarioController.listar);
 
 /**
  * @swagger
- * /api/usuarios/login:
+ * /usuarios/login:
  *   post:
  *     summary: Login de usuario
  *     tags: [Usuarios]

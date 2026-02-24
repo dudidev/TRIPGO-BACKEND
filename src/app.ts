@@ -25,12 +25,12 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api", routes);
-app.use("/api/auth", authRoutes);
-app.get("/", (req, res) => {
+app.use("/", routes);
+app.use("/auth", authRoutes);
+
+app.get("/status", (req, res) => {
     res.send("Servidor funcionando correctamente");
 });
-
 
 if (process.env.NODE_ENV === "production") {
     app.get("/api/docs.json", (_req, res) => {
@@ -39,12 +39,16 @@ if (process.env.NODE_ENV === "production") {
     });
 
     app.use(
-        "/api/docs",
+        "/docs",
         swaggerUi.serve,
         swaggerUi.setup(swaggerSpec, { explorer: true })
     );
 }
-
+app.use(
+    "/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, { explorer: true })
+);
 app.use(errorHandler);
 
 (async () => {

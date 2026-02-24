@@ -70,7 +70,7 @@ const login = async (req: Request, res: Response) => {
         const token = jwt.sign(
             { id: user.id, correo: user.correo_usuario, rol: user.rol },
             JWT_SECRET,
-            { expiresIn: "2h" }
+            { expiresIn: "10min" }
         );
 
         res.json({

@@ -12,7 +12,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/detalles-planeador:
+ * /detalles-planeador:
  *   post:
  *     summary: Crear detalle del planeador
  *     tags: [DetallesPlaneador]

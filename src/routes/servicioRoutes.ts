@@ -12,7 +12,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/servicios:
+ * /servicios:
  *   get:
  *     summary: Listar servicios
  *     tags: [Servicios]
@@ -24,7 +24,7 @@ router.get("/", ServicioController.listar);
 
 /**
  * @swagger
- * /api/servicios:
+ * /servicios:
  *   post:
  *     summary: Crear servicio
  *     tags: [Servicios]
