@@ -3,7 +3,7 @@ const pool = require("../config/db");
 const bcrypt =  require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_tripgo";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const register = async (req: Request, res: Response) => {
     try {
