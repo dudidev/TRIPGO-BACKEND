@@ -25,13 +25,8 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api", routes);
-app.use("/api/auth", authRoutes);
-// app.use("/api/establecimientos", establecimientoRoutes);
-
-app.get("/", (req, res) => {
-    res.send("Servidor funcionando correctamente 🚀");
-});
+app.use("/", routes);
+app.use("/auth", authRoutes);
 
 app.get("/status", (req, res) => {
     res.send("Servidor funcionando correctamente");
