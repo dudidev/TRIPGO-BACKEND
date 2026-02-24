@@ -5,7 +5,7 @@ const router = Router();
 
 
 
-router.get("/por-ubicacion/:town", TipoController.listarPorUbicacion);
+
 /**
  * @swagger
  * tags:
@@ -24,5 +24,6 @@ router.get("/por-ubicacion/:town", TipoController.listarPorUbicacion);
  *         description: Lista de tipos
  */
 router.get("/", TipoController.listar);
+router.get("/por-ubicacion/:town", TipoController.listarPorUbicacion);
 
 module.exports = router;
