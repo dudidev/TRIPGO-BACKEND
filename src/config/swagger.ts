@@ -7,13 +7,13 @@ const swaggerDefinition = {
     description: "Doccumentación oficial del Backend de TripGO",
     contact: {
       name: "TripGO Team",
-      email: ""
+      email: "teamtripgo@outlook.com"
     }
   },
   servers: [
     {
       url: process.env.NODE_ENV === "production"
-        ? `https://${process.env.AZURE_WEBSITE_HOSTNAME}`
+        ? `https://tripgo-backend-arehbhbubshxdpg7.chilecentral-01.azurewebsites.net/api`
         : `http://localhost:${process.env.PORT}`,
       description: process.env.NODE_ENV === "production" ? "Producción" : "Desarrollo"
     }
