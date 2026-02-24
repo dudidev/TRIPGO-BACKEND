@@ -12,6 +12,12 @@ class EstablecimientoController {
     const r = await EstablecimientoService.crear(req.body);
     res.status(201).json({ ok: true, r });
   }
+
+  static async listarPorUbicacionYTipo(req, res) {
+  const { town, idTipo } = req.params;
+  const rows = await EstablecimientoService.listarPorUbicacionYTipo(town, Number(idTipo));
+  res.json({ ok: true, data: rows });
+}
 }
 
 // ✅ ENDPOINT: /establecimientos/mio (GET)
