@@ -8,16 +8,19 @@ class TipoRepo {
     }
 
     static async listarPorUbicacion(town: string) {
-    const sql = `
-      SELECT DISTINCT t.id_tipo, t.nombre_tipo
-      FROM establecimiento e
-      JOIN tipos t ON e.tipo = t.id_tipo
-      WHERE LOWER(e.ubicacion) = LOWER(?)
-      ORDER BY t.nombre_tipo
-    `;
-    const [rows] = await pool.query(sql, [town]);
-    return rows;
-  }
+  const [rows] = await pool.query(
+    `
+    SELECT DISTINCT t.id_tipo, t.nombre_tipo
+    FROM establecimiento e
+    INNER JOIN tipos t ON t.id_tipo = e.tipo
+    WHERE LOWER(TRIM(e.ubicacion)) = LOWER(TRIM(?))
+    ORDER BY t.nombre_tipo
+    `,
+    [town]
+  );
+
+  return rows;
+}
     static async crear(t: Tipo) {
         const [res] = await pool.query(
             `INSERT INTO tipos (nombre_tipo) VALUES (?)`,
