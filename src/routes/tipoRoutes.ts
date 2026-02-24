@@ -23,8 +23,8 @@ const router = Router();
  *       200:
  *         description: Lista de tipos
  */
-router.get("/__debug", (req, res) => {
-  res.json({ ok: true, from: "tipoRoutes NEW", hasPorUbicacion: true });
+router.get("/__debug", (_req, res) => {
+  res.json({ ok: true, route: "tipoRoutes", has: "por-ubicacion" });
 });
 router.get("/", TipoController.listar);
 router.get("/por-ubicacion/:town", TipoController.listarPorUbicacion);
