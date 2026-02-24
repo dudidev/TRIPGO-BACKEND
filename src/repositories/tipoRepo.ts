@@ -24,7 +24,7 @@ class TipoRepo {
     static async crear(t: Tipo) {
         const [res] = await pool.query(
             `INSERT INTO tipos (nombre_tipo) VALUES (?)`,
-            [t.nombre_tipo ? 1 : 0]
+            [t.nombre_tipo]
         );
         return { insertId: (res as any).insertId };
     }
