@@ -2,10 +2,10 @@ const pool = require("../config/db");
 import type { Tipo } from "../models/tipoModel";
 
 class TipoRepo {
-    static async listar() {
-        const [rows] = await pool.query(`SELECT * FROM tipos`);
-        return rows;
-    }
+     static async listar() {
+    const [rows] = await pool.query(`SELECT * FROM tipos ORDER BY nombre_tipo`);
+    return rows;
+  }
 
     static async listarPorUbicacion(town: string) {
         const [rows] = await pool.query(

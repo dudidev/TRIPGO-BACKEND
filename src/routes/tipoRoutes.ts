@@ -5,7 +5,7 @@ const router = Router();
 
 
 
-router.get("/por-ubicacion/:town", TipoController.listarPorUbicacion);
+
 /**
  * @swagger
  * tags:
@@ -23,6 +23,10 @@ router.get("/por-ubicacion/:town", TipoController.listarPorUbicacion);
  *       200:
  *         description: Lista de tipos
  */
+router.get("/__debug", (_req, res) => {
+  res.json({ ok: true, route: "tipoRoutes", has: "por-ubicacion" });
+});
 router.get("/", TipoController.listar);
+router.get("/por-ubicacion/:town", TipoController.listarPorUbicacion);
 
 module.exports = router;

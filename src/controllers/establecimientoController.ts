@@ -9,7 +9,7 @@ class EstablecimientoController {
 
   static async crear(req: Request, res: Response) {
     const r = await EstablecimientoService.crear(req.body);
-    res.status(201).json({ ok: true, r });
+    res.status(201).json({ ok: true, data: r });
   }
 
   static async listarPorUbicacionYTipo(req, res) {
