@@ -11,6 +11,12 @@ class EstablecimientoService {
     static async updateMio(req: any, res: any) {
         return await EstablecimientoRepo.updateMio(req, res);
     }
+    static async getMios(req: any, res: any) {
+        return await EstablecimientoRepo.getMios(req, res);
+    }
+    static async updateMioById(req: any, res: any) {
+        return await EstablecimientoRepo.updateMioById(req, res);
+    }
 }
 
 module.exports = { EstablecimientoService };
