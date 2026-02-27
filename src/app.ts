@@ -15,64 +15,61 @@ const swaggerSpec = require("./config/swagger");
 dotenv.config();
 const app = express();
 
-// ------------ CORS ---------------------
+// ─── CORS ─────────────────────────────────────────────────────────────────────
 const allowedOrigins = [
     "http://localhost:4200",
     "https://tripgoquindio.vercel.app",
-    "https://tripgo-git-develop-dudidevs-projects.vercel.app"
+    "https://tripgo-git-develop-dudidevs-projects.vercel.app",   // ← rama develop
+    // Agrega aquí cualquier otro dominio de Vercel que uses (preview, producción, etc.)
 ];
 
 app.use(cors({
     origin: (origin, callback) => {
-        // Permite peticiones sin origin (Postman, server-to-server) en desarrollo
-        if (!origin || allowedOrigins.includes(origin)) {
+        // Sin origin = Postman, curl, server-to-server → permitir en todos los entornos
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
-            callback(new Error(`CORS bloqueado: origen no permitido → ${origin}`));
+            console.warn(`⚠️  [CORS] Origen bloqueado: ${origin}`);
+            callback(new Error(`CORS: origen no permitido → ${origin}`));
         }
     },
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
 }));
 
-// ----------------Midddleware global----------------
+// Responde el preflight OPTIONS globalmente (requerido para POST con JSON)
+app.options("*", cors());
+
+// ─── Middleware global ────────────────────────────────────────────────────────
 app.use(morgan("dev"));
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// -----------Rutas----------------
+// ─── Rutas ────────────────────────────────────────────────────────────────────
 app.use("/", routes);
 app.use("/auth", authRoutes);
 
-app.get("/status", (req, res) => {
-    res.send("Servidor funcionando correctamente");
+app.get("/status", (_req, res) => {
+    res.json({ ok: true, message: "Servidor TripGO funcionando correctamente" });
 });
 
-
-
-// -- Swagger ---------------------------------------------------
+// ─── Swagger ──────────────────────────────────────────────────────────────────
 if (process.env.NODE_ENV === "production") {
     app.get("/api/docs.json", (_req, res) => {
         res.setHeader("Content-Type", "application/json");
         res.send(swaggerSpec);
     });
-
-    app.use(
-        "/docs",
-        swaggerUi.serve,
-        swaggerUi.setup(swaggerSpec, { explorer: true })
-    );
 }
-app.use(
-    "/docs",
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerSpec, { explorer: true })
-);
 
-// --Error handler global ---------------------------
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
+
+// ─── Error handler (siempre al final) ────────────────────────────────────────
 app.use(errorHandler);
 
-// -- Verificar conexión a la base de datos al iniciar el servidor --------------------
+// ─── Conexión BD ──────────────────────────────────────────────────────────────
 (async () => {
     try {
         const connection = await pool.getConnection();
