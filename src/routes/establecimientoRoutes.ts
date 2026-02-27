@@ -14,16 +14,11 @@ const router = Router();
  */
 
 //  Mis establecimientos (todos) (solo empresa)
-router.get("/mios", verifyToken, requireEmpresa, getMios);
+router.get("/mios", verifyToken, requireEmpresa, EstablecimientoController.getMios);
 
 //  Actualizar 1 establecimiento mío por id (solo empresa)
-router.put("/mios/:id", verifyToken, requireEmpresa, updateMioById);
+router.put("/mios/:id", verifyToken, requireEmpresa, EstablecimientoController.updateMioById);
 
-//  Mi establecimiento (solo empresa)
-router.get("/mio", verifyToken, requireEmpresa, getMio);
-
-//  Actualizar mi establecimiento (solo empresa)
-router.put("/mio", verifyToken, requireEmpresa, updateMio);
 // ✅ Mi establecimiento (solo empresa)
 router.get("/mio", verifyToken, requireEmpresa, EstablecimientoController.getMio);
 
