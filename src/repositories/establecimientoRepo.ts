@@ -104,5 +104,89 @@ class EstablecimientoRepo {
         }
     };
 
+    //  ENDPOINT: /establecimientos/mios (GET) => traer TODOS mis establecimientos
+    static async getMios(req: any, res: any) {
+        try {
+            const userId = req.user.id;
+
+            const [rows] = await pool.query(
+                "SELECT * FROM establecimiento WHERE id_propietario = ?",
+                [userId]
+            );
+
+            if (!rows || (rows as any[]).length === 0) {
+                return res.status(404).json({ ok: false, message: "No tienes establecimientos asociados" });
+            }
+
+            return res.json({ ok: true, data: rows });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ ok: false, message: "Error al obtener mis establecimientos" });
+        }
+    };
+
+    //  ENDPOINT: /establecimientos/mios/:id (PUT) => actualizar SOLO 1 establecimiento mío
+    static async updateMioById(req: any, res: any) {
+        try {
+            const userId = req.user.id;
+            const idEstablecimiento = Number(req.params.id);
+            const payload = req.body;
+
+            const {
+                nombre_establecimiento,
+                direccion,
+                ubicacion,
+                horario_apertura,
+                horario_cierre,
+                estado,
+                descripcion,
+                telefono,
+                correo,
+                tipo
+            } = payload;
+
+            const [result] = await pool.query(
+                `UPDATE establecimiento
+       SET nombre_establecimiento = ?,
+           direccion = ?,
+           ubicacion = ?,
+           horario_apertura = ?,
+           horario_cierre = ?,
+           estado = ?,
+           descripcion = ?,
+           telefono = ?,
+           correo = ?,
+           tipo = ?
+       WHERE id_propietario = ? AND id_establecimiento = ?`,
+                [
+                    nombre_establecimiento,
+                    direccion,
+                    ubicacion,
+                    horario_apertura,
+                    horario_cierre,
+                    estado,
+                    descripcion,
+                    telefono,
+                    correo,
+                    tipo,
+                    userId,
+                    idEstablecimiento
+                ]
+            );
+
+            // @ts-ignore (depende del driver, pero normalmente viene affectedRows)
+            if (!result || result.affectedRows === 0) {
+                return res.status(404).json({
+                    ok: false,
+                    message: "No se encontró el establecimiento o no te pertenece"
+                });
+            }
+
+            return res.json({ ok: true, message: "Establecimiento actualizado correctamente" });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ ok: false, message: "Error al actualizar el establecimiento" });
+        }
+    };
 }
 module.exports = { EstablecimientoRepo };
