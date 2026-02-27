@@ -18,7 +18,8 @@ const app = express();
 // ------------ CORS ---------------------
 const allowedOrigins = [
     "http://localhost:4200",
-    "https://tripgoquindio.vercel.app"
+    "https://tripgoquindio.vercel.app",
+    "https://tripgo-git-develop-dudidevs-projects.vercel.app"
 ];
 
 app.use(cors({
