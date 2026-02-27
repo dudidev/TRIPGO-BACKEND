@@ -1,13 +1,7 @@
 const { Router } = require("express");
 
-//  Importa la clase + handlers sueltos
-const {
-  EstablecimientoController,
-  getMio,
-  updateMio,
-  getMios,
-  updateMioById
-} = require("../controllers/establecimientoController");
+// ✅ Importa la clase + handlers sueltos
+const {EstablecimientoController} = require("../controllers/establecimientoController");
 
 // Middlewares
 const { verifyToken, requireEmpresa } = require("../middlewares/authMiddleware");
@@ -30,6 +24,11 @@ router.get("/mio", verifyToken, requireEmpresa, getMio);
 
 //  Actualizar mi establecimiento (solo empresa)
 router.put("/mio", verifyToken, requireEmpresa, updateMio);
+// ✅ Mi establecimiento (solo empresa)
+router.get("/mio", verifyToken, requireEmpresa, EstablecimientoController.getMio);
+
+// ✅ Actualizar mi establecimiento (solo empresa)
+router.put("/mio", verifyToken, requireEmpresa, EstablecimientoController.updateMio);
 
 //  FILTRO por ubicacion + tipo
 // URL: /api/establecimientos/salento/tipo/1

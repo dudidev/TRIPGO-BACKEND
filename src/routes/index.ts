@@ -1,4 +1,4 @@
-const express  = require("express");
+const express = require("express");
 const usuarioRoutes = require("./usuarioRoutes");
 const tipoRoutes = require("./tipoRoutes");
 const establecimientoRoutes = require("./establecimientoRoutes");
@@ -8,6 +8,8 @@ const visitaRoutes = require("./visitaRoutes");
 const comentarioRoutes = require("./comentarioRoutes");
 const planeadorRoutes = require("./planeadorRoutes");
 const detallePlaneadorRoutes = require("./detallePlaneadorRoutes");
+const contactRoutes = require("./contactRoutes");
+
 
 const router = express.Router();
 
@@ -20,6 +22,8 @@ router.use("/visitas", visitaRoutes);
 router.use("/comentarios", comentarioRoutes);
 router.use("/planeador", planeadorRoutes);
 router.use("/detalles-planeador", detallePlaneadorRoutes);
+router.use("/contact", contactRoutes);
+
 
 
 router.get("/", (req, res) => res.json({ ok: true, message: "API TripGO" }));

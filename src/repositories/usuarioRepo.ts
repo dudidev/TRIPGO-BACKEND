@@ -20,6 +20,51 @@ class UsuarioRepo {
         const [rows] = await pool.query(`SELECT id, nombre_usuario, correo_usuario, fecha_registro, rol FROM usuarios`);
         return rows;
     }
+
+    static async findById(id: number) {
+        const [rows] = await pool.query(
+            `SELECT id, nombre_usuario, correo_usuario, fecha_registro, rol 
+            FROM usuarios WHERE id = ?`,
+            [id]
+        );
+        return (rows as any[])[0];
+    }
+
+   static async actualizar(id: number, usuario: any) {
+        const fields: string[] = [];
+        const values: any[] = [];
+
+        
+        if (usuario.nombre_usuario) {
+            fields.push("nombre_usuario = ?");
+            values.push(usuario.nombre_usuario);
+        }
+
+        if (usuario.correo_usuario) {
+            fields.push("correo_usuario = ?");
+            values.push(usuario.correo_usuario);
+        }
+
+        if (usuario.password_u) {
+            fields.push("password_u = ?");
+            values.push(usuario.password_u);
+        }
+
+        const sql = `UPDATE usuarios SET ${fields.join(", ")} WHERE id = ?`;
+        values.push(id);
+
+        const [result] = await pool.query(sql, values);
+        return result;
+    }
+
+    static async eliminar(id: number) {
+        const [result] = await pool.query(
+            `DELETE FROM usuarios WHERE id = ?`,
+            [id]
+        );
+
+        return result;
+    }
 }
 
 module.exports = { UsuarioRepo };
