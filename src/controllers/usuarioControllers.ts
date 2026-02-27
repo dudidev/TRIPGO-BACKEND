@@ -30,6 +30,36 @@ class UsuarioController {
             res.status(401).json({ ok: false, message: err.message });
         }
     }
+
+    static async obtener(req: Request, res: Response) {
+    try {
+        const id = Number(req.params.id);
+        const usuario = await UsuarioService.obtenerPorId(id);
+        res.json({ ok: true, data: usuario });
+    } catch (err: any) {
+        res.status(404).json({ ok: false, message: err.message });
+        }
+    }
+
+    static async actualizar(req: Request, res: Response) {
+        try {
+            const id = Number(req.params.id);
+            const result = await UsuarioService.actualizar(id, req.body);
+            res.json({ ok: true, result });
+        } catch (err: any) {
+            res.status(500).json({ ok: false, message: err.message });
+        }
+    }
+
+    static async eliminar(req: Request, res: Response) {
+        try {
+            const id = Number(req.params.id);
+            const result = await UsuarioService.eliminar(id);
+            res.json({ ok: true, result });
+        } catch (err: any) {
+            res.status(500).json({ ok: false, message: err.message });
+        }
+    }
 }
 
 module.exports = { UsuarioController };
