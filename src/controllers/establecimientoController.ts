@@ -9,7 +9,7 @@ class EstablecimientoController {
 
   static async crear(req: Request, res: Response) {
     const r = await EstablecimientoService.crear(req.body);
-    res.status(201).json({ ok: true, r });
+    res.status(201).json({ ok: true, data: r });
   }
 
   static async listarPorUbicacionYTipo(req, res) {
@@ -25,6 +25,14 @@ class EstablecimientoController {
   static async updateMio(req: any, res: any) {
     return await EstablecimientoService.updateMio(req, res);
   }
+
+    static async getMios(req: any, res: any) {  
+        return await EstablecimientoService.getMios(req, res);
+    }
+
+    static async updateMioById(req: any, res: any) {
+        return await EstablecimientoService.updateMioById(req, res);
+    }
 }
 
 module.exports = {
