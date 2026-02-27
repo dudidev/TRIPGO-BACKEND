@@ -19,29 +19,32 @@ const app = express();
 const allowedOrigins = [
     "http://localhost:4200",
     "https://tripgoquindio.vercel.app",
-    "https://tripgo-git-develop-dudidevs-projects.vercel.app",   // ← rama develop
-    // Agrega aquí cualquier otro dominio de Vercel que uses (preview, producción, etc.)
+    "https://tripgo-git-develop-dudidevs-projects.vercel.app",
 ];
 
-app.use(cors({
+const corsOptions = {
     origin: (origin, callback) => {
-        // Sin origin = Postman, curl, server-to-server → permitir en todos los entornos
+        // Sin origin = Postman, curl, server-to-server → permitir
         if (!origin) return callback(null, true);
 
         if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            console.warn(`⚠️  [CORS] Origen bloqueado: ${origin}`);
-            callback(new Error(`CORS: origen no permitido → ${origin}`));
+            return callback(null, true);
         }
+
+        console.warn(`⚠️  [CORS] Origen bloqueado: ${origin}`);
+        return callback(new Error(`CORS: origen no permitido → ${origin}`));
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-}));
+    // preflightContinue: false hace que cors() responda el OPTIONS por sí solo,
+    // eliminando la necesidad de app.options("*") que rompe con path-to-regexp v8+
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+};
 
-// Responde el preflight OPTIONS globalmente (requerido para POST con JSON)
-app.options("*", cors());
+// Un solo app.use maneja tanto el preflight OPTIONS como las requests normales
+app.use(cors(corsOptions));
 
 // ─── Middleware global ────────────────────────────────────────────────────────
 app.use(morgan("dev"));
