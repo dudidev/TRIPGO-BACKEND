@@ -25,6 +25,14 @@ class EstablecimientoController {
   static async updateMio(req: any, res: any) {
     return await EstablecimientoService.updateMio(req, res);
   }
+
+    static async getMios(req: any, res: any) {  
+        return await EstablecimientoService.getMios(req, res);
+    }
+
+    static async updateMioById(req: any, res: any) {
+        return await EstablecimientoService.updateMioById(req, res);
+    }
 }
 
 module.exports = {
