@@ -1,42 +1,36 @@
 const nodemailer = require("nodemailer");
 const { buildContactEmailHtml } = require("../templates/contactEmail.template");
+const { buildWelcomeEmailHtml } = require("../templates/welcomeEmail.template");
 
-// ─── Transporter ───────────────────────────────────────────────────────────────
+// ─── Transporter ──────────────────────────────────────────────────
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
         user: process.env.MAIL_USER,
-        // ⚠️ IMPORTANTE: debe ser las 16 letras del App Password SIN espacios
-        // Correcto:   abcdefghijklmnop
-        // Incorrecto: abcd efgh ijkl mnop
-        pass: process.env.MAIL_PASSWORD,
+        pass: process.env.MAIL_PASSWORD, // 16 chars sin espacios
     },
 });
 
-// ─── Verify al arrancar el servidor ───────────────────────────────────────────
-// Esto detecta problemas de credenciales ANTES de que llegue el primer correo.
-// Verás el resultado en consola al iniciar el servidor con `npm run dev`.
-transporter.verify((error, success) => {
+// Verifica la conexión al arrancar el servidor
+transporter.verify((error) => {
     if (error) {
-        console.error("❌ [emailService] Fallo de conexión con Gmail:");
-        console.error("   →", error.message);
-        console.error("   Verifica MAIL_USER y MAIL_PASSWORD en tu .env");
-        console.error("   App Password debe ser 16 caracteres sin espacios.");
+        console.error(" [emailService] Fallo de conexión con Gmail:", error.message);
     } else {
-        console.log("✅ [emailService] Conexión con Gmail OK — listo para enviar correos");
+        console.log(" [emailService] Conexión con Gmail OK");
     }
 });
 
-// ─── Función principal ────────────────────────────────────────────────────────
-/**
- * Envía el correo de alerta al equipo TripGO.
- * @param {{ name: string, email: string, message: string }} data
- */
-async function sendContactEmail({ name, email, message }) {
-    console.log(`📧 [emailService] Preparando correo | negocio: "${name}" | email: ${email}`);
+// ─── Helpers internos ─────────────────────────────────────────────────────────
+function checkEnvVars(...keys) {
+    keys.forEach((key) => {
+        if (!process.env[key]) {
+            throw new Error(`Variable de entorno requerida no definida: ${key}`);
+        }
+    });
+}
 
-    // Fecha formateada en español / zona Colombia
-    const dateTime = new Intl.DateTimeFormat("es-CO", {
+function getFormattedDate() {
+    return new Intl.DateTimeFormat("es-CO", {
         day: "2-digit",
         month: "long",
         year: "numeric",
@@ -45,52 +39,109 @@ async function sendContactEmail({ name, email, message }) {
         hour12: false,
         timeZone: "America/Bogota",
     }).format(new Date());
+}
 
-    const htmlBody = buildContactEmailHtml({ name, email, message, dateTime });
+function generateBusinessEmail(businessName) {
+    if (!businessName) throw new Error("businessName es requerido");
 
-    const mailOptions = {
+    // Quita tildes
+    const normalized = businessName
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+    // Quita caracteres especiales y espacios
+    const clean = normalized
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "");
+
+    return `${clean}@tripgo.com`;
+}
+
+// ─── sendContactEmail ─────────────────────────────────────────────────────────
+/**
+ * Alerta interna: avisa al equipo TripGO que un negocio completó el formulario.
+ * Destino: MAIL_RECIPIENT (correo interno de TripGO)
+ */
+async function sendContactEmail({ name, email, message }) {
+    checkEnvVars("MAIL_USER", "MAIL_PASSWORD", "MAIL_RECIPIENT");
+
+    console.log(`📧 [emailService] Alerta interna | negocio: "${name}"`);
+
+    const dateTime = getFormattedDate();
+    const html = buildContactEmailHtml({ name, email, message, dateTime });
+
+    const info = await transporter.sendMail({
         from: `"TripGO App" <${process.env.MAIL_USER}>`,
         to: process.env.MAIL_RECIPIENT,
         replyTo: email,
         subject: `🔔 Nuevo negocio interesado: ${name}`,
-        html: htmlBody,
-        text: [
-            "NUEVO NEGOCIO INTERESADO - TRIPGO",
-            "─────────────────────────────────",
-            `Negocio : ${name}`,
-            `Email   : ${email}`,
-            `Mensaje : ${message}`,
-            `Fecha   : ${dateTime}`,
-        ].join("\n"),
-    };
+        html,
+        text: `Negocio: ${name}\nEmail: ${email}\nMensaje: ${message}\nFecha: ${dateTime}`,
+    });
 
-    // Validación de variables de entorno antes de intentar enviar
-    if (!process.env.MAIL_USER || !process.env.MAIL_PASSWORD) {
-        const err = new Error("MAIL_USER o MAIL_PASSWORD no están definidos en .env");
-        console.error("❌ [emailService]", err.message);
-        throw err;
-    }
-
-    if (!process.env.MAIL_RECIPIENT) {
-        const err = new Error("MAIL_RECIPIENT no está definido en .env");
-        console.error("❌ [emailService]", err.message);
-        throw err;
-    }
-
-    try {
-        const info = await transporter.sendMail(mailOptions);
-        // messageId confirma que Gmail aceptó el correo
-        console.log(`✅ [emailService] Correo aceptado por Gmail`);
-        console.log(`   messageId : ${info.messageId}`);
-        console.log(`   para      : ${process.env.MAIL_RECIPIENT}`);
-        return info;
-    } catch (error) {
-        // Acá caerás si el App Password está mal, si Gmail bloqueó el intento, etc.
-        console.error("❌ [emailService] Error al enviar con Nodemailer:");
-        console.error("   código  :", error.code);
-        console.error("   mensaje :", error.message);
-        throw error; // propaga al errorHandler de Express
-    }
+    console.log(`✅ [emailService] Alerta enviada | messageId: ${info.messageId}`);
+    return info;
 }
 
-module.exports = { sendContactEmail };
+// ─── sendWelcomeEmail ─────────────────────────────────────────────────────────
+/**
+ * Correo de bienvenida: confirma la aceptación y entrega las credenciales al negocio.
+ * Destino: email del negocio (quien llenó el formulario)
+ *
+ * @param {{
+ *   businessName: string,   // nombre del negocio
+ *   contactName:  string,   // nombre del contacto (opcional)
+ *   email:        string,   // correo del negocio — AQUÍ se envía
+ *   description:  string,   // descripción que ingresó en el form
+ *   credPassword: string,   // contraseña temporal generada
+ *   businessId:   string,   // ID del registro en tu BD
+ * }} data
+ */
+async function sendWelcomeEmail({
+    businessName,
+    contactName,
+    email,
+    description,
+    credPassword,
+    businessId,
+}) {
+    checkEnvVars("MAIL_USER", "MAIL_PASSWORD");
+
+    const credEmail = generateBusinessEmail(businessName);
+
+    console.log(`🎉 [emailService] Bienvenida | negocio: "${businessName}" | para: ${email}`);
+
+    const dateTime = getFormattedDate();
+    const html = buildWelcomeEmailHtml({
+        businessName,
+        contactName,
+        email,
+        description,
+        credEmail,
+        credPassword,
+        businessId,
+        dateTime,
+    });
+
+    const info = await transporter.sendMail({
+        from: `"TripGO" <${process.env.MAIL_USER}>`,
+        to: email,   // ← va al correo del negocio
+        subject: `🎉 ¡Bienvenido a TripGO, ${businessName}!`,
+        html,
+        text: [
+            `¡Bienvenido a TripGO, ${businessName}!`,
+            `Tu negocio fue aprobado. Estas son tus credenciales de acceso:`,
+            `Email:      ${credEmail}`,
+            `Contraseña: ${credPassword}`,
+            `Ingresa en: https://tripgoquindio.vercel.app/login`,
+            `ID de negocio: #${businessId}`,
+            `Aprobado el: ${dateTime}`,
+        ].join("\n"),
+    });
+
+    console.log(`✅ [emailService] Bienvenida enviada | messageId: ${info.messageId}`);
+    return info;
+}
+
+module.exports = { sendContactEmail, sendWelcomeEmail };
