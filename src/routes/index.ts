@@ -10,6 +10,7 @@ const planeadorRoutes = require("./planeadorRoutes");
 const detallePlaneadorRoutes = require("./detallePlaneadorRoutes");
 const contactRoutes = require("./contactRoutes");
 const imagenRoutes = require("./imagenRoutes");
+const itinerarioRoutes = require("./itinerarioRoutes");
 
 
 const router = express.Router();
@@ -25,6 +26,7 @@ router.use("/planeador", planeadorRoutes);
 router.use("/detalles-planeador", detallePlaneadorRoutes);
 router.use("/contact", contactRoutes);
 router.use("/imagenes", imagenRoutes);
+router.use("/itinerario", itinerarioRoutes);
 
 
 
