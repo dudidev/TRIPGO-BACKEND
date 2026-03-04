@@ -3,6 +3,7 @@ import type { Usuario } from "../models/usuarioModel";
 const { hashPassword, comparePassword } = require("../utils/password");
 const { signToken } = require("../utils/jwt");
 const { uploadToCloudinary, deleteImage } = require("./cloudinaryService");
+const fileType = require("file-type");
 
 class UsuarioService {
     static async crear(usuario: Usuario) {
@@ -80,7 +81,14 @@ class UsuarioService {
 
     static async actualizarFotoPerfil(id: number, file: any) {
 
-       
+        const type = await fileType.fileTypeFromBuffer(file.buffer);
+
+        if (!type || !type.mime.startsWith("image/")) {
+            
+            throw new Error("El archivo debe ser una imagen válida");
+        }
+
+
         const user: any = await UsuarioRepo.findById(id);
 
         if (!user) {
