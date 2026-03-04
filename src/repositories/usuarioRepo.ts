@@ -27,13 +27,15 @@ class UsuarioRepo {
     }
 
     static async findById(id: number) {
-        const [rows] = await pool.query(
-            `SELECT id, nombre_usuario, correo_usuario, fecha_registro, rol , foto_perfil
-            FROM usuarios WHERE id = ?`,
-            [id]
-        );
-        return (rows as any[])[0];
-    }
+  const [rows] = await pool.query(
+    `SELECT id, nombre_usuario, correo_usuario, fecha_registro, rol, foto_perfil
+     FROM usuarios
+     WHERE id = ?`,
+    [id]
+  );
+
+  return (rows as any[])[0];
+}
 
    static async actualizar(id: number, usuario: any) {
         const fields: string[] = [];
