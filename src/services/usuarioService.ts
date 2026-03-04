@@ -47,5 +47,7 @@ class UsuarioService {
         await UsuarioRepo.eliminar(id);
         return { message: "Usuario eliminado correctamente" };
     }
+
+    
 }
 module.exports = { UsuarioService };
