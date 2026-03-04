@@ -12,17 +12,17 @@ class UsuarioRepo {
     }
 
     static async findByEmail(correo: string) {
-    const [rows] = await pool.query(
-         `SELECT id, nombre_usuario, correo_usuario, password_u, rol, foto_perfil 
+        const [rows] = await pool.query(
+            `SELECT id, nombre_usuario, correo_usuario, password_u, rol, foto_perfil 
             FROM usuarios 
             WHERE correo_usuario = ?`,
-     [correo]
-    );
-  return (rows as any[])[0];
-}
+            [correo]
+        );
+        return (rows as any[])[0];
+    }
 
     static async listar() {
-        const [rows] = await pool.query(`SELECT id, nombre_usuario, correo_usuario, fecha_registro, rol FROM usuarios`);
+        const [rows] = await pool.query(`SELECT * FROM usuarios`);
         return rows;
     }
 
@@ -37,11 +37,11 @@ class UsuarioRepo {
   return (rows as any[])[0];
 }
 
-   static async actualizar(id: number, usuario: any) {
+    static async actualizar(id: number, usuario: any) {
         const fields: string[] = [];
         const values: any[] = [];
 
-        
+
         if (usuario.nombre_usuario) {
             fields.push("nombre_usuario = ?");
             values.push(usuario.nombre_usuario);
@@ -74,13 +74,13 @@ class UsuarioRepo {
     }
 
     static async findByIdWithPassword(id: number) {
-    const [rows] = await pool.query(
-        `SELECT id, password_u FROM usuarios WHERE id = ?`,
-        [id]
-    );
+        const [rows] = await pool.query(
+            `SELECT id, password_u FROM usuarios WHERE id = ?`,
+            [id]
+        );
 
-    return (rows as any[])[0];
-}
+        return (rows as any[])[0];
+    }
 }
 
 module.exports = { UsuarioRepo };
