@@ -94,7 +94,7 @@ router.post("/login", UsuarioController.login);
 
 /**
  * @swagger
- * /api/usuarios/{id}:
+ * /usuarios/{id}:
  *   get:
  *     summary: Obtener usuario por ID
  *     tags: [Usuarios]
@@ -115,7 +115,7 @@ router.get("/:id", UsuarioController.obtener);
 
 /**
  * @swagger
- * /api/usuarios/{id}:
+ * /usuarios/{id}:
  *   put:
  *     summary: Actualizar perfil de usuario
  *     tags: [Usuarios]
@@ -149,7 +149,7 @@ router.put("/:id/password", UsuarioController.cambiarPassword);
 
 /**
  * @swagger
- * /api/usuarios/{id}:
+ * /usuarios/{id}:
  *   delete:
  *     summary: Eliminar usuario
  *     tags: [Usuarios]
