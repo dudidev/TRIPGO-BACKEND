@@ -144,6 +144,8 @@ router.get("/:id", UsuarioController.obtener);
  */
 router.put("/:id", UsuarioController.actualizar);
 
+router.put("/:id/password", UsuarioController.cambiarPassword);
+
 
 /**
  * @swagger
@@ -162,5 +164,6 @@ router.put("/:id", UsuarioController.actualizar);
  *         description: Usuario eliminado correctamente
  */
 router.delete("/:id", UsuarioController.eliminar);
+
 
 module.exports = router;

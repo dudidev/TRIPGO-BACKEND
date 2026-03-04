@@ -70,6 +70,15 @@ class UsuarioRepo {
 
         return result;
     }
+
+    static async findByIdWithPassword(id: number) {
+    const [rows] = await pool.query(
+        `SELECT id, password_u FROM usuarios WHERE id = ?`,
+        [id]
+    );
+
+    return (rows as any[])[0];
+}
 }
 
 module.exports = { UsuarioRepo };

@@ -61,6 +61,25 @@ class UsuarioController {
             res.status(500).json({ ok: false, message: err.message });
         }
     }
+
+
+    static async cambiarPassword(req: Request, res: Response) {
+    try {
+        const id = Number(req.params.id);
+        const { password_actual, password_nueva } = req.body;
+
+        const result = await UsuarioService.cambiarPassword(
+            id,
+            password_actual,
+            password_nueva
+        );
+
+        res.json({ ok: true, result });
+
+    } catch (err: any) {
+        res.status(400).json({ ok: false, message: err.message });
+    }
+}
 }
 
 module.exports = { UsuarioController };

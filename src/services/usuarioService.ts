@@ -16,6 +16,7 @@ class UsuarioService {
         const match = await comparePassword(password, user.password_u);
         if (!match) throw new Error("Credenciales inválidas");
         const token = signToken({ id: user.id, correo: user.correo_usuario, rol: user.rol });
+        delete user.password_u;
         return { user, token };
     }
 
@@ -47,6 +48,34 @@ class UsuarioService {
         await UsuarioRepo.eliminar(id);
         return { message: "Usuario eliminado correctamente" };
     }
+
+
+    static async cambiarPassword(
+    id: number,
+    password_actual: string,
+    password_nueva: string
+) {
+
+    const user: any = await UsuarioRepo.findByIdWithPassword(id);
+
+    if (!user) {
+        throw new Error("Usuario no encontrado");
+    }
+
+    const match = await comparePassword(password_actual, user.password_u);
+
+    if (!match) {
+        throw new Error("La contraseña actual es incorrecta");
+    }
+
+    const hashed = await hashPassword(password_nueva);
+
+    await UsuarioRepo.actualizar(id, {
+        password_u: hashed
+    });
+
+    return { message: "Contraseña actualizada correctamente" };
+}
 
     
 }
