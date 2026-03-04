@@ -80,10 +80,12 @@ class UsuarioController {
     }
 
     static async actualizarFotoPerfil(req: Request, res: Response) {
+        
         try {
             const id = Number(req.params.id);
 
             const file = (req as any).file; 
+          
 
             if (!file) {
                 return res.status(400).json({
@@ -100,6 +102,7 @@ class UsuarioController {
             res.json({ ok: true, result });
 
         } catch (err: any) {
+            
             res.status(500).json({
                 ok: false,
                 message: err.message
