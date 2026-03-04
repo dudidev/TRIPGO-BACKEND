@@ -41,10 +41,13 @@ class UsuarioService {
 
         return { message: "Usuario actualizado correctamente" };
     }
+    
 
     static async eliminar(id: number) {
         await UsuarioRepo.eliminar(id);
         return { message: "Usuario eliminado correctamente" };
     }
+
+    
 }
 module.exports = { UsuarioService };

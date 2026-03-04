@@ -50,6 +50,7 @@ class UsuarioController {
             res.status(500).json({ ok: false, message: err.message });
         }
     }
+    
 
     static async eliminar(req: Request, res: Response) {
         try {

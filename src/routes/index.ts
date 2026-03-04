@@ -9,9 +9,11 @@ const comentarioRoutes = require("./comentarioRoutes");
 const planeadorRoutes = require("./planeadorRoutes");
 const detallePlaneadorRoutes = require("./detallePlaneadorRoutes");
 const contactRoutes = require("./contactRoutes");
-
+const imagenRoutes = require("./imagenRoutes");
+const itinerarioRoutes = require("./itinerarioRoutes");
 
 const router = express.Router();
+const usuarioImagenRoutes = require("./usuarioImagenRoutes");
 
 router.use("/usuarios", usuarioRoutes);
 router.use("/tipos", tipoRoutes);
@@ -23,6 +25,10 @@ router.use("/comentarios", comentarioRoutes);
 router.use("/planeador", planeadorRoutes);
 router.use("/detalles-planeador", detallePlaneadorRoutes);
 router.use("/contact", contactRoutes);
+router.use("/imagenes", imagenRoutes);
+router.use("/itinerarios", itinerarioRoutes);
+router.use("/", usuarioImagenRoutes);
+
 
 
 
