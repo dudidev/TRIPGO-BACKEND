@@ -12,9 +12,14 @@ class UsuarioRepo {
     }
 
     static async findByEmail(correo: string) {
-        const [rows] = await pool.query(`SELECT * FROM usuarios WHERE correo_usuario = ?`, [correo]);
-        return (rows as any[])[0];
-    }
+    const [rows] = await pool.query(
+         `SELECT id, nombre_usuario, correo_usuario, password_u, rol, foto_perfil 
+            FROM usuarios 
+            WHERE correo_usuario = ?`,
+     [correo]
+    );
+  return (rows as any[])[0];
+}
 
     static async listar() {
         const [rows] = await pool.query(`SELECT id, nombre_usuario, correo_usuario, fecha_registro, rol FROM usuarios`);
@@ -23,7 +28,7 @@ class UsuarioRepo {
 
     static async findById(id: number) {
         const [rows] = await pool.query(
-            `SELECT id, nombre_usuario, correo_usuario, fecha_registro, rol 
+            `SELECT id, nombre_usuario, correo_usuario, fecha_registro, rol , foto_perfil
             FROM usuarios WHERE id = ?`,
             [id]
         );
