@@ -27,7 +27,7 @@ router.use("/detalles-planeador", detallePlaneadorRoutes);
 router.use("/contact", contactRoutes);
 router.use("/imagenes", imagenRoutes);
 router.use("/itinerarios", itinerarioRoutes);
-router.use("/", usuarioImagenRoutes);
+router.use("/usuarios", usuarioImagenRoutes);
 
 
 

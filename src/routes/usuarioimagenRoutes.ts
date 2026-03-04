@@ -7,7 +7,7 @@ const { subirFotoPerfil } = require("../controllers/usuarioImagenController");
 
 // PUT porque actualiza recurso existente
 router.put(
-  "/usuarios/:id/foto",
+  "/:id/foto",
   upload.single("imagen"),
   subirFotoPerfil
 );
