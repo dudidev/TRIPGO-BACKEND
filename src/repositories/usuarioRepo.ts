@@ -38,31 +38,49 @@ class UsuarioRepo {
 }
 
     static async actualizar(id: number, usuario: any) {
-        const fields: string[] = [];
-        const values: any[] = [];
+    const fields: string[] = [];
+    const values: any[] = [];
 
-
-        if (usuario.nombre_usuario) {
-            fields.push("nombre_usuario = ?");
-            values.push(usuario.nombre_usuario);
-        }
-
-        if (usuario.correo_usuario) {
-            fields.push("correo_usuario = ?");
-            values.push(usuario.correo_usuario);
-        }
-
-        if (usuario.password_u) {
-            fields.push("password_u = ?");
-            values.push(usuario.password_u);
-        }
-
-        const sql = `UPDATE usuarios SET ${fields.join(", ")} WHERE id = ?`;
-        values.push(id);
-
-        const [result] = await pool.query(sql, values);
-        return result;
+    if (usuario.nombre_usuario !== undefined) {
+        fields.push("nombre_usuario = ?");
+        values.push(usuario.nombre_usuario);
     }
+
+    if (usuario.correo_usuario !== undefined) {
+        fields.push("correo_usuario = ?");
+        values.push(usuario.correo_usuario);
+    }
+
+    if (usuario.password_u !== undefined) {
+        fields.push("password_u = ?");
+        values.push(usuario.password_u);
+    }
+
+    if (usuario.foto_perfil !== undefined) {
+        fields.push("foto_perfil = ?");
+        values.push(usuario.foto_perfil);
+    }
+
+    if (usuario.foto_public_id !== undefined) {
+        fields.push("foto_public_id = ?");
+        values.push(usuario.foto_public_id);
+    }
+
+    if (fields.length === 0) {
+        throw new Error("No hay campos para actualizar");
+    }
+
+    const sql = `
+        UPDATE usuarios 
+        SET ${fields.join(", ")} 
+        WHERE id = ?
+    `;
+
+    values.push(id);
+
+    const [result] = await pool.query(sql, values);
+    return result;
+}
 
     static async eliminar(id: number) {
         const [result] = await pool.query(

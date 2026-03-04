@@ -2,6 +2,7 @@ const { UsuarioRepo } = require("../repositories/usuarioRepo");
 import type { Usuario } from "../models/usuarioModel";
 const { hashPassword, comparePassword } = require("../utils/password");
 const { signToken } = require("../utils/jwt");
+const { uploadToCloudinary, deleteImage } = require("./cloudinaryService");
 
 class UsuarioService {
     static async crear(usuario: Usuario) {
@@ -77,6 +78,36 @@ class UsuarioService {
     return { message: "Contraseña actualizada correctamente" };
 }
 
-    
+    static async actualizarFotoPerfil(id: number, file: any) {
+
+       
+        const user: any = await UsuarioRepo.findById(id);
+
+        if (!user) {
+            throw new Error("Usuario no encontrado");
+        }
+
+       
+        if (user.foto_public_id) {
+            await deleteImage(user.foto_public_id);
+        }
+
+        const result = await uploadToCloudinary(
+            file.buffer,
+            "usuarios/perfil"
+        );
+
+        
+        await UsuarioRepo.actualizar(id, {
+            foto_perfil: result.secure_url,
+            foto_public_id: result.public_id
+        });
+
+        return {
+            message: "Foto de perfil actualizada correctamente",
+            url: result.secure_url
+        };
+}
+
 }
 module.exports = { UsuarioService };

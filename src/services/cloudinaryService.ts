@@ -1,11 +1,11 @@
 const cloudinary = require("../config/cloudinary");
 
-const uploadToCloudinary = async (fileBuffer) => {
+const uploadToCloudinary = async (fileBuffer, folderName) => {
   return new Promise((resolve, reject) => {
     cloudinary.uploader
       .upload_stream(
         {
-          folder: "lugares",    
+          folder: folderName,    
           format: "webp",      
           quality: "auto",    
         },
@@ -18,4 +18,11 @@ const uploadToCloudinary = async (fileBuffer) => {
   });
 };
 
-module.exports = { uploadToCloudinary };
+const deleteImage = async (publicId) => {
+  return cloudinary.uploader.destroy(publicId);
+};
+
+module.exports = {
+  uploadToCloudinary,
+  deleteImage,
+};

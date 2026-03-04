@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const { UsuarioController } = require("../controllers/usuarioControllers");
+const upload = require("../middlewares/upload");
 
 const router = Router();
 
@@ -143,6 +144,12 @@ router.get("/:id", UsuarioController.obtener);
  *         description: Usuario actualizado correctamente
  */
 router.put("/:id", UsuarioController.actualizar);
+
+router.put(
+  "/:id/foto",
+  upload.single("foto"),
+  UsuarioController.actualizarFotoPerfil
+);
 
 router.put("/:id/password", UsuarioController.cambiarPassword);
 
