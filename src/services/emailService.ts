@@ -2,13 +2,14 @@ const nodemailer = require("nodemailer");
 const { buildContactEmailHtml } = require("../templates/contactEmail.template");
 const { buildWelcomeEmailHtml } = require("../templates/welcomeEmail.template");
 const { buildItinerarioEmailHtml } = require("../templates/itinerarioEmail.template");
+const { welcomeUserEmail } = require("../templates/welcomeUserEmail.template");
 
 // ─── Transporter ──────────────────────────────────────────────────
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
         user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASSWORD, // 16 chars sin espacios
+        pass: process.env.MAIL_PASSWORD,
     },
 });
 
@@ -145,6 +146,20 @@ async function sendWelcomeEmail({
     return info;
 }
 
+const sendUserWelcomeEmail = async (email: string, nombre: string) => {
+        const htmlContent = welcomeUserEmail(nombre);
+
+        await transporter.sendMail({
+            from: `"TripGO - Bienvenida" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: "🎉 ¡Bienvenido a TripGO! Tu aventura comienza ahora",
+            html: htmlContent
+        });
+
+        console.log(`✅ Email de bienvenida enviado a: ${email}`);
+        // No lanzamos error para que no falle el registro si falla el email
+    }
+
 // ─── sendItinerarioEmail ───────────────────────────────────────────────────────
 /**
  * Envía el resumen del itinerario al correo del usuario turista.
@@ -187,4 +202,4 @@ async function sendItinerarioEmail({ email, nombre, items }) {
 }
 
 
-module.exports = { sendContactEmail, sendWelcomeEmail, sendItinerarioEmail };
+module.exports = { sendContactEmail, sendWelcomeEmail, sendUserWelcomeEmail ,sendItinerarioEmail };
