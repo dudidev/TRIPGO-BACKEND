@@ -13,7 +13,7 @@ const imagenRoutes = require("./imagenRoutes");
 const itinerarioRoutes = require("./itinerarioRoutes");
 
 const router = express.Router();
-const usuarioImagenRoutes = require("./usuarioImagenRoutes");
+
 
 router.use("/usuarios", usuarioRoutes);
 router.use("/tipos", tipoRoutes);
@@ -27,7 +27,7 @@ router.use("/detalles-planeador", detallePlaneadorRoutes);
 router.use("/contact", contactRoutes);
 router.use("/imagenes", imagenRoutes);
 router.use("/itinerario", itinerarioRoutes);
-router.use("/usuarios", usuarioImagenRoutes);
+
 
 
 

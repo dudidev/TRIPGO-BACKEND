@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const { UsuarioController } = require("../controllers/usuarioControllers");
+const upload = require("../middlewares/upload");
 
 const router = Router();
 
@@ -94,7 +95,7 @@ router.post("/login", UsuarioController.login);
 
 /**
  * @swagger
- * /api/usuarios/{id}:
+ * /usuarios/{id}:
  *   get:
  *     summary: Obtener usuario por ID
  *     tags: [Usuarios]
@@ -115,7 +116,7 @@ router.get("/:id", UsuarioController.obtener);
 
 /**
  * @swagger
- * /api/usuarios/{id}:
+ * /usuarios/{id}:
  *   put:
  *     summary: Actualizar perfil de usuario
  *     tags: [Usuarios]
@@ -144,12 +145,18 @@ router.get("/:id", UsuarioController.obtener);
  */
 router.put("/:id", UsuarioController.actualizar);
 
+router.put(
+  "/:id/foto",
+  upload.single("foto"),
+  UsuarioController.actualizarFotoPerfil
+);
+
 router.put("/:id/password", UsuarioController.cambiarPassword);
 
 
 /**
  * @swagger
- * /api/usuarios/{id}:
+ * /usuarios/{id}:
  *   delete:
  *     summary: Eliminar usuario
  *     tags: [Usuarios]

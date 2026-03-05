@@ -67,7 +67,11 @@ if (process.env.NODE_ENV === "production") {
     });
 }
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    //explorer: true, 
+    customCss: '.swagger-ui .topbar { background-color: #0E6973; }',
+    customSiteTitle: "TripGO API Docs"
+}));
 
 // ─── Error handler (siempre al final) ────────────────────────────────────────
 app.use(errorHandler);

@@ -1,8 +1,8 @@
-// src/controllers/Usuario.controller.ts
 import type { Request, Response } from "express";
 const { UsuarioService } = require("../services/usuarioService");
 
 class UsuarioController {
+
     static async crear(req: Request, res: Response) {
         try {
             const result = await UsuarioService.crear(req.body);
@@ -32,12 +32,12 @@ class UsuarioController {
     }
 
     static async obtener(req: Request, res: Response) {
-    try {
-        const id = Number(req.params.id);
-        const usuario = await UsuarioService.obtenerPorId(id);
-        res.json({ ok: true, data: usuario });
-    } catch (err: any) {
-        res.status(404).json({ ok: false, message: err.message });
+        try {
+            const id = Number(req.params.id);
+            const usuario = await UsuarioService.obtenerPorId(id);
+            res.json({ ok: true, data: usuario });
+        } catch (err: any) {
+            res.status(404).json({ ok: false, message: err.message });
         }
     }
 
@@ -50,7 +50,6 @@ class UsuarioController {
             res.status(500).json({ ok: false, message: err.message });
         }
     }
-    
 
     static async eliminar(req: Request, res: Response) {
         try {
@@ -62,24 +61,54 @@ class UsuarioController {
         }
     }
 
-
     static async cambiarPassword(req: Request, res: Response) {
-    try {
-        const id = Number(req.params.id);
-        const { password_actual, password_nueva } = req.body;
+        try {
+            const id = Number(req.params.id);
+            const { password_actual, password_nueva } = req.body;
 
-        const result = await UsuarioService.cambiarPassword(
-            id,
-            password_actual,
-            password_nueva
-        );
+            const result = await UsuarioService.cambiarPassword(
+                id,
+                password_actual,
+                password_nueva
+            );
 
-        res.json({ ok: true, result });
+            res.json({ ok: true, result });
 
-    } catch (err: any) {
-        res.status(400).json({ ok: false, message: err.message });
+        } catch (err: any) {
+            res.status(400).json({ ok: false, message: err.message });
+        }
     }
-}
+
+    static async actualizarFotoPerfil(req: Request, res: Response) {
+        
+        try {
+            const id = Number(req.params.id);
+
+            const file = (req as any).file; 
+          
+
+            if (!file) {
+                return res.status(400).json({
+                    ok: false,
+                    message: "Debes enviar una imagen"
+                });
+            }
+
+            const result = await UsuarioService.actualizarFotoPerfil(
+                id,
+                file
+            );
+
+            res.json({ ok: true, result });
+
+        } catch (err: any) {
+            
+            res.status(500).json({
+                ok: false,
+                message: err.message
+            });
+        }
+    }
 }
 
 module.exports = { UsuarioController };
