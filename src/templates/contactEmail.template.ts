@@ -351,6 +351,232 @@ function buildContactEmailHtml({ name, email, message, dateTime }) {
       border-radius: 2px;
     }
 
+    /* ─────────────────────────────────────────────
+   RESPONSIVE (EMAIL SAFE) – Media Queries
+   ───────────────────────────────────────────── */
+
+/* Ajustes generales para pantallas medianas */
+@media screen and (max-width: 680px) {
+  .email-wrapper {
+    margin: 16px auto !important;
+    padding: 0 12px !important;
+    max-width: 100% !important;
+  }
+
+  .header {
+    border-radius: 18px 18px 0 0 !important;
+  }
+
+  .header-inner {
+    padding: 36px 28px 30px !important;
+  }
+
+  .header-decoration {
+    top: -80px !important;
+    right: -90px !important;
+    width: 240px !important;
+    height: 240px !important;
+  }
+
+  .header-decoration-2 {
+    bottom: -90px !important;
+    right: 30px !important;
+    width: 150px !important;
+    height: 150px !important;
+  }
+
+  .logo-row {
+    margin-bottom: 28px !important;
+  }
+
+  .logo-icon {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 12px !important;
+  }
+
+  .logo-text {
+    font-size: 20px !important;
+  }
+
+  .header h1 {
+    font-size: 28px !important;
+    line-height: 1.18 !important;
+  }
+
+  .alert-band {
+    padding: 12px 28px !important;
+  }
+
+  .alert-band p {
+    font-size: 12.5px !important;
+    line-height: 1.35 !important;
+  }
+
+  .body-section {
+    padding: 36px 28px 28px !important;
+  }
+
+  .data-card {
+    padding: 16px 16px !important;
+    border-radius: 14px !important;
+  }
+
+  .message-box {
+    padding: 18px 18px !important;
+  }
+
+  .meta-row {
+    gap: 10px !important;
+  }
+
+  .cta-section {
+    padding: 28px 28px !important;
+  }
+
+  .cta-btn,
+  .cta-btn-secondary {
+    padding: 13px 22px !important;
+    border-radius: 12px !important;
+  }
+
+  .footer {
+    padding: 24px 28px !important;
+    border-radius: 0 0 18px 18px !important;
+  }
+}
+
+/* Móviles: 1 columna, botones apilados, tipografía y espaciado optimizados */
+@media screen and (max-width: 480px) {
+  .email-wrapper {
+    padding: 0 10px !important;
+  }
+
+  .header-inner {
+    padding: 28px 18px 24px !important;
+  }
+
+  .badge {
+    font-size: 10px !important;
+    padding: 5px 10px !important;
+    letter-spacing: 1px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .header h1 {
+    font-size: 24px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Banda de alerta: alineación y lectura */
+  .alert-band {
+    padding: 12px 18px !important;
+    gap: 8px !important;
+  }
+
+  .alert-band svg {
+    width: 15px !important;
+    height: 15px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .alert-band p {
+    font-size: 12px !important;
+  }
+
+  /* Grid a una sola columna */
+  .data-grid {
+    display: block !important; /* más compatible en email */
+  }
+
+  .data-card {
+    margin-bottom: 12px !important;
+  }
+
+  .data-card.full-width {
+    margin-bottom: 0 !important;
+  }
+
+  .card-label {
+    font-size: 10px !important;
+    letter-spacing: 1.2px !important;
+  }
+
+  .data-card .card-value {
+    font-size: 14px !important;
+  }
+
+  .message-box p {
+    font-size: 13.5px !important;
+    line-height: 1.7 !important;
+  }
+
+  /* Meta: apilar */
+  .meta-row {
+    display: block !important;
+    margin-top: 22px !important;
+    padding-top: 16px !important;
+  }
+
+  .meta-row p {
+    font-size: 12px !important;
+    margin-bottom: 6px !important;
+  }
+
+  /* CTA: botones full width, uno debajo del otro */
+  .cta-section {
+    padding: 24px 18px !important;
+  }
+
+  .cta-section p {
+    font-size: 12.5px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .cta-btn,
+  .cta-btn-secondary {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+    margin: 0 !important;
+  }
+
+  .cta-btn {
+    margin-bottom: 10px !important;
+  }
+
+  .cta-btn-secondary {
+    margin-left: 0 !important;
+  }
+
+  .footer {
+    padding: 22px 18px !important;
+  }
+
+  .footer-logo {
+    font-size: 17px !important;
+  }
+
+  .footer p {
+    font-size: 10.5px !important;
+  }
+
+  /* Decoraciones más sutiles (evita que se “coman” el contenido) */
+  .header-decoration {
+    width: 200px !important;
+    height: 200px !important;
+    top: -90px !important;
+    right: -110px !important;
+  }
+
+  .header-decoration-2 {
+    width: 120px !important;
+    height: 120px !important;
+    bottom: -90px !important;
+    right: 10px !important;
+  }
+}
+
     /* PREVIEW VARIABLE INJECTION (para demostración) */
     .var-name { /* reemplazar con el valor real desde el backend */ }
   </style>

@@ -319,6 +319,104 @@ function buildItinerarioEmailHtml({
     .footer-line { width: 32px; height: 1px; background: #E27921; margin: 12px auto; opacity: 0.4; }
     .footer p { font-size: 11px; color: rgba(255,255,255,0.2); line-height: 1.7; }
     .footer a { color: rgba(255,255,255,0.3); text-decoration: none; }
+    /* ─────────────────────────────────────────────
+   LISTA DE LUGARES: más separados y tipo lista
+   ───────────────────────────────────────────── */
+
+/* Contenedor: más aire */
+.item-list {
+  gap: 14px !important;
+  margin-bottom: 34px !important;
+}
+
+/* Cada item se siente independiente */
+.item-card {
+  background: #ffffff !important;
+  border: 1px solid #ECEAE6 !important;
+  box-shadow: 0 1px 0 rgba(12, 27, 31, 0.04) !important;
+  padding: 16px 18px !important;
+}
+
+/* Separador suave dentro de cada card para “orden de lista” */
+.item-info {
+  padding-left: 2px !important;
+}
+
+/* Punto final más sutil */
+.item-dot {
+  opacity: 0.22 !important;
+}
+
+/* Opcional: que el número tenga mejor presencia */
+.item-num {
+  color: #E7E3DC !important;
+}
+
+/* Si quieres que el nombre NO se corte en desktop (puede ocupar 2 líneas) */
+.item-name {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  line-height: 1.25 !important;
+}
+
+/* La dirección puede cortar si es muy larga, pero con mejor lectura */
+.item-address {
+  line-height: 1.35 !important;
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE: lista aún más “separada” en móvil
+   ───────────────────────────────────────────── */
+
+@media screen and (max-width: 680px) {
+  .item-list {
+    gap: 14px !important;
+  }
+
+  .item-card {
+    padding: 14px 14px !important;
+    border-radius: 14px !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .item-list {
+    gap: 12px !important;
+    margin-bottom: 28px !important;
+  }
+
+  .item-card {
+    padding: 14px 12px !important;
+    gap: 12px !important;
+  }
+
+  /* Número compacto pero legible */
+  .item-num {
+    font-size: 20px !important;
+    min-width: 22px !important;
+  }
+
+  /* Imagen un poquito más chica para que respire */
+  .item-img,
+  .item-img-placeholder {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 10px !important;
+  }
+
+  /* En móvil: permitir 2 líneas en nombre + 2 en dirección */
+  .item-name,
+  .item-address {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+  }
+}
+
+
+
+
   </style>
 </head>
 <body>

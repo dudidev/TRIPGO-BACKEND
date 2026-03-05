@@ -114,6 +114,8 @@ function buildWelcomeEmailHtml({
     .fd{width:36px;height:2px;background:#E27921;margin:14px auto;border-radius:2px}
     .ftr p{font-size:11px;color:#444755;line-height:1.8}
     .ftr a{color:#6B7380;text-decoration:none}
+
+    
   </style>
 </head>
 <body>
