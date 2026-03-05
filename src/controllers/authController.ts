@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
 const pool = require("../config/db");
-const bcrypt =  require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { sendUserWelcomeEmail } = require("../services/emailService");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -27,66 +28,80 @@ const register = async (req: Request, res: Response) => {
         // Encriptar contraseña
         const hashedPassword = await bcrypt.hash(password_u, 10);
 
-        // Insertar nuevo usuario
+        // Intentar enviar el email de bienvenida
+        try {
+            await sendUserWelcomeEmail(correo_usuario, nombre_usuario);
+        } catch (emailError) {
+            console.error("❌ Error al enviar email de bienvenida:", emailError);
+            return res.status(500).json({
+                message: "No se pudo enviar el correo de bienvenida. Verifica que el correo sea válido e intenta de nuevo.",
+                error: "El servicio de correo no está disponible"
+            });
+        }
+
+        // SOLO SI EL EMAIL SE ENVIÓ: Insertar nuevo usuario
         await pool.query(
             "INSERT INTO usuarios (nombre_usuario, correo_usuario, password_u, rol) VALUES (?, ?, ?, ?)",
             [nombre_usuario, correo_usuario, hashedPassword, rol || "usuario"]
         );
 
-        res.status(201).json({ message: "Usuario registrado exitosamente" });
-    } catch (error) {
-        console.error(error);
+        res.status(201).json({
+            message: "Usuario registrado exitosamente. Revisa tu correo para comenzar."
+        });
+
+        } catch (error) {
+        console.error("❌ Error en registro:", error);
         res.status(500).json({ message: "Error al registrar usuario" });
     }
-};
+    };
 
-const login = async (req: Request, res: Response) => {
-    try {
-        const { correo_usuario, password_u } = req.body;
+    const login = async (req: Request, res: Response) => {
+        try {
+            const { correo_usuario, password_u } = req.body;
 
-        if (!correo_usuario || !password_u) {
-            return res.status(400).json({ message: "Correo y contraseña son obligatorios" });
+            if (!correo_usuario || !password_u) {
+                return res.status(400).json({ message: "Correo y contraseña son obligatorios" });
+            }
+
+            // Buscar usuario
+            const [rows]: any = await pool.query(
+                "SELECT * FROM usuarios WHERE correo_usuario = ?",
+                [correo_usuario]
+            );
+
+            if (rows.length === 0) {
+                return res.status(404).json({ message: "Usuario no encontrado" });
+            }
+
+            const user = rows[0];
+
+            // Verificar contraseña
+            const validPassword = await bcrypt.compare(password_u, user.password_u);
+            if (!validPassword) {
+                return res.status(401).json({ message: "Contraseña incorrecta" });
+            }
+
+            // Generar token
+            const token = jwt.sign(
+                { id: user.id, correo: user.correo_usuario, rol: user.rol },
+                JWT_SECRET,
+                { expiresIn: "10min" }
+            );
+
+            res.json({
+                message: "Inicio de sesión exitoso",
+                token,
+                user: {
+                    id: user.id,
+                    nombre_usuario: user.nombre_usuario,
+                    correo_usuario: user.correo_usuario,
+                    rol: user.rol,
+                },
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Error en el inicio de sesión" });
         }
+    };
 
-        // Buscar usuario
-        const [rows]: any = await pool.query(
-            "SELECT * FROM usuarios WHERE correo_usuario = ?",
-            [correo_usuario]
-        );
-
-        if (rows.length === 0) {
-            return res.status(404).json({ message: "Usuario no encontrado" });
-        }
-
-        const user = rows[0];
-
-        // Verificar contraseña
-        const validPassword = await bcrypt.compare(password_u, user.password_u);
-        if (!validPassword) {
-            return res.status(401).json({ message: "Contraseña incorrecta" });
-        }
-
-        // Generar token
-        const token = jwt.sign(
-            { id: user.id, correo: user.correo_usuario, rol: user.rol },
-            JWT_SECRET,
-            { expiresIn: "10min" }
-        );
-
-        res.json({
-            message: "Inicio de sesión exitoso",
-            token,
-            user: {
-                id: user.id,
-                nombre_usuario: user.nombre_usuario,
-                correo_usuario: user.correo_usuario,
-                rol: user.rol,
-            },
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error en el inicio de sesión" });
-    }
-};
-
-module.exports = { register, login };
+    module.exports = { register, login };
