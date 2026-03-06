@@ -36,4 +36,25 @@ const subirImagenLugar = async (req, res) => {
   }
 };
 
-module.exports = { subirImagenLugar };
+const obtenerImagenesLugar = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [imagenes] = await pool.query(
+      "SELECT id_ima, url FROM imagenes_e WHERE id_lugar = ?",
+      [id]
+    );
+
+    res.json({
+      total: imagenes.length,
+      imagenes
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener las imágenes" });
+  }
+};
+
+
+module.exports = { subirImagenLugar, obtenerImagenesLugar };
