@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const {EstablecimientoController} = require("../controllers/establecimientoController");
+const ResenaController = require("../controllers/resenaController");
 const { verifyToken, requireEmpresa } = require("../middlewares/authMiddleware");
 
 const router = Router();
@@ -255,5 +256,46 @@ router.put("/mios/:id", verifyToken, requireEmpresa, EstablecimientoController.u
  *         $ref: '#/components/responses/ServerError'
  */
 router.get("/:town/tipo/:idTipo", EstablecimientoController.listarPorUbicacionYTipo);
+
+/**
+ * @swagger
+ * /establecimientos/{id}/resenas:
+ *   get:
+ *     summary: Listar reseñas de un establecimiento
+ *     description: Obtiene todas las reseñas y estadísticas de calificación de un establecimiento
+ *     tags: [Establecimientos]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del establecimiento
+ *     responses:
+ *       200:
+ *         description: Reseñas y estadísticas obtenidas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 estadisticas:
+ *                   type: object
+ *                   properties:
+ *                     promedio:
+ *                       type: number
+ *                       example: 4.2
+ *                     total:
+ *                       type: integer
+ *                       example: 15
+ *                     distribucion:
+ *                       type: object
+ *                       example: { "5": 8, "4": 4, "3": 2, "2": 1, "1": 0 }
+ *                 resenas:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ */
+router.get("/:id/resenas", ResenaController.listarPorEstablecimiento);
 
 module.exports = router;

@@ -5,7 +5,7 @@ const establecimientoRoutes = require("./establecimientoRoutes");
 const servicioRoutes = require("./servicioRoutes");
 const servicioEstablecimientoRoutes = require("./servicioEstablecimientosRoutes");
 const visitaRoutes = require("./visitaRoutes");
-const comentarioRoutes = require("./comentarioRoutes");
+const resenaRoutes = require("./resenaRoutes");
 const planeadorRoutes = require("./planeadorRoutes");
 const detallePlaneadorRoutes = require("./detallePlaneadorRoutes");
 const contactRoutes = require("./contactRoutes");
@@ -21,15 +21,12 @@ router.use("/establecimientos", establecimientoRoutes);
 router.use("/servicios", servicioRoutes);
 router.use("/servicios-establecimientos", servicioEstablecimientoRoutes);
 router.use("/visitas", visitaRoutes);
-router.use("/comentarios", comentarioRoutes);
+router.use("/resenas", resenaRoutes);
 router.use("/planeador", planeadorRoutes);
 router.use("/detalles-planeador", detallePlaneadorRoutes);
 router.use("/contact", contactRoutes);
 router.use("/imagenes", imagenRoutes);
 router.use("/itinerario", itinerarioRoutes);
-
-
-
 
 
 router.get("/", (req, res) => res.json({ ok: true, message: "API TripGO" }));
