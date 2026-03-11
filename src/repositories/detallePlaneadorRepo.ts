@@ -1,6 +1,5 @@
-
-const pool = require("../config/db");
-import type { DetallePlaneador } from "../models/detallePlaneadorModel";
+import pool from "../config/db.js";
+import { DetallePlaneador } from "../models/detallePlaneadorModel.js";
 
 class DetallePlaneadorRepo {
     static async crear(d: DetallePlaneador) {
@@ -9,4 +8,4 @@ class DetallePlaneadorRepo {
         return { insertId: (res as any).insertId };
     }
 }
-module.exports = { DetallePlaneadorRepo };
+export default DetallePlaneadorRepo;

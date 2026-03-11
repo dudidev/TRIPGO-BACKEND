@@ -3,7 +3,7 @@
  * @param {{ name: string, email: string, message: string, dateTime: string }} data
  * @returns {string} HTML completo del correo
  */
-function buildContactEmailHtml({ name, email, message, dateTime }) {
+function buildContactEmailHtml({ name, email, message, dateTime }: { name: string, email: string, message: string, dateTime: string }) {
     const s = escapeHtml; // alias corto
 
     return `<!DOCTYPE html>
@@ -696,4 +696,4 @@ function escapeHtml(str = "") {
         .replace(/'/g, "&#39;");
 }
 
-module.exports = { buildContactEmailHtml };
+export default  buildContactEmailHtml ;

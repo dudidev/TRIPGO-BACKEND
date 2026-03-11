@@ -1,8 +1,7 @@
-const {ServicioRepo} = require("../repositories/servicioRepo");
+import ServicioRepo from "../repositories/servicioRepo.js";
 class ServicioService {
     static async listar() { return await ServicioRepo.listar(); }
     static async crear(s: any) { return await ServicioRepo.crear(s); }
-    
 }
 
-module.exports = { ServicioService };
+export default ServicioService ;

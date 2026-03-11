@@ -491,4 +491,4 @@ function buildItinerarioEmailHtml({
 </html>`;
 }
 
-module.exports = {buildItinerarioEmailHtml}
+export default buildItinerarioEmailHtml

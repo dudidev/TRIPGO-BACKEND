@@ -1,5 +1,5 @@
-import type { Request, Response } from "express";
-const { EstablecimientoService } = require("../services/establecimientoService");
+import { Request, Response } from "express";
+import EstablecimientoService from "../services/establecimientoService.js";
 
 class EstablecimientoController {
   static async listar(req: Request, res: Response) {
@@ -12,9 +12,9 @@ class EstablecimientoController {
     res.status(201).json({ ok: true, data: r });
   }
 
-  static async listarPorUbicacionYTipo(req, res) {
+  static async listarPorUbicacionYTipo(req: Request, res: Response) {
     const { town, idTipo } = req.params;
-    const rows = await EstablecimientoService.listarPorUbicacionYTipo(town, Number(idTipo));
+    const rows = await EstablecimientoService.listarPorUbicacionYTipo(String(town), Number(idTipo));
     res.json({ ok: true, data: rows });
   }
 
@@ -26,15 +26,13 @@ class EstablecimientoController {
     return await EstablecimientoService.updateMio(req, res);
   }
 
-    static async getMios(req: any, res: any) {  
-        return await EstablecimientoService.getMios(req, res);
-    }
+  static async getMios(req: any, res: any) {
+    return await EstablecimientoService.getMios(req, res);
+  }
 
-    static async updateMioById(req: any, res: any) {
-        return await EstablecimientoService.updateMioById(req, res);
-    }
+  static async updateMioById(req: any, res: any) {
+    return await EstablecimientoService.updateMioById(req, res);
+  }
 }
 
-module.exports = {
-  EstablecimientoController
-};
+export default EstablecimientoController;

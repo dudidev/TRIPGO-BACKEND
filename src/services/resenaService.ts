@@ -1,5 +1,5 @@
-const resenaRepo = require("../repositories/resenaRepo");
-import type { CrearResenaDTO, ActualizarResenaDTO } from "../models/resenaModel";
+import resenaRepo from "../repositories/resenaRepo.js";
+import { CrearResenaDTO, ActualizarResenaDTO } from "../models/resenaModel.js";
 
 class ResenaService {
     async crear(idUsuario: number, data: CrearResenaDTO) {
@@ -107,4 +107,4 @@ class ResenaService {
     }
 }
 
-module.exports = new ResenaService();
+export default new ResenaService();

@@ -1,5 +1,5 @@
-import type { Request, Response } from "express";
-const { DetallePlaneadorService } = require("../services/detallePlaneadorService");
+import { Request, Response } from "express";
+import  DetallePlaneadorService from "../services/detallePlaneadorService.js";
 
 class DetallePlaneadorController {
     static async crear(req: Request, res: Response) {
@@ -7,4 +7,4 @@ class DetallePlaneadorController {
         res.status(201).json({ ok: true, r });
     }
 }
-module.exports = { DetallePlaneadorController };
+export default DetallePlaneadorController ;

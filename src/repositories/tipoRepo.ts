@@ -1,11 +1,11 @@
-const pool = require("../config/db");
-import type { Tipo } from "../models/tipoModel";
+import pool from "../config/db.js";
+import type { Tipo } from "../models/tipoModel.js";
 
 class TipoRepo {
-     static async listar() {
-    const [rows] = await pool.query(`SELECT * FROM tipos ORDER BY nombre_tipo`);
-    return rows;
-  }
+    static async listar() {
+        const [rows] = await pool.query(`SELECT * FROM tipos ORDER BY nombre_tipo`);
+        return rows;
+    }
 
     static async listarPorUbicacion(town: string) {
         const [rows] = await pool.query(
@@ -29,4 +29,4 @@ class TipoRepo {
         return { insertId: (res as any).insertId };
     }
 }
-module.exports = { TipoRepo };
+export default TipoRepo;

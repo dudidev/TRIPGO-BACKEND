@@ -1,5 +1,5 @@
-const pool = require("../config/db");
-import type { Visita } from "../models/visitaModel";
+import pool from "../config/db.js";
+import type { Visita } from "../models/visitaModel.js";
 
 class VisitaRepo {
     static async crear(v: Visita) {
@@ -8,4 +8,4 @@ class VisitaRepo {
         return { insertId: (res as any).insertId };
     }
 }
-module.exports = { VisitaRepo };
+export default VisitaRepo;

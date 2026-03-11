@@ -1,8 +1,8 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
-const upload = require("../middlewares/upload");
-const { subirImagenLugar, obtenerImagenesLugar } = require("../controllers/imagenController");
+import upload from "../middlewares/upload.js";
+import { subirImagenLugar, obtenerImagenesLugar } from "../controllers/imagenController.js";
 
 router.post(
   "/lugares/:id/imagenes",
@@ -16,4 +16,4 @@ router.get(
   obtenerImagenesLugar
 );
 
-module.exports = router;
+export default router;

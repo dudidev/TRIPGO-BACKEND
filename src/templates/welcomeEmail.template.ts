@@ -13,18 +13,27 @@
  * @returns {string} HTML completo del correo
  */
 function buildWelcomeEmailHtml({
-    businessName,
-    contactName,
-    email,
-    description,
-    credEmail,
-    credPassword,
-    businessId,
-    dateTime,
+  businessName,
+  contactName,
+  email,
+  description,
+  credEmail,
+  credPassword,
+  businessId,
+  dateTime,
+}: {
+  businessName: string,
+  contactName: string,
+  email: string,
+  description: string,
+  credEmail: string,
+  credPassword: string,
+  businessId: string,
+  dateTime: string
 }) {
-    const s = escapeHtml;
+  const s = escapeHtml;
 
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
@@ -263,12 +272,12 @@ function buildWelcomeEmailHtml({
 }
 
 function escapeHtml(str = "") {
-    return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
-module.exports = { buildWelcomeEmailHtml };
+export default buildWelcomeEmailHtml;

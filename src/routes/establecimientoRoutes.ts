@@ -1,7 +1,7 @@
-const { Router } = require("express");
-const {EstablecimientoController} = require("../controllers/establecimientoController");
-const ResenaController = require("../controllers/resenaController");
-const { verifyToken, requireEmpresa } = require("../middlewares/authMiddleware");
+import Router from "express";
+import EstablecimientoController from "../controllers/establecimientoController.js";
+import ResenaController from "../controllers/resenaController.js";
+import { verifyToken, requireEmpresa } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
@@ -298,4 +298,4 @@ router.get("/:town/tipo/:idTipo", EstablecimientoController.listarPorUbicacionYT
  */
 router.get("/:id/resenas", ResenaController.listarPorEstablecimiento);
 
-module.exports = router;
+export default router;

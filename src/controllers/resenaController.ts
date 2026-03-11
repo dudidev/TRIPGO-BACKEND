@@ -1,5 +1,5 @@
-import type { Request, Response } from "express";
-const resenaService = require("../services/resenaService");
+import { Request, Response } from "express";
+import resenaService from "../services/resenaService.js";
 
 class ResenaController {
     async crear(req: Request, res: Response) {
@@ -26,7 +26,7 @@ class ResenaController {
 
     async listarPorEstablecimiento(req: Request, res: Response) {
         try {
-            const idEstablecimiento = parseInt(req.params.id);
+            const idEstablecimiento = parseInt(req.params.id!);
             const idUsuarioLogueado = (req as any).user?.id; // Opcional, puede no estar logueado
 
             const datos = await resenaService.listarPorEstablecimiento(idEstablecimiento, idUsuarioLogueado);
@@ -53,7 +53,7 @@ class ResenaController {
 
     async obtenerPorId(req: Request, res: Response) {
         try {
-            const idResena = parseInt(req.params.id);
+            const idResena = parseInt(req.params.id!);
 
             const resena = await resenaService.obtenerPorId(idResena);
 
@@ -67,7 +67,7 @@ class ResenaController {
 
     async actualizar(req: Request, res: Response) {
         try {
-            const idResena = parseInt(req.params.id);
+            const idResena = parseInt(req.params.id!);
             const idUsuario = (req as any).user.id;
             const { calificacion, comentario } = req.body;
 
@@ -89,7 +89,7 @@ class ResenaController {
 
     async eliminar(req: Request, res: Response) {
         try {
-            const idResena = parseInt(req.params.id);
+            const idResena = parseInt(req.params.id!);
             const idUsuario = (req as any).user.id;
 
             await resenaService.eliminar(idResena, idUsuario);
@@ -103,4 +103,4 @@ class ResenaController {
     }
 }
 
-module.exports = new ResenaController();
+export default new ResenaController();

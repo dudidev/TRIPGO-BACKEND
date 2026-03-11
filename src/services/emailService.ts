@@ -1,8 +1,8 @@
-const nodemailer = require("nodemailer");
-const { buildContactEmailHtml } = require("../templates/contactEmail.template");
-const { buildWelcomeEmailHtml } = require("../templates/welcomeEmail.template");
-const { buildItinerarioEmailHtml } = require("../templates/itinerarioEmail.template");
-const { welcomeUserEmail } = require("../templates/welcomeUserEmail.template");
+import nodemailer from "nodemailer";
+import buildContactEmailHtml from "../templates/contactEmail.template.js";
+import buildWelcomeEmailHtml from "../templates/welcomeEmail.template.js";
+import buildItinerarioEmailHtml from "../templates/itinerarioEmail.template.js";
+import welcomeUserEmail from "../templates/welcomeUserEmail.template.js";
 
 // ─── Transporter ──────────────────────────────────────────────────
 const transporter = nodemailer.createTransport({
@@ -23,7 +23,8 @@ transporter.verify((error) => {
 });
 
 // ─── Helpers internos ─────────────────────────────────────────────────────────
-function checkEnvVars(...keys) {
+function checkEnvVars(...keys: string[]
+) {
     keys.forEach((key) => {
         if (!process.env[key]) {
             throw new Error(`Variable de entorno requerida no definida: ${key}`);
@@ -43,7 +44,7 @@ function getFormattedDate() {
     }).format(new Date());
 }
 
-function generateBusinessEmail(businessName) {
+function generateBusinessEmail(businessName: string) {
     if (!businessName) throw new Error("businessName es requerido");
 
     // Quita tildes
@@ -65,7 +66,7 @@ function generateBusinessEmail(businessName) {
  * Alerta interna: avisa al equipo TripGO que un negocio completó el formulario.
  * Destino: MAIL_RECIPIENT (correo interno de TripGO)
  */
-async function sendContactEmail({ name, email, message }) {
+async function sendContactEmail({ name, email, message }: { name: string; email: string; message: string }) {
     checkEnvVars("MAIL_USER", "MAIL_PASSWORD", "MAIL_RECIPIENT");
 
     console.log(`📧 [emailService] Alerta interna | negocio: "${name}"`);
@@ -107,6 +108,13 @@ async function sendWelcomeEmail({
     description,
     credPassword,
     businessId,
+} : {
+    businessName: string,
+    contactName:  string,
+    email:        string,
+    description:  string,
+    credPassword: string,
+    businessId:   string,
 }) {
     checkEnvVars("MAIL_USER", "MAIL_PASSWORD");
 
@@ -147,18 +155,18 @@ async function sendWelcomeEmail({
 }
 
 const sendUserWelcomeEmail = async (email: string, nombre: string) => {
-        const htmlContent = welcomeUserEmail(nombre);
+    const htmlContent = welcomeUserEmail(nombre);
 
-        await transporter.sendMail({
-            from: `"TripGO - Bienvenida" <${process.env.EMAIL_USER}>`,
-            to: email,
-            subject: "🎉 ¡Bienvenido a TripGO! Tu aventura comienza ahora",
-            html: htmlContent
-        });
+    await transporter.sendMail({
+        from: `"TripGO - Bienvenida" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: "🎉 ¡Bienvenido a TripGO! Tu aventura comienza ahora",
+        html: htmlContent
+    });
 
-        console.log(`✅ Email de bienvenida enviado a: ${email}`);
-        // No lanzamos error para que no falle el registro si falla el email
-    }
+    console.log(`✅ Email de bienvenida enviado a: ${email}`);
+    // No lanzamos error para que no falle el registro si falla el email
+}
 
 // ─── sendItinerarioEmail ───────────────────────────────────────────────────────
 /**
@@ -174,7 +182,7 @@ const sendUserWelcomeEmail = async (email: string, nombre: string) => {
  *   }>
  * }} data
  */
-async function sendItinerarioEmail({ email, nombre, items }) {
+async function sendItinerarioEmail({ email, nombre, items }: { email: string; nombre: string; items: Array<{ nombre: string; direccion?: string; imagenUrl?: string }> }) {
     checkEnvVars("MAIL_USER", "MAIL_PASSWORD");
 
     console.log(`🗺️  [emailService] Itinerario | usuario: "${nombre}" | destino: ${email} | lugares: ${items.length}`);
@@ -202,4 +210,4 @@ async function sendItinerarioEmail({ email, nombre, items }) {
 }
 
 
-module.exports = { sendContactEmail, sendWelcomeEmail, sendUserWelcomeEmail ,sendItinerarioEmail };
+export { sendContactEmail, sendWelcomeEmail, sendUserWelcomeEmail, sendItinerarioEmail };

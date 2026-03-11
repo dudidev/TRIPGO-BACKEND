@@ -1,4 +1,5 @@
-const { DetallePlaneadorRepo } = require("../repositories/detallePlaneadorRepo");
+import DetallePlaneadorRepo from "../repositories/detallePlaneadorRepo.js";
 class DetallePlaneadorService { static async crear(d: any) { return await DetallePlaneadorRepo.crear(d); } }
 
-module.exports = { DetallePlaneadorService };
+
+export default DetallePlaneadorService;

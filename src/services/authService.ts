@@ -1,7 +1,10 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const SECRET_KEY = process.env.JWT_SECRET;
+if(!SECRET_KEY) {
+    throw new Error("JWT_SECRET no está definido en las variables de entorno");
+}
 const users: any[] = []; // simulación de base de datos temporal
 
 const registerUser = async (email: string, password: string) => {
@@ -27,4 +30,4 @@ const loginUser = async (email: string, password: string) => {
     return { message: "Login exitoso", token };
 };
 
-module.exports = { registerUser, loginUser };
+export { registerUser, loginUser };

@@ -1,6 +1,6 @@
-const { ServicioEstablecimientoRepo } = require ( "../repositories/servicioEstablecimientoRepo");
+import ServicioEstablecimientoRepo from  "../repositories/servicioEstablecimientoRepo.js";
 class ServicioEstablecimientoService {
     static async crear(s: any) { return await ServicioEstablecimientoRepo.crear(s); }
 }
 
-module.exports = { ServicioEstablecimientoService };
+export default ServicioEstablecimientoService;

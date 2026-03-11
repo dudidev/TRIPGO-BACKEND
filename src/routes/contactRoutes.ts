@@ -1,6 +1,6 @@
-const express = require("express");
-const rateLimit = require("express-rate-limit");
-const { sendContactEmail } = require("../services/emailService");
+import express from "express";
+import rateLimit from "express-rate-limit";
+import { sendContactEmail } from "../services/emailService.js";
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ const contactLimiter = rateLimit({
 });
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-function isValidEmail(email) {
+function isValidEmail(email:any) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
@@ -48,4 +48,4 @@ router.post("/", contactLimiter, async (req, res, next) => {
     }
 });
 
-module.exports = router;
+export default router;

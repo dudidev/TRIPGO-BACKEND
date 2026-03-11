@@ -1,4 +1,4 @@
-const { TipoRepo } = require("../repositories/tipoRepo");
+import TipoRepo from "../repositories/tipoRepo.js";
 
 class TipoService {
     static async listar() { return await TipoRepo.listar(); }
@@ -10,4 +10,4 @@ class TipoService {
     static async crear(t: any) { return await TipoRepo.crear(t); }
 }
 
-module.exports = { TipoService };
+export default TipoService;

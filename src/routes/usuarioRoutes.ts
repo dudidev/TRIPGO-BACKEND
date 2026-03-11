@@ -1,6 +1,6 @@
-const { Router } = require("express");
-const { UsuarioController } = require("../controllers/usuarioControllers");
-const upload = require("../middlewares/upload");
+import Router from "express";
+import UsuarioController from "../controllers/usuarioControllers.js";
+import upload from "../middlewares/upload.js";
 
 const router = Router();
 
@@ -173,4 +173,4 @@ router.put("/:id/password", UsuarioController.cambiarPassword);
 router.delete("/:id", UsuarioController.eliminar);
 
 
-module.exports = router;
+export default router;

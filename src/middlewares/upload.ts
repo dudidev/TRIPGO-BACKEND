@@ -1,4 +1,4 @@
-const multer = require("multer");
+import multer from "multer";
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -19,9 +19,9 @@ const upload = multer({
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error("Solo se permiten archivos de tipo imagen"), false);
+      cb(new Error("Solo se permiten archivos de tipo imagen"));
     }
   }
 });
 
-module.exports = upload;
+export default upload;

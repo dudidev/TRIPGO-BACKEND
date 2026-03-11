@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-const { ServicioEstablecimientoService } = require("../services/servicioEstablecimientoService");
+import ServicioEstablecimientoService from "../services/servicioEstablecimientoService.js";
 
 class ServicioEstablecimientoController {
     static async crear(req: Request, res: Response) {
@@ -7,4 +7,4 @@ class ServicioEstablecimientoController {
         res.status(201).json({ ok: true, r });
     }
 }
-module.exports = { ServicioEstablecimientoController };
+export default ServicioEstablecimientoController;

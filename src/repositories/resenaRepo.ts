@@ -1,5 +1,5 @@
-const pool = require("../config/db");
-import type { Resena, CrearResenaDTO, ActualizarResenaDTO, EstadisticasResenas } from "../models/resenaModel";
+import pool from "../config/db.js";
+import type { Resena, CrearResenaDTO, ActualizarResenaDTO, EstadisticasResenas } from "../models/resenaModel.js";
 
 class ResenaRepository {
     async crear(idUsuario: number, data: CrearResenaDTO): Promise<number> {
@@ -134,4 +134,4 @@ class ResenaRepository {
     }
 }
 
-module.exports = new ResenaRepository();
+export default new ResenaRepository();

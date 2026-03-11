@@ -1,5 +1,5 @@
-const { Router } = require("express");
-const {ServicioEstablecimientoController} = require("../controllers/servicioEstablecimientoController");
+import Router from "express";
+import ServicioEstablecimientoController from "../controllers/servicioEstablecimientoController.js";
 
 const router = Router();
 
@@ -39,4 +39,5 @@ const router = Router();
  *         description: Error en los datos
  */
 router.post("/", ServicioEstablecimientoController.crear);
-module.exports = router;
+
+export default router;

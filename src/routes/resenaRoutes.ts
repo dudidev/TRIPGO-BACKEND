@@ -1,6 +1,6 @@
-const { Router } = require("express");
-const ResenaController = require("../controllers/resenaController");
-const { verifyToken } = require("../middlewares/authMiddleware");
+import Router from "express";
+import ResenaController from "../controllers/resenaController.js";
+import { verifyToken } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
@@ -157,4 +157,4 @@ router.put("/:id", verifyToken, ResenaController.actualizar);
  */
 router.delete("/:id", verifyToken, ResenaController.eliminar);
 
-module.exports = router;
+export default router;

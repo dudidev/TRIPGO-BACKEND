@@ -1,5 +1,5 @@
-const pool  = require("../config/db");
-import type { ServicioEstablecimiento } from "../models/servicioEstablecimiento";
+import pool from "../config/db.js";
+import type { ServicioEstablecimiento } from "../models/servicioEstablecimiento.js";
 
 class ServicioEstablecimientoRepo {
     static async crear(s: ServicioEstablecimiento) {
@@ -10,4 +10,4 @@ class ServicioEstablecimientoRepo {
         return { ok: true };
     }
 }
-module.exports = { ServicioEstablecimientoRepo };
+export default ServicioEstablecimientoRepo;

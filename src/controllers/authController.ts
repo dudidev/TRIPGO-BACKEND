@@ -1,10 +1,10 @@
-import type { Request, Response } from "express";
-const pool = require("../config/db");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { sendUserWelcomeEmail } = require("../services/emailService");
+import { Request, Response } from "express";
+import pool from "../config/db.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import {sendUserWelcomeEmail} from "../services/emailService.js";
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET: string = process.env.JWT_SECRET!;
 
 const register = async (req: Request, res: Response) => {
     try {
@@ -49,59 +49,59 @@ const register = async (req: Request, res: Response) => {
             message: "Usuario registrado exitosamente. Revisa tu correo para comenzar."
         });
 
-        } catch (error) {
+    } catch (error) {
         console.error("❌ Error en registro:", error);
         res.status(500).json({ message: "Error al registrar usuario" });
     }
-    };
+};
 
-    const login = async (req: Request, res: Response) => {
-        try {
-            const { correo_usuario, password_u } = req.body;
+const login = async (req: Request, res: Response) => {
+    try {
+        const { correo_usuario, password_u } = req.body;
 
-            if (!correo_usuario || !password_u) {
-                return res.status(400).json({ message: "Correo y contraseña son obligatorios" });
-            }
-
-            // Buscar usuario
-            const [rows]: any = await pool.query(
-                "SELECT * FROM usuarios WHERE correo_usuario = ?",
-                [correo_usuario]
-            );
-
-            if (rows.length === 0) {
-                return res.status(404).json({ message: "Usuario no encontrado" });
-            }
-
-            const user = rows[0];
-
-            // Verificar contraseña
-            const validPassword = await bcrypt.compare(password_u, user.password_u);
-            if (!validPassword) {
-                return res.status(401).json({ message: "Contraseña incorrecta" });
-            }
-
-            // Generar token
-            const token = jwt.sign(
-                { id: user.id, correo: user.correo_usuario, rol: user.rol },
-                JWT_SECRET,
-                { expiresIn: "10min" }
-            );
-
-            res.json({
-                message: "Inicio de sesión exitoso",
-                token,
-                user: {
-                    id: user.id,
-                    nombre_usuario: user.nombre_usuario,
-                    correo_usuario: user.correo_usuario,
-                    rol: user.rol,
-                },
-            });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "Error en el inicio de sesión" });
+        if (!correo_usuario || !password_u) {
+            return res.status(400).json({ message: "Correo y contraseña son obligatorios" });
         }
-    };
 
-    module.exports = { register, login };
+        // Buscar usuario
+        const [rows]: any = await pool.query(
+            "SELECT * FROM usuarios WHERE correo_usuario = ?",
+            [correo_usuario]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+
+        const user = rows[0];
+
+        // Verificar contraseña
+        const validPassword = await bcrypt.compare(password_u, user.password_u);
+        if (!validPassword) {
+            return res.status(401).json({ message: "Contraseña incorrecta" });
+        }
+
+        // Generar token
+        const token = jwt.sign(
+            { id: user.id, correo: user.correo_usuario, rol: user.rol },
+            JWT_SECRET,
+            { expiresIn: "10min" }
+        );
+
+        res.json({
+            message: "Inicio de sesión exitoso",
+            token,
+            user: {
+                id: user.id,
+                nombre_usuario: user.nombre_usuario,
+                correo_usuario: user.correo_usuario,
+                rol: user.rol,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error en el inicio de sesión" });
+    }
+};
+
+export { register, login };

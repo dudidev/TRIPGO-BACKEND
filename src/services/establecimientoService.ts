@@ -1,4 +1,4 @@
-const { EstablecimientoRepo } = require("../repositories/establecimientoRepo");
+import EstablecimientoRepo from "../repositories/establecimientoRepo.js";
 class EstablecimientoService {
     static async listar() { return await EstablecimientoRepo.listar(); }
     static async listarPorUbicacionYTipo(town: string, idTipo: number) {
@@ -19,4 +19,4 @@ class EstablecimientoService {
     }
 }
 
-module.exports = { EstablecimientoService };
+export default EstablecimientoService;

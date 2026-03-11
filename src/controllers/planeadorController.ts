@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-const { PlaneadorService } = require("../services/planeadorService");
+import PlaneadorService from "../services/planeadorService.js";
 
 class PlaneadorController {
     static async crear(req: Request, res: Response) {
@@ -7,4 +7,4 @@ class PlaneadorController {
         res.status(201).json({ ok: true, r });
     }
 }
-module.exports = { PlaneadorController };
+export default PlaneadorController;
