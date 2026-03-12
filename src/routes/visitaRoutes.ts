@@ -1,5 +1,5 @@
-const { Router } = require("express");
-const { VisitaController } = require("../controllers/visitaController");
+import Router from "express";
+import VisitaController from "../controllers/visitaController.js";
 
 const router = Router();
 
@@ -40,4 +40,4 @@ const router = Router();
  */
 router.post("/", VisitaController.crear);
 
-module.exports = router;
+export default router;

@@ -1,15 +1,17 @@
-const pool = require("../config/db");
-const { uploadToCloudinary } = require("../services/cloudinaryService");
+import pool from "../config/db.js";
+import { uploadToCloudinary } from "../services/cloudinaryService.js";
+import type { Request, Response } from "express";
 
-const subirImagenLugar = async (req, res) => {
+const subirImagenLugar = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    const file = (req as any).file;
 
-    if (!req.file) {
+    if (!file) {
       return res.status(400).json({ message: "No se envió ninguna imagen" });
     }
 
-    const [rows] = await pool.query(
+    const [rows]: any = await pool.query(
       "SELECT id_establecimiento FROM establecimiento WHERE id_establecimiento = ?",
       [id]
     );
@@ -18,7 +20,7 @@ const subirImagenLugar = async (req, res) => {
       return res.status(404).json({ message: "El establecimiento no existe" });
     }
 
-    const result = await uploadToCloudinary(req.file.buffer);
+    const result: any = await uploadToCloudinary(file.buffer, "establecimientos");
 
     await pool.query(
       "INSERT INTO imagenes_e (id_lugar, url) VALUES (?, ?)",
@@ -36,4 +38,25 @@ const subirImagenLugar = async (req, res) => {
   }
 };
 
-module.exports = { subirImagenLugar };
+const obtenerImagenesLugar = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const [imagenes]: any = await pool.query(
+      "SELECT id_ima, url FROM imagenes_e WHERE id_lugar = ?",
+      [id]
+    );
+
+    res.json({
+      total: imagenes.length,
+      imagenes
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener las imágenes" });
+  }
+};
+
+
+export { subirImagenLugar, obtenerImagenesLugar };

@@ -1,6 +1,6 @@
 // src/controllers/Servicio.controller.ts
 import type { Request, Response } from "express";
-const  {ServicioService}  = require("../services/servicioService");
+import ServicioService from "../services/servicioService.js";
 
 class ServicioController {
     static async listar(req: Request, res: Response) {
@@ -12,4 +12,4 @@ class ServicioController {
         res.status(201).json({ ok: true, r });
     }
 }
-module.exports = { ServicioController };
+export default ServicioController;

@@ -1,5 +1,5 @@
-const { Router } = require("express");
-const {DetallePlaneadorController} = require("../controllers/detallePlaneadorController");
+import Router from "express";
+import DetallePlaneadorController from "../controllers/detallePlaneadorController.js";
 
 const router = Router();
 
@@ -40,4 +40,4 @@ const router = Router();
  */
 router.post("/", DetallePlaneadorController.crear);
 
-module.exports = router;
+export default router;

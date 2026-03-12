@@ -1,6 +1,5 @@
-// src/controllers/Visita.controller.ts
 import type { Request, Response } from "express";
-const { VisitaService } = require("../services/visitaService");
+import VisitaService from "../services/visitaService.js";
 
 class VisitaController {
     static async crear(req: Request, res: Response) {
@@ -8,4 +7,4 @@ class VisitaController {
         res.status(201).json({ ok: true, r });
     }
 }
-module.exports = { VisitaController };
+export default VisitaController;

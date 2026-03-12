@@ -1,5 +1,5 @@
-const { Router } = require("express");
-const { ServicioController } = require("../controllers/servicioController");
+import Router from "express";
+import ServicioController from "../controllers/servicioController.js";
 
 const router = Router();
 
@@ -48,4 +48,4 @@ router.get("/", ServicioController.listar);
  */
 router.post("/", ServicioController.crear);
 
-module.exports = router;
+export default router;

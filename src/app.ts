@@ -1,90 +1,89 @@
-const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const morgan = require("morgan");
+import express, { Application, Request, Response } from "express";
+import cors, { CorsOptions } from "cors";
+import morgan from "morgan";
 
-const routes = require("./routes");
-const authRoutes = require("./routes/authRoutes");
+import routes from "./routes/index.js";
+import authRoutes from "./routes/authRoutes.js";
 
-const pool = require("./config/db");
-const { errorHandler } = require("./middlewares/errorMiddleware");
+import { errorHandler } from "./middlewares/errorMiddleware.js";
 
-const swaggerUi = require("swagger-ui-express");
-const swaggerSpec = require("./config/swagger");
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.js";
 
-dotenv.config();
-const app = express();
+const app: Application = express();
 
-// ─── CORS ─────────────────────────────────────────────────────────────────────
-const allowedOrigins = [
+// ─── CORS ─────────────────────────────────────────────
+
+const allowedOrigins: string[] = [
     "http://localhost:4200",
     "https://tripgoquindio.vercel.app",
     "https://tripgo-git-develop-dudidevs-projects.vercel.app",
 ];
 
-const corsOptions = {
+const corsOptions: CorsOptions = {
     origin: (origin, callback) => {
-        // Sin origin = Postman, curl, server-to-server → permitir
+
+        // Sin origin = Postman, curl, server-to-server
         if (!origin) return callback(null, true);
 
         if (allowedOrigins.includes(origin)) {
             return callback(null, true);
         }
 
-        console.warn(`⚠️  [CORS] Origen bloqueado: ${origin}`);
+        console.warn(`⚠️ [CORS] Origen bloqueado: ${origin}`);
         return callback(new Error(`CORS: origen no permitido → ${origin}`));
     },
+
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-    // preflightContinue: false hace que cors() responda el OPTIONS por sí solo,
-    // eliminando la necesidad de app.options("*") que rompe con path-to-regexp v8+
     preflightContinue: false,
     optionsSuccessStatus: 204,
 };
 
-// Un solo app.use maneja tanto el preflight OPTIONS como las requests normales
 app.use(cors(corsOptions));
 
-// ─── Middleware global ────────────────────────────────────────────────────────
-app.use(morgan("dev"));
+// ─── Middleware global ─────────────────────────────────
+
+if (process.env.NODE_ENV === "development") {
+    app.use(morgan("dev"));
+}
+
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// ─── Rutas ────────────────────────────────────────────────────────────────────
+// ─── Rutas ─────────────────────────────────────────────
+
 app.use("/", routes);
 app.use("/auth", authRoutes);
 
-app.get("/status", (_req, res) => {
-    res.json({ ok: true, message: "Servidor TripGO funcionando correctamente" });
+app.get("/status", (_req: Request, res: Response) => {
+    res.json({
+        ok: true,
+        message: "Servidor TripGO funcionando correctamente",
+    });
 });
 
-// ─── Swagger ──────────────────────────────────────────────────────────────────
+// ─── Swagger ───────────────────────────────────────────
+
 if (process.env.NODE_ENV === "production") {
-    app.get("/api/docs.json", (_req, res) => {
+    app.get("/api/docs.json", (_req: Request, res: Response) => {
         res.setHeader("Content-Type", "application/json");
         res.send(swaggerSpec);
     });
 }
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-    //explorer: true, 
-    customCss: '.swagger-ui .topbar { background-color: #0E6973; }',
-    customSiteTitle: "TripGO API Docs"
-}));
+app.use(
+    "/docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+        customCss: ".swagger-ui .topbar { background-color: #0E6973; }",
+        customSiteTitle: "TripGO API Docs",
+    })
+);
 
-// ─── Error handler (siempre al final) ────────────────────────────────────────
+// ─── Error handler (siempre al final) ──────────────────
+
 app.use(errorHandler);
 
-// ─── Conexión BD ──────────────────────────────────────────────────────────────
-(async () => {
-    try {
-        const connection = await pool.getConnection();
-        console.log("Conectado a la base de datos MySQL");
-        connection.release();
-    } catch (error) {
-        console.error("Error al conectar a la base de datos:", error);
-    }
-})();
-
-module.exports = app;
+export default app;

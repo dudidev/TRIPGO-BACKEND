@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-const { sendItinerarioEmail } = require("../services/emailService");
+import { sendItinerarioEmail } from "../services/emailService.js";
 
-const enviarItinerarioEmail = async(req: Request, res: Response): Promise<void> => {
+const enviarItinerarioEmail = async (req: Request, res: Response): Promise<void> => {
     const { email, nombre, items } = req.body;
 
     if (!email || !nombre || !Array.isArray(items) || items.length === 0) {
@@ -18,4 +18,4 @@ const enviarItinerarioEmail = async(req: Request, res: Response): Promise<void> 
     }
 }
 
-module.exports = { enviarItinerarioEmail };
+export default enviarItinerarioEmail;

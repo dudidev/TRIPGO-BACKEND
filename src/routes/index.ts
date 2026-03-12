@@ -1,18 +1,18 @@
-const express = require("express");
-const usuarioRoutes = require("./usuarioRoutes");
-const tipoRoutes = require("./tipoRoutes");
-const establecimientoRoutes = require("./establecimientoRoutes");
-const servicioRoutes = require("./servicioRoutes");
-const servicioEstablecimientoRoutes = require("./servicioEstablecimientosRoutes");
-const visitaRoutes = require("./visitaRoutes");
-const comentarioRoutes = require("./comentarioRoutes");
-const planeadorRoutes = require("./planeadorRoutes");
-const detallePlaneadorRoutes = require("./detallePlaneadorRoutes");
-const contactRoutes = require("./contactRoutes");
-const imagenRoutes = require("./imagenRoutes");
-const itinerarioRoutes = require("./itinerarioRoutes");
+import Router from "express"
+import usuarioRoutes from "./usuarioRoutes.js";
+import tipoRoutes from"./tipoRoutes.js";
+import establecimientoRoutes from"./establecimientoRoutes.js";
+import servicioRoutes from"./servicioRoutes.js";
+import servicioEstablecimientoRoutes from"./servicioEstablecimientosRoutes.js";
+import visitaRoutes from"./visitaRoutes.js";
+import resenaRoutes from"./resenaRoutes.js";
+import planeadorRoutes from"./planeadorRoutes.js";
+import detallePlaneadorRoutes from"./detallePlaneadorRoutes.js";
+import contactRoutes from"./contactRoutes.js";
+import imagenRoutes from"./imagenRoutes.js";
+import itinerarioRoutes from"./itinerarioRoutes.js";
 
-const router = express.Router();
+const router = Router();
 
 
 router.use("/usuarios", usuarioRoutes);
@@ -21,7 +21,7 @@ router.use("/establecimientos", establecimientoRoutes);
 router.use("/servicios", servicioRoutes);
 router.use("/servicios-establecimientos", servicioEstablecimientoRoutes);
 router.use("/visitas", visitaRoutes);
-router.use("/comentarios", comentarioRoutes);
+router.use("/resenas", resenaRoutes);
 router.use("/planeador", planeadorRoutes);
 router.use("/detalles-planeador", detallePlaneadorRoutes);
 router.use("/contact", contactRoutes);
@@ -29,9 +29,6 @@ router.use("/imagenes", imagenRoutes);
 router.use("/itinerario", itinerarioRoutes);
 
 
+router.get("/", (_req, _res) => _res.json({ ok: true, message: "API TripGO" }));
 
-
-
-router.get("/", (req, res) => res.json({ ok: true, message: "API TripGO" }));
-
-module.exports = router;
+export default router;

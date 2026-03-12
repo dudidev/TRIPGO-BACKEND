@@ -1,5 +1,5 @@
-const { Router } = require("express");
-const { TipoController } = require("../controllers/tipoController");
+import {Router, Request, Response} from "express";
+import TipoController from "../controllers/tipoController.js";
 
 const router = Router();
 
@@ -23,10 +23,10 @@ const router = Router();
  *       200:
  *         description: Lista de tipos
  */
-router.get("/__debug", (_req, res) => {
+router.get("/__debug", (_req: Request, res: Response) => {
   res.json({ ok: true, route: "tipoRoutes", has: "por-ubicacion" });
 });
 router.get("/", TipoController.listar);
 router.get("/por-ubicacion/:town", TipoController.listarPorUbicacion);
 
-module.exports = router;
+export default router;

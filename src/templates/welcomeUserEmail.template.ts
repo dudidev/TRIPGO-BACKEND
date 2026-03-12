@@ -129,4 +129,4 @@ const welcomeUserEmail = (nombre: string): string => {
   `;
 };
 
-module.exports = { welcomeUserEmail };
+export default welcomeUserEmail;

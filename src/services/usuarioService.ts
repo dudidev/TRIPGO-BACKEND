@@ -1,9 +1,9 @@
-const { UsuarioRepo } = require("../repositories/usuarioRepo");
-import type { Usuario } from "../models/usuarioModel";
-const { hashPassword, comparePassword } = require("../utils/password");
-const { signToken } = require("../utils/jwt");
-const { uploadToCloudinary, deleteImage } = require("./cloudinaryService");
-const fileType = require("file-type");
+import UsuarioRepo from "../repositories/usuarioRepo.js";
+import type { Usuario } from "../models/usuarioModel.js";
+import { hashPassword, comparePassword } from "../utils/password.js";
+import { signToken } from "../utils/jwt.js";
+import { uploadToCloudinary, deleteImage } from "./cloudinaryService.js";
+import * as fileType from "file-type";
 
 class UsuarioService {
     static async crear(usuario: Usuario) {
@@ -27,11 +27,11 @@ class UsuarioService {
     }
 
     static async obtenerPorId(id: number) {
-    const usuario = await UsuarioRepo.findById(id);
-    if (!usuario) {
-        throw new Error("Usuario no encontrado");
-    }
-    return usuario;
+        const usuario = await UsuarioRepo.findById(id);
+        if (!usuario) {
+            throw new Error("Usuario no encontrado");
+        }
+        return usuario;
     }
 
     static async actualizar(id: number, data: Partial<Usuario>) {
@@ -44,7 +44,7 @@ class UsuarioService {
 
         return { message: "Usuario actualizado correctamente" };
     }
-    
+
 
     static async eliminar(id: number) {
         await UsuarioRepo.eliminar(id);
@@ -53,38 +53,38 @@ class UsuarioService {
 
 
     static async cambiarPassword(
-    id: number,
-    password_actual: string,
-    password_nueva: string
-) {
+        id: number,
+        password_actual: string,
+        password_nueva: string
+    ) {
 
-    const user: any = await UsuarioRepo.findByIdWithPassword(id);
+        const user: any = await UsuarioRepo.findByIdWithPassword(id);
 
-    if (!user) {
-        throw new Error("Usuario no encontrado");
+        if (!user) {
+            throw new Error("Usuario no encontrado");
+        }
+
+        const match = await comparePassword(password_actual, user.password_u);
+
+        if (!match) {
+            throw new Error("La contraseña actual es incorrecta");
+        }
+
+        const hashed = await hashPassword(password_nueva);
+
+        await UsuarioRepo.actualizar(id, {
+            password_u: hashed
+        });
+
+        return { message: "Contraseña actualizada correctamente" };
     }
-
-    const match = await comparePassword(password_actual, user.password_u);
-
-    if (!match) {
-        throw new Error("La contraseña actual es incorrecta");
-    }
-
-    const hashed = await hashPassword(password_nueva);
-
-    await UsuarioRepo.actualizar(id, {
-        password_u: hashed
-    });
-
-    return { message: "Contraseña actualizada correctamente" };
-}
 
     static async actualizarFotoPerfil(id: number, file: any) {
 
         const type = await fileType.fileTypeFromBuffer(file.buffer);
 
         if (!type || !type.mime.startsWith("image/")) {
-            
+
             throw new Error("El archivo debe ser una imagen válida");
         }
 
@@ -95,17 +95,17 @@ class UsuarioService {
             throw new Error("Usuario no encontrado");
         }
 
-       
+
         if (user.foto_public_id) {
             await deleteImage(user.foto_public_id);
         }
 
-        const result = await uploadToCloudinary(
+        const result: any = await uploadToCloudinary(
             file.buffer,
             "usuarios/perfil"
         );
 
-        
+
         await UsuarioRepo.actualizar(id, {
             foto_perfil: result.secure_url,
             foto_public_id: result.public_id
@@ -115,7 +115,7 @@ class UsuarioService {
             message: "Foto de perfil actualizada correctamente",
             url: result.secure_url
         };
-}
+    }
 
 }
-module.exports = { UsuarioService };
+export default UsuarioService;

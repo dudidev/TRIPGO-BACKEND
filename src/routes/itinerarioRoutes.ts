@@ -1,13 +1,8 @@
-// src/routes/itinerarioRoutes.ts
-
-const { Router } = require ("express");
-const { enviarItinerarioEmail } = require ("../controllers/itinerarioEmailController");
-const { verifyToken } = require ("../middlewares/authMiddleware") ; // protege la ruta con JWT
+import Router from "express";
+import enviarItinerarioEmail from "../controllers/itinerarioEmailController.js";
+import { verifyToken } from "../middlewares/authMiddleware.js";
 
 const router = Router();
-
-// POST /api/itinerario/enviar-email
-// Requiere usuario autenticado (JWT)
 router.post("/enviar-email", verifyToken, enviarItinerarioEmail);
 
-module.exports = router;
+export default router;

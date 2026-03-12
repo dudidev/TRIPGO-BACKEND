@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-const { UsuarioService } = require("../services/usuarioService");
+import UsuarioService from "../services/usuarioService.js";
 
 class UsuarioController {
 
@@ -111,4 +111,4 @@ class UsuarioController {
     }
 }
 
-module.exports = { UsuarioController };
+export default UsuarioController;

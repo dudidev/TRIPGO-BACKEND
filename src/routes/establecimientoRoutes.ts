@@ -1,6 +1,7 @@
-const { Router } = require("express");
-const {EstablecimientoController} = require("../controllers/establecimientoController");
-const { verifyToken, requireEmpresa } = require("../middlewares/authMiddleware");
+import Router from "express";
+import EstablecimientoController from "../controllers/establecimientoController.js";
+import ResenaController from "../controllers/resenaController.js";
+import { verifyToken, requireEmpresa } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
@@ -256,4 +257,45 @@ router.put("/mios/:id", verifyToken, requireEmpresa, EstablecimientoController.u
  */
 router.get("/:town/tipo/:idTipo", EstablecimientoController.listarPorUbicacionYTipo);
 
-module.exports = router;
+/**
+ * @swagger
+ * /establecimientos/{id}/resenas:
+ *   get:
+ *     summary: Listar reseñas de un establecimiento
+ *     description: Obtiene todas las reseñas y estadísticas de calificación de un establecimiento
+ *     tags: [Establecimientos]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del establecimiento
+ *     responses:
+ *       200:
+ *         description: Reseñas y estadísticas obtenidas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 estadisticas:
+ *                   type: object
+ *                   properties:
+ *                     promedio:
+ *                       type: number
+ *                       example: 4.2
+ *                     total:
+ *                       type: integer
+ *                       example: 15
+ *                     distribucion:
+ *                       type: object
+ *                       example: { "5": 8, "4": 4, "3": 2, "2": 1, "1": 0 }
+ *                 resenas:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ */
+router.get("/:id/resenas", ResenaController.listarPorEstablecimiento);
+
+export default router;

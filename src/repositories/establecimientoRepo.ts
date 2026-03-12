@@ -1,6 +1,5 @@
-// src/repositories/Establecimiento.repo.ts
-const pool = require("../config/db");
-import type { Establecimiento } from "../models/establecimientoModel";
+import pool from "../config/db.js";
+import { Establecimiento } from "../models/establecimientoModel.js";
 
 class EstablecimientoRepo {
     static async listar() {
@@ -10,11 +9,12 @@ class EstablecimientoRepo {
 
     static async listarPorUbicacionYTipo(town: string, idTipo: number) {
         const sql = `
-    SELECT e.*
-    FROM establecimiento e
-    WHERE LOWER(e.ubicacion) = LOWER(?)
-      AND e.tipo = ?
-  `;
+        SELECT e.*,
+        (SELECT url FROM imagenes_e WHERE id_lugar = e.id_establecimiento LIMIT 1) AS imagen
+        FROM establecimiento e
+        WHERE LOWER(e.ubicacion) = LOWER(?)
+        AND e.tipo = ?
+    `;
         const [rows] = await pool.query(sql, [town, idTipo]);
         return rows;
     }
@@ -22,7 +22,7 @@ class EstablecimientoRepo {
     static async crear(e: Establecimiento) {
         const [res] = await pool.query(
             `INSERT INTO establecimiento (nombre_establecimiento, direccion, ubicacion, horario_apertura, horario_cierre, estado, descripcion, id_propietario, telefono, correo, tipo)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [e.nombre_establecimiento, e.direccion, e.ubicacion, e.horario_apertura, e.horario_cierre, e.estado || "activo", e.descripcion, e.id_propietario, e.telefono, e.correo, e.tipo]
         );
         // @ts-ignore
@@ -39,11 +39,11 @@ class EstablecimientoRepo {
                 [userId]
             );
 
-            if (!rows || rows.length === 0) {
+            if (!rows || (rows as any[]).length === 0) {
                 return res.status(404).json({ message: "No tienes establecimiento asociado" });
             }
 
-            return res.json(rows[0]);
+            return res.json(rows as any[][][0]);
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: "Error al obtener mi establecimiento" });
@@ -71,17 +71,17 @@ class EstablecimientoRepo {
 
             await pool.query(
                 `UPDATE establecimiento
-       SET nombre_establecimiento = ?,
-           direccion = ?,
-           ubicacion = ?,
-           horario_apertura = ?,
-           horario_cierre = ?,
-           estado = ?,
-           descripcion = ?,
-           telefono = ?,
-           correo = ?,
-           tipo = ?
-       WHERE id_propietario = ?`,
+        SET nombre_establecimiento = ?,
+            direccion = ?,
+            ubicacion = ?,
+            horario_apertura = ?,
+            horario_cierre = ?,
+            estado = ?,
+            descripcion = ?,
+            telefono = ?,
+            correo = ?,
+            tipo = ?
+        WHERE id_propietario = ?`,
                 [
                     nombre_establecimiento,
                     direccion,
@@ -147,17 +147,17 @@ class EstablecimientoRepo {
 
             const [result] = await pool.query(
                 `UPDATE establecimiento
-       SET nombre_establecimiento = ?,
-           direccion = ?,
-           ubicacion = ?,
-           horario_apertura = ?,
-           horario_cierre = ?,
-           estado = ?,
-           descripcion = ?,
-           telefono = ?,
-           correo = ?,
-           tipo = ?
-       WHERE id_propietario = ? AND id_establecimiento = ?`,
+        SET nombre_establecimiento = ?,
+            direccion = ?,
+            ubicacion = ?,
+            horario_apertura = ?,
+            horario_cierre = ?,
+            estado = ?,
+            descripcion = ?,
+            telefono = ?,
+            correo = ?,
+            tipo = ?
+        WHERE id_propietario = ? AND id_establecimiento = ?`,
                 [
                     nombre_establecimiento,
                     direccion,
@@ -189,4 +189,4 @@ class EstablecimientoRepo {
         }
     };
 }
-module.exports = { EstablecimientoRepo };
+export default EstablecimientoRepo;
