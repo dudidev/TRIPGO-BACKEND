@@ -11,10 +11,11 @@ import detallePlaneadorRoutes from"./detallePlaneadorRoutes.js";
 import contactRoutes from"./contactRoutes.js";
 import imagenRoutes from"./imagenRoutes.js";
 import itinerarioRoutes from"./itinerarioRoutes.js";
+import iaRoutes from "./iaRoutes.js";
 
 const router = Router();
 
-
+router.use("/ia", iaRoutes);
 router.use("/usuarios", usuarioRoutes);
 router.use("/tipos", tipoRoutes);
 router.use("/establecimientos", establecimientoRoutes);
