@@ -11,9 +11,10 @@ import detallePlaneadorRoutes from"./detallePlaneadorRoutes.js";
 import contactRoutes from"./contactRoutes.js";
 import imagenRoutes from"./imagenRoutes.js";
 import itinerarioRoutes from"./itinerarioRoutes.js";
+import iaRoutes from "./iaRoutes.js";
+import favoritosRoutes from "./favoritosRoutes.js";
 
 const router = Router();
-
 
 router.use("/usuarios", usuarioRoutes);
 router.use("/tipos", tipoRoutes);
@@ -27,7 +28,8 @@ router.use("/detalles-planeador", detallePlaneadorRoutes);
 router.use("/contact", contactRoutes);
 router.use("/imagenes", imagenRoutes);
 router.use("/itinerario", itinerarioRoutes);
-
+router.use("/ia", iaRoutes);
+router.use("/favoritos", favoritosRoutes);
 
 router.get("/", (_req, _res) => _res.json({ ok: true, message: "API TripGO" }));
 
