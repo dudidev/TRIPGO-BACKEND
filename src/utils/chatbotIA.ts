@@ -143,7 +143,6 @@ export function interpretarMensaje(mensaje: string): FiltrosIA {
 
   }
 
-
   for (const tipo in sinonimos) {
 
     if (sinonimos[tipo].some((palabra: string) => texto.includes(palabra))) {
@@ -151,7 +150,7 @@ export function interpretarMensaje(mensaje: string): FiltrosIA {
     }
 
   }
-  
+
   if (texto.includes("armenia")) {
     filtros.ubicacion = "Armenia"
   }
