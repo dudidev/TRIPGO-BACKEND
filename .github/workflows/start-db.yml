@@ -4,7 +4,11 @@ on:
   schedule:
     - cron: "0 11 * * *"
   workflow_dispatch:
-
+  
+permissions:
+  id-token: write
+  contents: read
+  
 jobs:
   start-db:
     runs-on: ubuntu-latest
