@@ -2,7 +2,7 @@ name: Start MySQL Database
 
 on:
   schedule:
-    - cron: "0 11 * * *"
+    - cron: "55 10 * * *"
   workflow_dispatch:
   
 permissions:
