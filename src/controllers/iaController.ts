@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { chatbotIAService, recomendacionesIAService } from "../services/iaServices"
+import { chatbotIAService, recomendacionesIAService } from "../services/iaServices.js"
 
 export const chatbotIA = async (req: Request, res: Response) => {
 
