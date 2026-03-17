@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import pool from "../config/db.js";
+import {
+  insertarFavorito,
+  borrarFavorito,
+  listarFavoritos
+} from "../repositories/favoritosRepo.js";
 
 
 export const agregarFavorito = async (req: Request, res: Response): Promise<void> => {
@@ -7,11 +11,7 @@ export const agregarFavorito = async (req: Request, res: Response): Promise<void
 
     const { id_usuario, id_establecimiento } = req.body;
 
-    const [result]: any = await pool.query(
-      `INSERT INTO favoritos (id_usuario, id_establecimiento)
-       VALUES (?, ?)`,
-      [id_usuario, id_establecimiento]
-    );
+    const result: any = await insertarFavorito(id_usuario, id_establecimiento);
 
     res.json({
       message: "Favorito agregado",
@@ -37,10 +37,9 @@ export const eliminarFavorito = async (req: Request, res: Response): Promise<voi
 
     const { id_usuario, id_establecimiento } = req.params;
 
-    const [result]: any = await pool.query(
-      `DELETE FROM favoritos 
-       WHERE id_usuario = ? AND id_establecimiento = ?`,
-      [id_usuario, id_establecimiento]
+    const result: any = await borrarFavorito(
+      Number(id_usuario),
+      Number(id_establecimiento)
     );
 
     if (result.affectedRows === 0) {
@@ -59,26 +58,13 @@ export const eliminarFavorito = async (req: Request, res: Response): Promise<voi
   }
 };
 
+
 export const obtenerFavoritos = async (req: Request, res: Response): Promise<void> => {
   try {
 
     const { id_usuario } = req.params;
 
-    const [rows] = await pool.query(
-      `SELECT 
-        f.id_favorito,
-        e.id_establecimiento,
-        e.nombre_establecimiento,
-        e.descripcion,
-        e.direccion,
-        e.latitud,
-        e.longitud
-      FROM favoritos f
-      JOIN establecimiento e 
-      ON f.id_establecimiento = e.id_establecimiento
-      WHERE f.id_usuario = ?`,
-      [id_usuario]
-    );
+    const rows = await listarFavoritos(Number(id_usuario));
 
     res.json(rows);
 
