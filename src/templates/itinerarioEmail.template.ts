@@ -4,6 +4,7 @@ type ItinerarioItem = {
     nombre: string;
     direccion?: string;
     imagenUrl?: string;
+    productos?: { nombre: string; precio: number; categoria: string }[];
 };
 
 function buildItemRow(item: ItinerarioItem, index: number): string {
@@ -21,6 +22,29 @@ function buildItemRow(item: ItinerarioItem, index: number): string {
         ? `<div class="item-address">${item.direccion}</div>`
         : "";
 
+
+        // ← NUEVO: bloque de productos seleccionados
+  let productosBlock = "";
+  if (item.productos?.length) {
+    const totalCOP = item.productos.reduce((acc, p) => acc + p.precio, 0);
+    const filas = item.productos
+      .map(p => `
+        <div class="prod-row">
+          <span class="prod-nombre">${p.nombre}</span>
+          <span class="prod-precio">$${totalCOP > 0 ? p.precio.toLocaleString("es-CO") : "—"}</span>
+        </div>`)
+      .join("");
+
+    productosBlock = `
+      <div class="prod-list">
+        ${filas}
+        <div class="prod-total">
+          <span>Total estimado</span>
+          <strong>$${totalCOP.toLocaleString("es-CO")} COP</strong>
+        </div>
+      </div>`;
+  }
+
     return `
     <div class="item-card">
       <div class="item-num">${num}</div>
@@ -28,9 +52,12 @@ function buildItemRow(item: ItinerarioItem, index: number): string {
       <div class="item-info">
         <div class="item-name">${item.nombre}</div>
         ${addressBlock}
+        ${productosBlock}
       </div>
       <div class="item-dot"></div>
     </div>`;
+
+    
 }
 
 function buildItinerarioEmailHtml({
@@ -302,6 +329,51 @@ function buildItinerarioEmailHtml({
       border-radius: 10px;
     }
 
+      /* PRODUCTOS SELECCIONADOS */
+.prod-list {
+  margin-top: 8px;
+  background: #F2F9FA;
+  border: 1px solid #D6EEF0;
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.prod-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #4A6B70;
+  font-weight: 300;
+}
+.prod-nombre {
+  flex: 1;
+  white-space: normal;
+  line-height: 1.3;
+}
+.prod-precio {
+  font-weight: 500;
+  color: #0E6973;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+.prod-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #0C1B1F;
+  border-top: 1px solid #D6EEF0;
+  margin-top: 4px;
+  padding-top: 5px;
+}
+.prod-total strong {
+  color: #E27921;
+}
+
     /* FOOTER */
     .footer {
       background: #0C1B1F;
@@ -364,6 +436,9 @@ function buildItinerarioEmailHtml({
 .item-address {
   line-height: 1.35 !important;
 }
+
+
+
 
 /* ─────────────────────────────────────────────
    RESPONSIVE: lista aún más “separada” en móvil
