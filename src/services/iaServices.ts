@@ -1,6 +1,6 @@
-import { interpretarMensaje } from "../utils/chatbotIA"
-import { calcularScore } from "../utils/recomendadorIA"
-import { buscarLugares } from "../repositories/iaRepo"
+import { interpretarMensaje } from "../utils/chatbotIA.js"
+import { calcularScore } from "../utils/recomendadorIA.js"
+import { buscarLugares } from "../repositories/iaRepo.js"
 
 export const chatbotIAService = async (mensaje: string) => {
 
