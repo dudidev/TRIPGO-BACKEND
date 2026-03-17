@@ -3,9 +3,13 @@ import { Establecimiento } from "../models/establecimientoModel.js";
 
 class EstablecimientoRepo {
     static async listar() {
-        const [rows] = await pool.query(`SELECT * FROM establecimiento`);
-        return rows;
-    }
+    const [rows] = await pool.query(`
+        SELECT e.*,
+        (SELECT url FROM imagenes_e WHERE id_lugar = e.id_establecimiento LIMIT 1) AS imagen
+        FROM establecimiento e
+    `);
+    return rows;
+}
 
     static async listarPorUbicacionYTipo(town: string, idTipo: number) {
         const sql = `
