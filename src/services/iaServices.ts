@@ -1,5 +1,4 @@
 import { interpretarMensaje } from "../utils/chatbotIA.js"
-import { calcularScore } from "../utils/recomendadorIA.js"
 import { buscarLugares } from "../repositories/iaRepo.js"
 
 export const chatbotIAService = async (mensaje: string) => {
@@ -12,23 +11,4 @@ export const chatbotIAService = async (mensaje: string) => {
   )
 
   return lugares
-}
-
-
-
-export const recomendacionesIAService = async (
-  ubicacion?: string,
-  tipo?: string
-) => {
-
-  const lugares = await buscarLugares(tipo, ubicacion)
-
-  const resultados = lugares.map((lugar: any) => ({
-    ...lugar,
-    score: calcularScore(lugar)
-  }))
-
-  resultados.sort((a: any, b: any) => b.score - a.score)
-
-  return resultados.slice(0, 10)
 }
