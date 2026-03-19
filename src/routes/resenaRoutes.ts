@@ -52,6 +52,9 @@ const router = Router();
  *         $ref: '#/components/responses/Unauthorized'
  */
 router.post("/", verifyToken, ResenaController.crear);
+// Agrega esta línea en resenaRouter.ts, antes de la ruta GET /:id
+router.get("/establecimiento/:id", ResenaController.listarPorEstablecimiento);
+
 
 /**
  * @swagger
