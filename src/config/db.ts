@@ -13,6 +13,9 @@ const pool = mysql.createPool({
   ssl: {
     rejectUnauthorized: false
   }
+  // ssl: process.env.NODE_ENV === 'production'  // ← SSL solo en producción
+  //   ? { rejectUnauthorized: false }
+  //   : undefined
 });
 
 export default pool;
