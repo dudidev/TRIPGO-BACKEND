@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import pool from "../config/db.js";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import {sendUserWelcomeEmail} from "../services/emailService.js";
-
-const JWT_SECRET: string = process.env.JWT_SECRET!;
+import { signToken } from "../utils/jwt.js";
+import { sendUserWelcomeEmail } from "../services/emailService.js";
 
 const register = async (req: Request, res: Response) => {
     try {
@@ -81,12 +79,11 @@ const login = async (req: Request, res: Response) => {
             return res.status(401).json({ message: "Contraseña incorrecta" });
         }
 
-        // Generar token
-        const token = jwt.sign(
-            { id: user.id, correo: user.correo_usuario, rol: user.rol },
-            JWT_SECRET,
-            { expiresIn: "10min" }
-        );
+        const token = signToken({
+            id: user.id,
+            correo: user.correo_usuario,
+            rol: user.rol
+        });
 
         res.json({
             message: "Inicio de sesión exitoso",
