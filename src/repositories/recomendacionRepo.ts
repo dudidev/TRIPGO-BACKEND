@@ -102,9 +102,10 @@ class RecomendacionRepository {
 
     // ========== GUARDAR/OBTENER PERFIL ==========
 
-    async guardarPreferencias(idUsuario: number, preferencias: any): Promise<void> {
-        await pool.query(
-            `INSERT INTO preferencias_usuario 
+   async guardarPreferencias(idUsuario: number, preferencias: any): Promise<void> {
+  try {
+    await pool.query(
+      `INSERT INTO preferencias_usuario 
        (id_usuario, tipos_favoritos, ubicaciones_favoritas, promedio_calificaciones, total_interacciones)
        VALUES (?, ?, ?, ?, ?)
        ON DUPLICATE KEY UPDATE
@@ -112,15 +113,18 @@ class RecomendacionRepository {
        ubicaciones_favoritas = VALUES(ubicaciones_favoritas),
        promedio_calificaciones = VALUES(promedio_calificaciones),
        total_interacciones = VALUES(total_interacciones)`,
-            [
-                idUsuario,
-                JSON.stringify(preferencias.tipos_favoritos),
-                JSON.stringify(preferencias.ubicaciones_favoritas),
-                preferencias.promedio_calificaciones,
-                preferencias.total_interacciones
-            ]
-        );
-    }
+      [
+        idUsuario,
+        JSON.stringify(preferencias.tipos_favoritos ?? []),
+        JSON.stringify(preferencias.ubicaciones_favoritas ?? []),
+        preferencias.promedio_calificaciones ?? 0,
+        preferencias.total_interacciones ?? 0
+      ]
+    );
+  } catch (e) {
+    console.warn('guardarPreferencias falló silenciosamente:', e);
+  }
+}
 
     async obtenerPreferencias(idUsuario: number): Promise<any | null> {
         const [rows]: any = await pool.query(

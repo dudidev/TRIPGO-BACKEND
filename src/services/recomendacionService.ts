@@ -144,12 +144,18 @@ class RecomendacionService {
             busquedas.length;
 
         // Guardar perfil en BD para futuras consultas
+        // Al final de construirPerfilUsuario, reemplaza el await guardarPreferencias por:
+        try {
         await recomendacionRepo.guardarPreferencias(idUsuario, {
-            tipos_favoritos: tiposPreferidos,
-            ubicaciones_favoritas: ubicacionesPreferidas.map(u => u.ubicacion),
-            promedio_calificaciones: parseFloat(promedioCalificaciones.toFixed(2)),
-            total_interacciones: totalInteracciones
+            tipos_favoritos          : tiposPreferidos,
+            ubicaciones_favoritas    : ubicacionesPreferidas.map(u => u.ubicacion),
+            promedio_calificaciones  : parseFloat(promedioCalificaciones.toFixed(2)),
+            total_interacciones      : totalInteracciones
         });
+        } catch (e) {
+        console.warn('No se pudo guardar preferencias:', e);
+        // continúa sin crashear
+        };
 
         return {
             tipos_favoritos: tiposPreferidos,
