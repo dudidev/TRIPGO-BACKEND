@@ -1,5 +1,6 @@
 import Router from "express";
 import { register, login } from "../controllers/authController.js";
+import passwordResetRoutes from "./passwordResetRoutes.js";
 
 const router = Router();
 
@@ -109,5 +110,8 @@ router.post("/register", register);
  *         $ref: '#/components/responses/ServerError'
  */
 router.post("/login", login);
+
+// Rutas de recuperación de contraseña
+router.use("/", passwordResetRoutes);
 
 export default router;
