@@ -103,8 +103,9 @@ class RecomendacionRepository {
     // ========== GUARDAR/OBTENER PERFIL ==========
 
     async guardarPreferencias(idUsuario: number, preferencias: any): Promise<void> {
-        await pool.query(
-            `INSERT INTO preferencias_usuario 
+        try {
+            await pool.query(
+                `INSERT INTO preferencias_usuario 
        (id_usuario, tipos_favoritos, ubicaciones_favoritas, promedio_calificaciones, total_interacciones)
        VALUES (?, ?, ?, ?, ?)
        ON DUPLICATE KEY UPDATE
@@ -112,14 +113,17 @@ class RecomendacionRepository {
        ubicaciones_favoritas = VALUES(ubicaciones_favoritas),
        promedio_calificaciones = VALUES(promedio_calificaciones),
        total_interacciones = VALUES(total_interacciones)`,
-            [
-                idUsuario,
-                JSON.stringify(preferencias.tipos_favoritos),
-                JSON.stringify(preferencias.ubicaciones_favoritas),
-                preferencias.promedio_calificaciones,
-                preferencias.total_interacciones
-            ]
-        );
+                [
+                    idUsuario,
+                    JSON.stringify(preferencias.tipos_favoritos ?? []),
+                    JSON.stringify(preferencias.ubicaciones_favoritas ?? []),
+                    preferencias.promedio_calificaciones ?? 0,
+                    preferencias.total_interacciones ?? 0
+                ]
+            );
+        } catch (e) {
+            console.warn('guardarPreferencias falló silenciosamente:', e);
+        }
     }
 
     async obtenerPreferencias(idUsuario: number): Promise<any | null> {
@@ -130,10 +134,24 @@ class RecomendacionRepository {
 
         if (rows.length === 0) return null;
 
+        const preferencia = rows[0];
+
+        // Helper para parsear JSON de forma segura
+        const parseJSON = (value: any, defaultValue: any = []) => {
+            if (typeof value === 'string') {
+                try {
+                    return JSON.parse(value);
+                } catch {
+                    return defaultValue;
+                }
+            }
+            return value || defaultValue;
+        };
+
         return {
-            ...rows[0],
-            tipos_favoritos: JSON.parse(rows[0].tipos_favoritos || '[]'),
-            ubicaciones_favoritas: JSON.parse(rows[0].ubicaciones_favoritas || '[]')
+            ...preferencia,
+            tipos_favoritos: parseJSON(preferencia.tipos_favoritos, []),
+            ubicaciones_favoritas: parseJSON(preferencia.ubicaciones_favoritas, [])
         };
     }
 

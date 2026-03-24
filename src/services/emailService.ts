@@ -3,6 +3,7 @@ import buildContactEmailHtml from "../templates/contactEmail.template.js";
 import buildWelcomeEmailHtml from "../templates/welcomeEmail.template.js";
 import buildItinerarioEmailHtml from "../templates/itinerarioEmail.template.js";
 import welcomeUserEmail from "../templates/welcomeUserEmail.template.js";
+import passwordResetEmailTemplate from "../templates/passwordResetEmail.tmeplate.js";
 
 // ─── Transporter ──────────────────────────────────────────────────
 const transporter = nodemailer.createTransport({
@@ -108,13 +109,13 @@ async function sendWelcomeEmail({
     description,
     credPassword,
     businessId,
-} : {
+}: {
     businessName: string,
-    contactName:  string,
-    email:        string,
-    description:  string,
+    contactName: string,
+    email: string,
+    description: string,
     credPassword: string,
-    businessId:   string,
+    businessId: string,
 }) {
     checkEnvVars("MAIL_USER", "MAIL_PASSWORD");
 
@@ -182,7 +183,7 @@ const sendUserWelcomeEmail = async (email: string, nombre: string) => {
  *   }>
  * }} data
  */
-async function sendItinerarioEmail({ email, nombre, items }: { email: string; nombre: string; items: Array<{ nombre: string; direccion?: string; imagenUrl?: string; productos?: {nombre: string; precio: number; categoria: string} [] }> }) {
+async function sendItinerarioEmail({ email, nombre, items }: { email: string; nombre: string; items: Array<{ nombre: string; direccion?: string; imagenUrl?: string; productos?: { nombre: string; precio: number; categoria: string }[] }> }) {
     checkEnvVars("MAIL_USER", "MAIL_PASSWORD");
 
     console.log(`🗺️  [emailService] Itinerario | usuario: "${nombre}" | destino: ${email} | lugares: ${items.length}`);
@@ -199,21 +200,21 @@ async function sendItinerarioEmail({ email, nombre, items }: { email: string; no
             `Hola ${nombre}, aquí está tu itinerario de TripGO:`,
             ``,
             ...items.map((item, i) => {
-    const lineas = [
-         `${i + 1}. ${item.nombre}${item.direccion ? ` — ${item.direccion}` : ""}`
-         ];
-    if (item.productos?.length) {
-      item.productos.forEach(p =>
-        lineas.push(`   • ${p.nombre}: $${p.precio.toLocaleString("es-CO")} COP`)
-      );
-      const total = item.productos.reduce((acc, p) => acc + p.precio, 0);
-      lineas.push(`   Total: $${total.toLocaleString("es-CO")} COP`);
-        }
-        return lineas.join("\n");
-     }),
-         "",
-        `Creado el: ${dateTime}`,
-        `Visita: https://tripgoquindio.vercel.app/principal`,
+                const lineas = [
+                    `${i + 1}. ${item.nombre}${item.direccion ? ` — ${item.direccion}` : ""}`
+                ];
+                if (item.productos?.length) {
+                    item.productos.forEach(p =>
+                        lineas.push(`   • ${p.nombre}: $${p.precio.toLocaleString("es-CO")} COP`)
+                    );
+                    const total = item.productos.reduce((acc, p) => acc + p.precio, 0);
+                    lineas.push(`   Total: $${total.toLocaleString("es-CO")} COP`);
+                }
+                return lineas.join("\n");
+            }),
+            "",
+            `Creado el: ${dateTime}`,
+            `Visita: https://tripgoquindio.vercel.app/principal`,
         ].join("\n"),
     });
 
@@ -221,5 +222,19 @@ async function sendItinerarioEmail({ email, nombre, items }: { email: string; no
     return info;
 }
 
+// ─── Reset Password ──────────────────────────────────────────────────
+const sendPasswordResetEmail = async (email: string, nombre: string, resetToken: string) => {
+    const htmlContent = passwordResetEmailTemplate(nombre, resetToken);
 
-export { sendContactEmail, sendWelcomeEmail, sendUserWelcomeEmail, sendItinerarioEmail };
+    await transporter.sendMail({
+        from: `"TripGO - Recuperación" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: "🔐 Recupera tu contraseña de TripGO",
+        html: htmlContent
+    });
+
+    console.log(`✅ Email de recuperación enviado a: ${email}`);
+};
+
+
+export { sendContactEmail, sendWelcomeEmail, sendUserWelcomeEmail, sendItinerarioEmail, sendPasswordResetEmail};
