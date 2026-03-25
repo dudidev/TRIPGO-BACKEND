@@ -1,6 +1,5 @@
 import pool from "../config/db.js";
 import { EnviarMensajeSoporteDTO, DatosUsuarioSoporte } from "../models/soporteModel.js";
-
 import soporteEmailToTeamTemplate from "../templates/soporteEmailToTeam.template.js";
 import soporteEmailToUserTemplate from "../templates/soporteEmailToUser.template.js";
 import { transporter } from "./emailService.js";
