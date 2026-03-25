@@ -237,4 +237,4 @@ const sendPasswordResetEmail = async (email: string, nombre: string, resetToken:
 };
 
 
-export { sendContactEmail, sendWelcomeEmail, sendUserWelcomeEmail, sendItinerarioEmail, sendPasswordResetEmail};
+export { sendContactEmail, sendWelcomeEmail, sendUserWelcomeEmail, sendItinerarioEmail, sendPasswordResetEmail, transporter};
