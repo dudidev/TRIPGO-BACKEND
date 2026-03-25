@@ -11,7 +11,6 @@ export interface DatosUsuarioSoporte {
     correo_usuario: string;
 }
 
-/*
 export enum CategoriaSoporte {
     TECNICO = 'tecnico',
     CUENTA = 'cuenta',
@@ -25,4 +24,3 @@ export enum PrioridadSoporte {
     ALTA = 'alta',
     URGENTE = 'urgente'
 }
-*/
