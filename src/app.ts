@@ -22,18 +22,12 @@ const allowedOrigins: string[] = [
 
 const corsOptions: CorsOptions = {
     origin: (origin, callback) => {
-
-        // Sin origin = Postman, curl, server-to-server
         if (!origin) return callback(null, true);
-
-        if (allowedOrigins.includes(origin)) {
-            return callback(null, true);
-        }
+        if (allowedOrigins.includes(origin)) return callback(null, true);
 
         console.warn(`⚠️ [CORS] Origen bloqueado: ${origin}`);
         return callback(new Error(`CORS: origen no permitido → ${origin}`));
     },
-
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
