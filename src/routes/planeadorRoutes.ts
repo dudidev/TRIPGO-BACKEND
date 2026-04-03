@@ -41,4 +41,26 @@ const router = Router();
  */
 router.post("/", PlaneadorController.crear);
 
+/**
+ * @swagger
+ * /planeador/{id}:
+ *   get:
+ *     summary: Obtener detalle de un planeador
+ *     tags: [Planeador]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del planeador
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     responses:
+ *       200:
+ *         description: Detalle del planeador
+ *       404:
+ *         description: Planeador no encontrado
+ */
+router.get("/:id", PlaneadorController.obtenerDetalle);
+
 export default router;
