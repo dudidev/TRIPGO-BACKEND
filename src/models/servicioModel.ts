@@ -1,6 +1,6 @@
 export interface Servicio {
     id?: number;
-    nombre: string;
+    nombre_servicio: string;
     descripcion?: string;
-    categoria?: any;
+    disponibilidad?: boolean;
 }

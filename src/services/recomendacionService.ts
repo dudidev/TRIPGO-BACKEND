@@ -169,7 +169,6 @@ class RecomendacionService {
 
     async generarRecomendaciones(idUsuario: number, limite: number = 10): Promise<RecomendacionPersonalizada[]> {
 
-        try {
         // 1. Construir perfil del usuario
         const perfil = await this.construirPerfilUsuario(idUsuario);
 
@@ -252,11 +251,6 @@ class RecomendacionService {
         return recomendaciones
             .sort((a, b) => b.score_relevancia - a.score_relevancia)
             .slice(0, limite);
-        } catch (e) {
-            console.warn('Error generando recomendaciones:', e);
-            // Fallback a obtenerTopGeneral()
-            return this.obtenerTopGeneral(limite);
-    }
     }
 
     // ========== TOP GENERAL (para usuarios nuevos) ==========
