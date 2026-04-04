@@ -167,7 +167,7 @@ class RecomendacionRepository {
        FROM establecimiento e
        INNER JOIN tipos t ON e.tipo = t.id_tipo
        WHERE e.estado = 'activo'
-       AND e.id_establecimiento NOT IN (
+       AND e.id_establecimiento NOT EXISTS(
          SELECT id_establecimiento FROM historial_visualizaciones WHERE id_usuario = ?
          UNION
          SELECT id_establecimiento FROM favoritos WHERE id_usuario = ?
