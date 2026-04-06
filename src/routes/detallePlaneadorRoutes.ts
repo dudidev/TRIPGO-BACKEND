@@ -23,22 +23,20 @@ const router = Router();
  *           schema:
  *             type: object
  *             required:
- *               - id_planeador
- *               - id_establecimiento
- *               - id_servicio
+ *               - planeador_id
+ *               - establecimiento_id
  *             properties:
- *               id_planeador:
+ *               planeador_id:
  *                 type: integer
  *                 example: 1
- *               id_establecimiento:
+ *               establecimiento_id:
  *                 type: integer
  *                 example: 5
- *               id_servicio:
- *                 type: integer
- *                 example: 2
- *               cantidad:
- *                 type: integer
- *                 example: 1
+ *     responses:
+ *       201:
+ *         description: Detalle del planeador creado
+ *       400:
+ *         description: Error en los datos
  */
 router.post("/", DetallePlaneadorController.crear);
 

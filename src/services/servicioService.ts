@@ -1,18 +1,7 @@
 import ServicioRepo from "../repositories/servicioRepo.js";
-
 class ServicioService {
-
-    static async listar() {
-        return await ServicioRepo.listar();
-    }
-
-    static async crear(data: any) {
-        return await ServicioRepo.crear(data);
-    }
-
-    static async porEstablecimiento(id: number) {
-        return await ServicioRepo.porEstablecimiento(id);
-    }
+    static async listar() { return await ServicioRepo.listar(); }
+    static async crear(s: any) { return await ServicioRepo.crear(s); }
 }
 
-export default ServicioService;
+export default ServicioService ;
