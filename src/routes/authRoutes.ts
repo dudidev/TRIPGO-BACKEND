@@ -1,6 +1,7 @@
 import Router from "express";
-import { register, login, logout } from "../controllers/authController.js";
+import { register, login, logout, me } from "../controllers/authController.js";
 import passwordResetRoutes from "./passwordResetRoutes.js";
+import { verifyToken } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
@@ -131,6 +132,7 @@ router.post("/login", login);
  *                   example: "Sesión cerrada correctamente"
  */
 router.post("/logout", logout);
+router.get("/me", verifyToken, me);
 
 // Rutas de recuperación de contraseña
 router.use("/", passwordResetRoutes);

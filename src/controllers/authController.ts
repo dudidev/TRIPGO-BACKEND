@@ -118,4 +118,20 @@ const logout = async (_req: Request, res: Response) => {
     res.json({ message: "Sesión cerrada correctamente" });
 };
 
-export { register, login, logout };
+const me = async (req: Request, res: Response) => {
+  // verifyToken ya validó la cookie y puso el user en req
+  const { id, correo, rol } = (req as any).user;
+
+  const [rows]: any = await pool.query(
+    "SELECT id, nombre_usuario, correo_usuario, rol FROM usuarios WHERE id = ?",
+    [id]
+  );
+
+  if (rows.length === 0) {
+    return res.status(404).json({ message: "Usuario no encontrado" });
+  }
+
+  res.json({ user: rows[0] });
+};
+
+export { register, login, logout, me };
