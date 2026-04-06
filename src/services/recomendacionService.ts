@@ -168,6 +168,9 @@ class RecomendacionService {
     // ========== GENERAR RECOMENDACIONES PERSONALIZADAS ==========
 
     async generarRecomendaciones(idUsuario: number, limite: number = 10): Promise<RecomendacionPersonalizada[]> {
+        try {
+            // 1. Construir perfil del usuario
+            const perfil = await this.construirPerfilUsuario(idUsuario);
 
         try {
             // 1. Construir perfil del usuario
