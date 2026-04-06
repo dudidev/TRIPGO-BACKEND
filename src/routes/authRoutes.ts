@@ -1,5 +1,5 @@
 import Router from "express";
-import { register, login } from "../controllers/authController.js";
+import { register, login, logout } from "../controllers/authController.js";
 import passwordResetRoutes from "./passwordResetRoutes.js";
 
 const router = Router();
@@ -76,7 +76,7 @@ router.post("/register", register);
  *               $ref: '#/components/schemas/AuthResponse'
  *             example:
  *               message: "Inicio de sesión exitoso"
- *               token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sIjoidXN1YXJpbyJ9.xyz"
+ *               
  *               user:
  *                 id: 1
  *                 nombre_usuario: "Juan Pérez"
@@ -110,6 +110,27 @@ router.post("/register", register);
  *         $ref: '#/components/responses/ServerError'
  */
 router.post("/login", login);
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Cerrar sesión
+ *     description: Elimina la cookie de autenticación del usuario
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Sesión cerrada correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Sesión cerrada correctamente"
+ */
+router.post("/logout", logout);
 
 // Rutas de recuperación de contraseña
 router.use("/", passwordResetRoutes);

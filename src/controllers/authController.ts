@@ -85,9 +85,18 @@ const login = async (req: Request, res: Response) => {
             rol: user.rol
         });
 
+        // ✅ Token en cookie HttpOnly — invisible para JS
+        res.cookie("auth_token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
+            path: "/"
+        });
+
+        // ✅ Solo datos no sensibles en el body
         res.json({
             message: "Inicio de sesión exitoso",
-            token,
             user: {
                 id: user.id,
                 nombre_usuario: user.nombre_usuario,
@@ -95,10 +104,18 @@ const login = async (req: Request, res: Response) => {
                 rol: user.rol,
             },
         });
+
+       
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error en el inicio de sesión" });
     }
 };
 
-export { register, login };
+// ✅ Nueva función logout
+const logout = async (_req: Request, res: Response) => {
+    res.clearCookie("auth_token", { path: "/" });
+    res.json({ message: "Sesión cerrada correctamente" });
+};
+
+export { register, login, logout };
