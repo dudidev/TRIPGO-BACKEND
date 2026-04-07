@@ -85,16 +85,16 @@ const login = async (req: Request, res: Response) => {
             rol: user.rol
         });
 
-        // ✅ Token en cookie HttpOnly — invisible para JS
+        const isProd = process.env.NODE_ENV === "production";
+
         res.cookie("auth_token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
+            secure: isProd,
+            sameSite: isProd ? "none" : "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
             path: "/"
         });
 
-        // ✅ Solo datos no sensibles en el body
         res.json({
             message: "Inicio de sesión exitoso",
             user: {
@@ -105,33 +105,39 @@ const login = async (req: Request, res: Response) => {
             },
         });
 
-       
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error en el inicio de sesión" });
     }
 };
 
-// ✅ Nueva función logout
 const logout = async (_req: Request, res: Response) => {
-    res.clearCookie("auth_token", { path: "/" });
+    const isProd = process.env.NODE_ENV === "production";
+
+    res.clearCookie("auth_token", {
+        httpOnly: true,
+        secure: isProd,
+        sameSite: isProd ? "none" : "lax",
+        path: "/"
+    });
+
     res.json({ message: "Sesión cerrada correctamente" });
 };
 
 const me = async (req: Request, res: Response) => {
-  // verifyToken ya validó la cookie y puso el user en req
-  const { id, correo, rol } = (req as any).user;
+    const { id } = (req as any).user;
 
-  const [rows]: any = await pool.query(
-    "SELECT id, nombre_usuario, correo_usuario, rol FROM usuarios WHERE id = ?",
-    [id]
-  );
+    const [rows]: any = await pool.query(
+        "SELECT id, nombre_usuario, correo_usuario, rol FROM usuarios WHERE id = ?",
+        [id]
+    );
 
-  if (rows.length === 0) {
-    return res.status(404).json({ message: "Usuario no encontrado" });
-  }
+    if (rows.length === 0) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+    }
 
-  res.json({ user: rows[0] });
+    res.json({ user: rows[0] });
 };
 
 export { register, login, logout, me };
