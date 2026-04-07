@@ -38,6 +38,10 @@ const corsOptions: CorsOptions = {
 
 app.use(cors(corsOptions));
 
+// ─── Cookie parser ─────────────────────────────────────
+
+app.use(cookieParser());
+
 // ─── Middleware global ─────────────────────────────────
 
 if (process.env.NODE_ENV === "development") {
@@ -46,6 +50,7 @@ if (process.env.NODE_ENV === "development") {
 
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true }));
+
 
 // ─── Rutas ─────────────────────────────────────────────
 
@@ -80,9 +85,5 @@ app.use(
 // ─── Error handler (siempre al final) ──────────────────
 
 app.use(errorHandler);
-
-// ─── Cookie parser ─────────────────────────────────────
-
-app.use(cookieParser());
 
 export default app;
