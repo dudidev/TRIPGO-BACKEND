@@ -9,6 +9,7 @@ import { errorHandler } from "./middlewares/errorMiddleware.js";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.js";
+import cookieParser from "cookie-parser";
 
 const app: Application = express();
 
@@ -29,13 +30,17 @@ const corsOptions: CorsOptions = {
         return callback(new Error(`CORS: origen no permitido → ${origin}`));
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
     credentials: true,
     preflightContinue: false,
     optionsSuccessStatus: 204,
 };
 
 app.use(cors(corsOptions));
+
+// ─── Cookie parser ─────────────────────────────────────
+
+app.use(cookieParser());
 
 // ─── Middleware global ─────────────────────────────────
 
@@ -45,6 +50,7 @@ if (process.env.NODE_ENV === "development") {
 
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true }));
+
 
 // ─── Rutas ─────────────────────────────────────────────
 
