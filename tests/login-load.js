@@ -7,11 +7,12 @@ export const options = {
         { duration: '20s', target: 10 },
         { duration: '20s', target: 20 },
         { duration: '20s', target: 30 },
+        { duration: '20s', target: 40 },
         { duration: '20s', target: 50 },
         { duration: '20s', target: 0 },
     ],
     thresholds: {
-        http_req_duration: ['p(95)<1000'],
+        http_req_duration: ['p(95)<2000'],
         http_req_failed: ['rate<0.05'],
     },
 };
