@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import pool from "../config/db.js";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import { signToken } from "../utils/jwt.js";
 import { sendUserWelcomeEmail } from "../services/emailService.js";
 
