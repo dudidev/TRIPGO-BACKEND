@@ -31,13 +31,14 @@ const corsOptions: CorsOptions = {
         return callback(new Error(`CORS: origen no permitido → ${origin}`));
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie", "Accept-Language"],
     credentials: true,
     preflightContinue: false,
-    optionsSuccessStatus: 204,
+    optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions))
 
 // ─── Cookie parser ─────────────────────────────────────
 
