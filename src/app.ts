@@ -18,6 +18,7 @@ const app: Application = express();
 const allowedOrigins: string[] = [
     "http://localhost:4200",
     "https://tripgoquindio.vercel.app",
+    "https://www.tripgoquindio.vercel.app",
     "https://tripgo-git-develop-dudidevs-projects.vercel.app",
 ];
 
@@ -56,6 +57,15 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/", routes);
 app.use("/auth", authRoutes);
+
+// En tu router principal o app.ts del backend
+app.get('/health', (req, res) => {
+    res.json({
+        ok: true,
+        origin: req.headers['origin'] ?? 'no-origin',
+        userAgent: req.headers['user-agent']
+    });
+});
 
 app.get("/status", (_req: Request, res: Response) => {
     res.json({

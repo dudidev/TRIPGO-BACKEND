@@ -75,7 +75,7 @@ class RecomendacionRepository {
        FROM detalles_planeador dp
        INNER JOIN planeador p ON dp.id_planeador = p.id_planeador
        INNER JOIN servicios s ON dp.id_servicio = s.id
-       INNER JOIN servicios_establecimiento se ON s.id = se.id_servicios
+       INNER JOIN servicios_establecimiento se ON s.id = se.id_servicio
        INNER JOIN establecimiento e ON se.id_establecimiento = e.id_establecimiento
        INNER JOIN tipos t ON e.tipo = t.id_tipo
        WHERE p.id_usuario = ?`,
