@@ -260,5 +260,8 @@ export function interpretarMensaje(mensaje: string): RespuestaIA {
     }
   }
 
-  return filtros
+  return {
+    filtros,
+    esConversacion: false
+  }
 }
