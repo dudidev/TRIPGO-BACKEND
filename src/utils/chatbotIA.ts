@@ -1,15 +1,69 @@
-export interface FiltrosIA {
-  tipo?: string
-  ubicacion?: string
+export interface RespuestaIA {
+  filtros?: {
+    tipo?: string
+    ubicacion?: string
+  }
+  mensaje?: string
+  esConversacion?: boolean
 }
 
-export function interpretarMensaje(mensaje: string): FiltrosIA {
+export function interpretarMensaje(mensaje: string): RespuestaIA {
 
-  const texto = mensaje.toLowerCase()
+  const texto = mensaje.toLowerCase().trim()
 
-  const filtros: FiltrosIA = {}
+  //Logica saludos y despedidas
+  const saludos = [
+    "hola",
+    "buenas",
+    "buenos dias",
+    "buen día",
+    "hey",
+    "holi",
+    "ola",
+    "hello",
+    "hi"
+  ]
 
-    const sinonimos: any = {
+  const despedidas = [
+    "adios",
+    "adiós",
+    "chao",
+    "nos vemos",
+    "hasta luego"
+  ]
+
+  const agradecimientos = [
+    "gracias",
+    "muchas gracias",
+    "thanks"
+  ]
+
+  if (saludos.some(p => texto.includes(p))) {
+    return {
+      esConversacion: true,
+      mensaje: "¡Hola! 👋 Soy TritanIA, tu asistente de TripGO. Puedes escribirme cosas como: 'quiero caminar en Salento', 'un hotel en Armenia' o 'dónde comer en Filandia'."
+    }
+  }
+
+  if (despedidas.some(p => texto.includes(p))) {
+    return {
+      esConversacion: true,
+      mensaje: "¡Hasta luego! 👋 Espero haberte ayudado a encontrar un buen plan."
+    }
+  }
+
+  if (agradecimientos.some(p => texto.includes(p))) {
+    return {
+      esConversacion: true,
+      mensaje: "¡Con gusto! 😊 Si quieres, también puedo ayudarte a encontrar hoteles, restaurantes, senderismo, cafés y más."
+    }
+  }
+
+
+  //Filtrado de categorias y sinonimos
+  const filtros: any = {}
+
+  const sinonimos: any = {
 
     Hotel: [
       "hotel",
@@ -162,8 +216,8 @@ export function interpretarMensaje(mensaje: string): FiltrosIA {
   if (texto.includes("filandia")) {
     filtros.ubicacion = "Filandia"
   }
-  
-    if (texto.includes("la tebaida")) {
+
+  if (texto.includes("la tebaida")) {
     filtros.ubicacion = "La tebaida"
   }
 
@@ -186,8 +240,8 @@ export function interpretarMensaje(mensaje: string): FiltrosIA {
   if (texto.includes("pijao")) {
     filtros.ubicacion = "Pijao"
   }
-  
-    if (texto.includes("calarca")) {
+
+  if (texto.includes("calarca")) {
     filtros.ubicacion = "Calarca"
   }
 
@@ -197,6 +251,13 @@ export function interpretarMensaje(mensaje: string): FiltrosIA {
 
   if (texto.includes("quimbaya")) {
     filtros.ubicacion = "Quimbaya"
+  }
+
+  if (!filtros.tipo && !filtros.ubicacion) {
+    return {
+      esConversacion: true,
+      mensaje: "Lo siento, no entendí tu consulta 😅 Prueba escribiendo algo como: 'hotel en Armenia', 'quiero caminar en Salento' o 'dónde comer en Filandia'."
+    }
   }
 
   return filtros
