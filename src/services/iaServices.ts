@@ -3,12 +3,29 @@ import { buscarLugares } from "../repositories/iaRepo.js"
 
 export const chatbotIAService = async (mensaje: string) => {
 
-  const filtros = interpretarMensaje(mensaje)
+  const resultadoIA = interpretarMensaje(mensaje)
+
+  if (resultadoIA.esConversacion) {
+    return {
+      tipo: "mensaje",
+      mensaje: resultadoIA.mensaje
+    }
+  }
 
   const lugares = await buscarLugares(
-    filtros.tipo,
-    filtros.ubicacion
+    resultadoIA.filtros?.tipo,
+    resultadoIA.filtros?.ubicacion
   )
 
-  return lugares
+  if (!lugares.length) {
+    return {
+      tipo: "mensaje",
+      mensaje: "No encontré resultados para esa búsqueda 😕 Intenta con otra ubicación o tipo de lugar."
+    }
+  }
+
+  return {
+    tipo: "resultados",
+    data: lugares
+  }
 }
