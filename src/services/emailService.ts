@@ -7,7 +7,9 @@ import passwordResetEmailTemplate from "../templates/passwordResetEmail.tmeplate
 
 // ─── Transporter ──────────────────────────────────────────────────
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
     auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASSWORD,
@@ -222,4 +224,4 @@ const sendPasswordResetEmail = async (email: string, nombre: string, resetToken:
 };
 
 
-export { sendContactEmail, sendWelcomeEmail, sendUserWelcomeEmail, sendItinerarioEmail, sendPasswordResetEmail, transporter};
+export { sendContactEmail, sendWelcomeEmail, sendUserWelcomeEmail, sendItinerarioEmail, sendPasswordResetEmail, transporter };
