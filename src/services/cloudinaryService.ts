@@ -20,7 +20,6 @@ const uploadToCloudinary = async (fileBuffer: any, folderName: any) => {
 
 const deleteImage = async (publicId: any) => {
   const result = await cloudinary.uploader.destroy(publicId);
-  console.log("Resultado eliminación:", result);
   return result;
 };
 
