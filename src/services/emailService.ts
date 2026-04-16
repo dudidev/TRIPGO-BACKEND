@@ -70,8 +70,6 @@ function generateBusinessEmail(businessName: string) {
 async function sendContactEmail({ name, email, message }: { name: string; email: string; message: string }) {
     checkEnvVars("MAIL_USER", "MAIL_PASSWORD", "MAIL_RECIPIENT");
 
-    console.log(`📧 [emailService] Alerta interna | negocio: "${name}"`);
-
     const dateTime = getFormattedDate();
     const html = buildContactEmailHtml({ name, email, message, dateTime });
 
@@ -84,7 +82,6 @@ async function sendContactEmail({ name, email, message }: { name: string; email:
         text: `Negocio: ${name}\nEmail: ${email}\nMensaje: ${message}\nFecha: ${dateTime}`,
     });
 
-    console.log(`✅ [emailService] Alerta enviada | messageId: ${info.messageId}`);
     return info;
 }
 
@@ -121,8 +118,6 @@ async function sendWelcomeEmail({
 
     const credEmail = generateBusinessEmail(businessName);
 
-    console.log(`🎉 [emailService] Bienvenida | negocio: "${businessName}" | para: ${email}`);
-
     const dateTime = getFormattedDate();
     const html = buildWelcomeEmailHtml({
         businessName,
@@ -151,7 +146,6 @@ async function sendWelcomeEmail({
         ].join("\n"),
     });
 
-    console.log(`✅ [emailService] Bienvenida enviada | messageId: ${info.messageId}`);
     return info;
 }
 
@@ -164,9 +158,6 @@ const sendUserWelcomeEmail = async (email: string, nombre: string) => {
         subject: "🎉 ¡Bienvenido a TripGO! Tu aventura comienza ahora",
         html: htmlContent
     });
-
-    console.log(`✅ Email de bienvenida enviado a: ${email}`);
-    // No lanzamos error para que no falle el registro si falla el email
 }
 
 // ─── sendItinerarioEmail ───────────────────────────────────────────────────────
@@ -185,8 +176,6 @@ const sendUserWelcomeEmail = async (email: string, nombre: string) => {
  */
 async function sendItinerarioEmail({ email, nombre, items }: { email: string; nombre: string; items: Array<{ nombre: string; direccion?: string; imagenUrl?: string; productos?: { nombre: string; precio: number; categoria: string }[] }> }) {
     checkEnvVars("MAIL_USER", "MAIL_PASSWORD");
-
-    console.log(`🗺️  [emailService] Itinerario | usuario: "${nombre}" | destino: ${email} | lugares: ${items.length}`);
 
     const dateTime = getFormattedDate();
     const html = buildItinerarioEmailHtml({ nombreUsuario: nombre, items, dateTime });
@@ -217,8 +206,6 @@ async function sendItinerarioEmail({ email, nombre, items }: { email: string; no
             `Visita: https://tripgoquindio.vercel.app/principal`,
         ].join("\n"),
     });
-
-    console.log(`✅ [emailService] Itinerario enviado | messageId: ${info.messageId}`);
     return info;
 }
 
@@ -232,8 +219,6 @@ const sendPasswordResetEmail = async (email: string, nombre: string, resetToken:
         subject: "🔐 Recupera tu contraseña de TripGO",
         html: htmlContent
     });
-
-    console.log(`✅ Email de recuperación enviado a: ${email}`);
 };
 
 

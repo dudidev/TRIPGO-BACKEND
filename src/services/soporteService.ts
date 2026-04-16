@@ -66,8 +66,6 @@ class SoporteService {
             subject: "Recibimos tu mensaje - TripGO Soporte",
             html: emailToUser
         });
-
-        console.log(`✅ Emails de soporte enviados para usuario #${usuario.id}`);
     }
 
     // ========== VALIDAR RATE LIMIT ==========

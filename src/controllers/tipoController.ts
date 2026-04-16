@@ -9,7 +9,6 @@ class TipoController {
 
 
     static async listarPorUbicacion(req: Request, res: Response) {
-        console.log(" LLEGÓ petición tipos por ubicacion:", req.params.town);
         const town = req.params.town;
         const rows = await TipoService.listarPorUbicacion(String(town));
         res.json({ ok: true, data: rows });
