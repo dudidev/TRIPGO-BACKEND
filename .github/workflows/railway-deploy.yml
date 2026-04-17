@@ -1,0 +1,34 @@
+name: Railway Deploy
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+
+jobs:
+  deploy-production:
+    name: Deploy to Production
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Railway Production Deploy
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"query": "mutation { serviceInstanceRedeploy(environmentId: \"${{ secrets.RAILWAY_PRODUCTION_ENVIRONMENT }}\", serviceId: \"${{ secrets.RAILWAY_SERVICE_ID }}\") }"}' \
+            https://backboard.railway.app/graphql/v2
+
+  deploy-staging:
+    name: Deploy to Staging
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Railway Staging Deploy
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"query": "mutation { serviceInstanceRedeploy(environmentId: \"${{ secrets.RAILWAY_STAGING_ENVIRONMENT }}\", serviceId: \"${{ secrets.RAILWAY_SERVICE_ID }}\") }"}' \
+            https://backboard.railway.app/graphql/v2
