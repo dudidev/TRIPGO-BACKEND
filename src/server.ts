@@ -1,6 +1,9 @@
 import "./config/env.js";
 import app from "./app.js";
 import pool  from "./config/db.js";
+import dns from 'dns';
+
+dns.setDefaultResultOrder('ipv4first');
 
 const PORT = process.env.PORT || 8080;
 
