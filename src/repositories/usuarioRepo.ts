@@ -3,11 +3,21 @@ import type { Usuario } from "../models/usuarioModel.js";
 
 class UsuarioRepo {
     static async crear(usuario: Usuario) {
+
         const [result] = await pool.query(
-            `INSERT INTO usuarios (nombre_usuario, correo_usuario, password_u, rol) VALUES (?, ?, ?, ?)`,
-            [usuario.nombre_usuario, usuario.correo_usuario, usuario.password_u, usuario.rol || "usuario"]
+            `INSERT INTO usuarios 
+        (nombre_usuario, correo_usuario, password_u, rol, google_id, auth_provider, foto) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [
+                usuario.nombre_usuario,
+                usuario.correo_usuario,
+                usuario.password_u || null,
+                usuario.rol || "usuario",
+                usuario.google_id || null,
+                usuario.auth_provider || "local"
+            ]
         );
-        // @ts-ignore
+
         return { insertId: (result as any).insertId };
     }
 

@@ -7,7 +7,10 @@ import * as fileType from "file-type";
 
 class UsuarioService {
     static async crear(usuario: Usuario) {
-        usuario.password_u = await hashPassword(usuario.password_u);
+        if (usuario.password_u) {
+            usuario.password_u = await hashPassword(usuario.password_u);
+        }
+
         const result = await UsuarioRepo.crear(usuario);
         return result;
     }
@@ -17,7 +20,7 @@ class UsuarioService {
         if (!user) throw new Error("Usuario no encontrado");
         const match = await comparePassword(password, user.password_u);
         if (!match) throw new Error("Credenciales inválidas");
-        const token = signToken({ id: user.id, correo: user.correo_usuario, rol: user.rol });
+        const token = signToken({ id: user.id, rol: user.rol });
         delete user.password_u;
         return { user, token };
     }
@@ -32,6 +35,14 @@ class UsuarioService {
             throw new Error("Usuario no encontrado");
         }
         return usuario;
+    }
+
+    static async obtenerPorEmail(email: string) {
+        const correo = await UsuarioRepo.findByEmail(email);
+        if (!correo) {
+            throw new Error("Email no encontrado");
+        }
+        return correo;
     }
 
     static async actualizar(id: number, data: Partial<Usuario>) {
