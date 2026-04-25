@@ -56,17 +56,12 @@ app.use(express.urlencoded({ extended: true }));
 
 // ─── Rutas ─────────────────────────────────────────────
 
+app.use((req, res, next) => {
+    res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+    next();
+});
 app.use("/", routes);
 app.use("/auth", authRoutes);
-
-// En tu router principal o app.ts del backend
-app.get('/health', (req, res) => {
-    res.json({
-        ok: true,
-        origin: req.headers['origin'] ?? 'no-origin',
-        userAgent: req.headers['user-agent']
-    });
-});
 
 app.get("/status", (_req: Request, res: Response) => {
     res.json({
