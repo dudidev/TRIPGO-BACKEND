@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import pool from "../config/db.js";
 import bcrypt from "bcrypt";
-import UsuarioService from '../services/usuarioService';
+import UsuarioService from '../services/usuarioService.js';
 import { verifyGoogleToken } from '../services/googleService.js';
 import { signToken } from "../utils/jwt.js";
 import { sendUserWelcomeEmail } from "../services/emailService.js";
