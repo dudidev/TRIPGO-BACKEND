@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import pool from "../config/db.js";
 import bcrypt from "bcrypt";
+import UsuarioService from '../services/usuarioService';
+import { verifyGoogleToken } from '../services/googleService.js';
 import { signToken } from "../utils/jwt.js";
 import { sendUserWelcomeEmail } from "../services/emailService.js";
 
@@ -29,12 +31,8 @@ const register = async (req: Request, res: Response) => {
         // Intentar enviar el email de bienvenida
         try {
             await sendUserWelcomeEmail(correo_usuario, nombre_usuario);
-        } catch (emailError) {
-            console.error("❌ Error al enviar email de bienvenida:", emailError);
-            return res.status(500).json({
-                message: "No se pudo enviar el correo de bienvenida. Verifica que el correo sea válido e intenta de nuevo.",
-                error: "El servicio de correo no está disponible"
-            });
+        } catch (e) {
+            console.error("❌ Error al enviar email de bienvenida");
         }
 
         // SOLO SI EL EMAIL SE ENVIÓ: Insertar nuevo usuario
@@ -81,7 +79,6 @@ const login = async (req: Request, res: Response) => {
 
         const token = signToken({
             id: user.id,
-            correo: user.correo_usuario,
             rol: user.rol
         });
 
@@ -97,7 +94,7 @@ const login = async (req: Request, res: Response) => {
 
         res.json({
             message: "Inicio de sesión exitoso",
-            user: {
+            usuario: {
                 id: user.id,
                 nombre_usuario: user.nombre_usuario,
                 correo_usuario: user.correo_usuario,
@@ -126,18 +123,67 @@ const logout = async (_req: Request, res: Response) => {
 };
 
 const me = async (req: Request, res: Response) => {
-    const { id } = (req as any).user;
-
-    const [rows]: any = await pool.query(
-        "SELECT id, nombre_usuario, correo_usuario, rol FROM usuarios WHERE id = ?",
-        [id]
-    );
-
-    if (rows.length === 0) {
-        return res.status(404).json({ message: "Usuario no encontrado" });
+    if (!req.user) {
+        return res.status(401).json({ mensaje: 'No autenticado' });
     }
 
-    res.json({ user: rows[0] });
+    const usuario = await UsuarioService.obtenerPorId(req.user.id);
+
+    return res.json({ user: usuario });
 };
 
+// ----------- Google Sign ---------
+export const googleLogin = async (req: Request, res: Response) => {
+    try {
+        const { token } = req.body;
+
+        if (!token) {
+            return res.status(400).json({ mensaje: 'Token requerido' });
+        }
+
+        const data = await verifyGoogleToken(token);
+
+        if (!data.email || !data.nombre || !data.googleId) {
+            return res.status(400).json({ mensaje: 'Datos de Google incompletos' });
+        }
+
+        let usuario = await UsuarioService.obtenerPorEmail(data.email);
+
+        if (!usuario) {
+            const result = await UsuarioService.crear({
+                nombre_usuario: data.nombre,
+                correo_usuario: data.email,
+                password_u: null,
+                google_id: data.googleId,
+                auth_provider: 'google'
+            });
+
+            usuario = await UsuarioService.obtenerPorId(result.insertId);
+        }
+
+        const jwt = signToken({
+            id: usuario.id,
+            rol: usuario.rol
+        });
+
+        const isProd = process.env.NODE_ENV === "production";
+
+        res.cookie("auth_token", jwt, {
+            httpOnly: true,
+            secure: isProd,
+            sameSite: isProd ? "none" : "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: "/"
+        });
+
+        return res.json({
+            usuario,
+            mensaje: 'Login con Google OK'
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(401).json({ mensaje: 'Error en login con Google' });
+    }
+};
 export { register, login, logout, me };
