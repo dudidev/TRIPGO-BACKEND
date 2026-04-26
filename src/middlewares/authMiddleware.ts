@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { verifyJwt } from '../utils/jwt.js'
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
@@ -7,14 +8,13 @@ if (!JWT_SECRET) {
 }
 
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-  // ✅ Leer desde cookie HttpOnly en vez del header Authorization
   const token = req.cookies?.["auth_token"];
 
   if (!token) return res.status(401).json({ error: "Token requerido" });
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    (req as any).user = decoded;
+    const decoded = verifyJwt(token);
+    req.user = decoded;
     next();
   } catch (error) {
     return res.status(403).json({ error: "Token inválido o expirado" });
@@ -23,7 +23,7 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
 
 const requireEmpresa = (req: Request, res: Response, next: NextFunction) => {
   const user = (req as any).user;
-  if (!user || user.rol !== "empresa") {
+  if (!req.user || req.user.rol !== "empresa") {
     return res.status(403).json({ error: "Acceso solo para empresa" });
   }
   next();

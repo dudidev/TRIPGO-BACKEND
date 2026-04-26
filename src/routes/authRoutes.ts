@@ -1,5 +1,5 @@
 import Router from "express";
-import { register, login, logout, me } from "../controllers/authController.js";
+import { register, login, logout, me, googleLogin } from "../controllers/authController.js";
 import passwordResetRoutes from "./passwordResetRoutes.js";
 import { verifyToken } from "../middlewares/authMiddleware.js";
 
@@ -111,6 +111,8 @@ router.post("/register", register);
  *         $ref: '#/components/responses/ServerError'
  */
 router.post("/login", login);
+
+router.post('/google', googleLogin);
 
 /**
  * @swagger

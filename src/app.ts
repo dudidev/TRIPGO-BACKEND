@@ -16,10 +16,16 @@ const app: Application = express();
 // ─── CORS ─────────────────────────────────────────────
 
 const allowedOrigins: string[] = [
-    "http://localhost:4200",
+
+    //Desplieuge
+    "https://tripgoapp.com",
+    "https://www.tripgoapp.com",
     "https://tripgoquindio.vercel.app",
     "https://www.tripgoquindio.vercel.app",
-    "https://tripgo-git-develop-dudidevs-projects.vercel.app",
+
+    //Pruebas
+    "http://localhost:4200",
+    "https://tripgo-git-develop-dudidevs-projects.vercel.app"
 ];
 
 const corsOptions: CorsOptions = {
@@ -56,17 +62,12 @@ app.use(express.urlencoded({ extended: true }));
 
 // ─── Rutas ─────────────────────────────────────────────
 
+app.use((req, res, next) => {
+    res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+    next();
+});
 app.use("/", routes);
 app.use("/auth", authRoutes);
-
-// En tu router principal o app.ts del backend
-app.get('/health', (req, res) => {
-    res.json({
-        ok: true,
-        origin: req.headers['origin'] ?? 'no-origin',
-        userAgent: req.headers['user-agent']
-    });
-});
 
 app.get("/status", (_req: Request, res: Response) => {
     res.json({
