@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 8080;
         app.listen(PORT, () => {
             console.log(`Environment: ${process.env.NODE_ENV}`);
             process.env.NODE_ENV == "production"
-            ? console.log(`TripGO backend corriendo en https://tripgo-backend-production.up.railway.app`)
+            ? console.log(`TripGO backend corriendo en https://api.tripgoapp.com`)
             : console.log(`TripGO backend corriendo en http://localhost:${PORT}`);
         });
 

@@ -16,10 +16,16 @@ const app: Application = express();
 // ─── CORS ─────────────────────────────────────────────
 
 const allowedOrigins: string[] = [
-    "http://localhost:4200",
+
+    //Desplieuge
+    "https://tripgoapp.com",
+    "https://www.tripgoapp.com",
     "https://tripgoquindio.vercel.app",
     "https://www.tripgoquindio.vercel.app",
-    "https://tripgo-git-develop-dudidevs-projects.vercel.app",
+
+    //Pruebas
+    "http://localhost:4200",
+    "https://tripgo-git-develop-dudidevs-projects.vercel.app"
 ];
 
 const corsOptions: CorsOptions = {
