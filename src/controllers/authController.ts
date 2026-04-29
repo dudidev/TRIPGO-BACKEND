@@ -88,6 +88,7 @@ const login = async (req: Request, res: Response) => {
             httpOnly: true,
             secure: isProd,
             sameSite: isProd ? "none" : "lax",
+            domain: isProd ? ".tripgoapp.com" : undefined,
             maxAge: 7 * 24 * 60 * 60 * 1000,
             path: "/"
         });
@@ -116,6 +117,7 @@ const logout = async (_req: Request, res: Response) => {
         httpOnly: true,
         secure: isProd,
         sameSite: isProd ? "none" : "lax",
+        domain: isProd ? ".tripgoapp.com" : undefined,
         path: "/"
     });
 
@@ -172,6 +174,7 @@ export const googleLogin = async (req: Request, res: Response) => {
             httpOnly: true,
             secure: isProd,
             sameSite: isProd ? "none" : "lax",
+            domain: isProd ? ".tripgoapp.com" : undefined,
             maxAge: 7 * 24 * 60 * 60 * 1000,
             path: "/"
         });
