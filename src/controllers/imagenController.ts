@@ -5,11 +5,14 @@ import type { Request, Response } from "express";
 const subirImagenLugar = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const file = (req as any).file;
+    const files = (req as any).files;
 
-    if (!file) {
-      return res.status(400).json({ message: "No se envió ninguna imagen" });
+    if (!files || files.length === 0) {
+      return res.status(400).json({
+        message: "No se enviaron imágenes",
+      });
     }
+
 
     const [rows]: any = await pool.query(
       "SELECT id_establecimiento FROM establecimiento WHERE id_establecimiento = ?",
@@ -17,24 +20,42 @@ const subirImagenLugar = async (req: Request, res: Response) => {
     );
 
     if (rows.length === 0) {
-      return res.status(404).json({ message: "El establecimiento no existe" });
+      return res.status(404).json({
+        message: "El establecimiento no existe",
+      });
     }
 
-    const result: any = await uploadToCloudinary(file.buffer, "establecimientos");
+    const imagenesSubidas = [];
 
-    await pool.query(
-      "INSERT INTO imagenes_e (id_lugar, url) VALUES (?, ?)",
-      [id, result.secure_url]
-    );
+    
+    for (const file of files) {
+      const result: any = await uploadToCloudinary(
+        file.buffer,
+        "establecimientos"
+      );
+
+      await pool.query(
+        "INSERT INTO imagenes_e (id_lugar, url) VALUES (?, ?)",
+        [id, result.secure_url]
+      );
+
+      imagenesSubidas.push({
+        url: result.secure_url,
+      });
+    }
 
     res.status(201).json({
-      message: "Imagen subida correctamente",
-      url: result.secure_url,
+      message: "Imágenes subidas correctamente",
+      total: imagenesSubidas.length,
+      imagenes: imagenesSubidas,
     });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error interno del servidor" });
+
+    res.status(500).json({
+      message: "Error interno del servidor",
+    });
   }
 };
 
@@ -49,14 +70,19 @@ const obtenerImagenesLugar = async (req: Request, res: Response) => {
 
     res.json({
       total: imagenes.length,
-      imagenes
+      imagenes,
     });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error al obtener las imágenes" });
+
+    res.status(500).json({
+      message: "Error al obtener las imágenes",
+    });
   }
 };
 
-
-export { subirImagenLugar, obtenerImagenesLugar };
+export {
+  subirImagenLugar,
+  obtenerImagenesLugar,
+};
