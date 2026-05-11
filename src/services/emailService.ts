@@ -9,6 +9,7 @@ import passwordResetEmailTemplate from "../templates/passwordResetEmail.tmeplate
 import soporteEmailToTeamTemplate from "../templates/soporteEmailToTeam.template.js";
 import soporteEmailToUserTemplate from "../templates/soporteEmailToUser.template.js";
 import verificationCodeEmailTemplate from "../templates/verificationCodeEmail.template.js";
+import onboardingEmailTemplate from "../templates/onboardingEmailTemplate.js";
 
 // ─── Cliente Resend ───────────────────────────────────────────────────────────
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -316,7 +317,48 @@ async function sendVerificationEmail(email: string, nombre: string, code: string
             `Si no creaste una cuenta, ignora este correo.`,
         ].join("\n"),
     });
-}
+    }
+
+    // ─── sendOnboardingEmail ─────────────────────────────────────────────────────
+/**
+ * Correo para continuar el proceso de onboarding del establecimiento.
+    */
+    async function sendOnboardingEmail({
+        email,
+        nombreContacto,
+        nombreEstablecimiento,
+        token,}: 
+        {
+        email: string;
+        nombreContacto: string;
+        nombreEstablecimiento: string;
+        token: string;
+    }): Promise<void> {
+
+        const onboardingLink = `${FRONTEND}/onboarding/${token}`;
+
+        const html = onboardingEmailTemplate(
+            nombreContacto,
+            nombreEstablecimiento,
+            onboardingLink
+        );
+
+        await send({
+            from: FROM,
+            to: email,
+            replyTo: REPLY_TO,
+            subject: `Completa el onboarding de ${nombreEstablecimiento} — TripGO`,
+            html,
+            text: [
+                `Hola ${nombreContacto},`,
+                `Recibimos la solicitud de ${nombreEstablecimiento}.`,
+                `Completa el onboarding aquí:`,
+                onboardingLink,
+                `El enlace tiene tiempo limitado de validez.`,
+            ].join("\n"),
+        });
+    }
+
 
 // ─── Exports ──────────────────────────────────────────────────────────────────
 export {
@@ -328,4 +370,5 @@ export {
     sendSoporteToTeam,
     sendSoporteToUser,
     sendVerificationEmail,
+    sendOnboardingEmail,
 };
