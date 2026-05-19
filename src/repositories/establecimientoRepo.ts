@@ -4,7 +4,7 @@ import { Establecimiento } from "../models/establecimientoModel.js";
 class EstablecimientoRepo {
     static async listar() {
     const [rows] = await pool.query(`
-        SELECT e.*,
+        SELECT e.nombre_establecimiento,
         (SELECT url FROM imagenes_e WHERE id_lugar = e.id_establecimiento LIMIT 1) AS imagen
         FROM establecimiento e
     `);
@@ -33,7 +33,6 @@ class EstablecimientoRepo {
         return { insertId: (res as any).insertId };
     }
 
-    // ✅ ENDPOINT: /establecimientos/mio (GET)
     static async getMio(req: any, res: any) {
         try {
             const userId = req.user.id;
@@ -54,7 +53,6 @@ class EstablecimientoRepo {
         }
     };
 
-    // ✅ ENDPOINT: /establecimientos/mio (PUT)
     static async updateMio(req: any, res: any) {
         try {
             const userId = req.user.id;
@@ -108,7 +106,6 @@ class EstablecimientoRepo {
         }
     };
 
-    //  ENDPOINT: /establecimientos/mios (GET) => traer TODOS mis establecimientos
     static async getMios(req: any, res: any) {
         try {
             const userId = req.user.id;
@@ -178,7 +175,7 @@ class EstablecimientoRepo {
                 ]
             );
 
-            // @ts-ignore (depende del driver, pero normalmente viene affectedRows)
+            // @ts-ignore 
             if (!result || result.affectedRows === 0) {
                 return res.status(404).json({
                     ok: false,

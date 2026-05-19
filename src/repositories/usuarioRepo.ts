@@ -32,7 +32,7 @@ class UsuarioRepo {
     }
 
     static async listar() {
-        const [rows] = await pool.query(`SELECT * FROM usuarios`);
+        const [rows] = await pool.query(`SELECT nombre_usuario, correo_usuario FROM usuarios`);
         return rows;
     }
 
