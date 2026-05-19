@@ -6,7 +6,7 @@ CREATE TABLE solicitudes_onboarding (
     telefono_contacto VARCHAR(50),
     descripcion TEXT NOT NULL,
     id_tipo INT NULL,
-		 FOREIGN KEY (id_tipo)
+		  FOREIGN KEY (id_tipo)
 			REFERENCES tipos(id_tipo),
     estado ENUM(
         'pendiente',
