@@ -15,6 +15,7 @@ import iaRoutes from "./iaRoutes.js";
 import favoritosRoutes from "./favoritosRoutes.js";
 import recomendacionRoutes from "./recomendacionRoutes.js";
 import soporteRoutes from "./soporteRoutes.js";
+import onboardingRoutes from "./onboardingRoutes.js";
 
 const router = Router();
 
@@ -34,6 +35,7 @@ router.use("/ia", iaRoutes);
 router.use("/favoritos", favoritosRoutes);
 router.use("/recomendaciones", recomendacionRoutes);
 router.use("/soporte", soporteRoutes);
+router.use("/onboarding", onboardingRoutes);
 
 
 router.get("/", (_req, _res) => _res.json({ ok: true, message: "API TripGO" }));
