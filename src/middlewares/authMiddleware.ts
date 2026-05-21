@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
-import { verifyJwt } from '../utils/jwt.js'
+import { verifyJwt } from '../utils/jwt.js';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
@@ -22,11 +21,17 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const requireEmpresa = (req: Request, res: Response, next: NextFunction) => {
-  const user = (req as any).user;
   if (!req.user || req.user.rol !== "empresa") {
     return res.status(403).json({ error: "Acceso solo para empresa" });
   }
   next();
 };
 
-export { verifyToken, requireEmpresa };
+const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user || req.user.rol !== "admin") {
+    return res.status(403).json({ error: "Acceso solo para administradores" });
+  }
+  next();
+};
+
+export { verifyToken, requireEmpresa, requireAdmin };
