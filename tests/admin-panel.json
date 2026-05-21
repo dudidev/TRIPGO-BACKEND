@@ -1,0 +1,123 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "TripGO — Admin Panel (Bloque 3)",
+    "dateExported": "2026-05-18",
+    "version": "1.2",
+    "requests": [
+        {
+            "name": "BE-07 ✅ Listar solicitudes (admin logueado)",
+            "url": "http://localhost:3000/admin/solicitudes",
+            "method": "GET",
+            "headers": [
+                {
+                    "name": "Cookie",
+                    "value": "auth_token={{ADMIN_TOKEN}}"
+                }
+            ],
+            "expect": {
+                "status": 200,
+                "body": {
+                    "solicitudes": []
+                }
+            },
+            "notes": "{{ADMIN_TOKEN}} debe ser un JWT válido con rol='admin'. Obtenlo haciendo login como admin."
+        },
+        {
+            "name": "BE-07 ❌ Sin token — 401",
+            "url": "http://localhost:3000/admin/solicitudes",
+            "method": "GET",
+            "headers": [],
+            "expect": {
+                "status": 401,
+                "body": {
+                    "error": "Token requerido"
+                }
+            }
+        },
+        {
+            "name": "BE-07 ❌ Token válido pero no es admin — 403",
+            "url": "http://localhost:3000/admin/solicitudes",
+            "method": "GET",
+            "headers": [
+                {
+                    "name": "Cookie",
+                    "value": "auth_token={{USER_TOKEN}}"
+                }
+            ],
+            "expect": {
+                "status": 403,
+                "body": {
+                    "error": "Acceso solo para administradores"
+                }
+            },
+            "notes": "{{USER_TOKEN}} es un JWT válido pero con rol='usuario'"
+        },
+        {
+            "name": "BE-08 ✅ Aprobar solicitud (ÉXITO)",
+            "url": "http://localhost:3000/admin/solicitudes/1/aprobar",
+            "method": "POST",
+            "headers": [
+                {
+                    "name": "Cookie",
+                    "value": "auth_token={{ADMIN_TOKEN}}"
+                }
+            ],
+            "expect": {
+                "status": 200,
+                "body": {
+                    "message": "Solicitud aprobada. Credenciales enviadas al negocio."
+                }
+            },
+            "notes": "Reemplazar 1 con un ID real de solicitud en estado 'en_revision' de la BD"
+        },
+        {
+            "name": "BE-08 ❌ Aprobar solicitud no encontrada — 404",
+            "url": "http://localhost:3000/admin/solicitudes/99999/aprobar",
+            "method": "POST",
+            "headers": [
+                {
+                    "name": "Cookie",
+                    "value": "auth_token={{ADMIN_TOKEN}}"
+                }
+            ],
+            "expect": {
+                "status": 404,
+                "body": {
+                    "message": "Solicitud no encontrada"
+                }
+            }
+        },
+        {
+            "name": "BE-08 ❌ Aprobar solicitud ya aprobada — 409",
+            "url": "http://localhost:3000/admin/solicitudes/1/aprobar",
+            "method": "POST",
+            "headers": [
+                {
+                    "name": "Cookie",
+                    "value": "auth_token={{ADMIN_TOKEN}}"
+                }
+            ],
+            "expect": {
+                "status": 409,
+                "body": {
+                    "message": "Solo se pueden aprobar solicitudes en revisión"
+                }
+            },
+            "notes": "Ejecutar después de un approve exitoso. Intenta aprobar de nuevo con el mismo ID."
+        },
+        {
+            "name": "BE-08 ❌ ID inválido — 400",
+            "url": "http://localhost:3000/admin/solicitudes/abc/aprobar",
+            "method": "POST",
+            "headers": [
+                {
+                    "name": "Cookie",
+                    "value": "auth_token={{ADMIN_TOKEN}}"
+                }
+            ],
+            "expect": {
+                "status": 400
+            }
+        }
+    ]
+}
