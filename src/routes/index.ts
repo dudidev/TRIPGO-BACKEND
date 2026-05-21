@@ -16,6 +16,7 @@ import favoritosRoutes from "./favoritosRoutes.js";
 import recomendacionRoutes from "./recomendacionRoutes.js";
 import soporteRoutes from "./soporteRoutes.js";
 import onboardingRoutes from "./onboardingRoutes.js";
+import adminRoutes from "./adminRoutes.js";
 
 const router = Router();
 
@@ -36,6 +37,7 @@ router.use("/favoritos", favoritosRoutes);
 router.use("/recomendaciones", recomendacionRoutes);
 router.use("/soporte", soporteRoutes);
 router.use("/onboarding", onboardingRoutes);
+router.use("/admin", adminRoutes);
 
 
 router.get("/", (_req, _res) => _res.json({ ok: true, message: "API TripGO" }));
