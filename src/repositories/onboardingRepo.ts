@@ -2,6 +2,21 @@ import pool from '../config/db.js';
 import { SolicitudOnboarding, CrearSolicitudDTO } from '../types/onboarding.types.js';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
 
+// ─── Helper: safe JSON parse ─────────────────────────────────────────────────
+
+function safeJsonParse(value: any): any {
+    if (value === null || value === undefined) return null;
+    if (typeof value === 'object') return value; // Ya es objeto
+    if (typeof value === 'string') {
+        try {
+            return JSON.parse(value);
+        } catch {
+            return null;
+        }
+    }
+    return null;
+}
+
 // ─── Crear solicitud inicial ────────────────────────────────────────────────
 
 export async function crearSolicitud(
@@ -28,18 +43,17 @@ export async function buscarPorToken(token: string): Promise<SolicitudOnboarding
 
     if (rows.length === 0) return null;
 
-    // Desestructuración + guard: TS no infiere que rows[0] existe aunque pasó el length check
     const [row] = rows;
     if (!row) return null;
 
     return {
         ...row,
-        datos_completos:  row['datos_completos']  ? JSON.parse(row['datos_completos'])  : null,
-        fotos:            row['fotos']            ? JSON.parse(row['fotos'])            : null,
-        servicios:        row['servicios']        ? JSON.parse(row['servicios'])        : null,
+        datos_completos: safeJsonParse(row['datos_completos']),
+        fotos: safeJsonParse(row['fotos']),
+        servicios: safeJsonParse(row['servicios']),
         token_expiracion: new Date(row['token_expiracion']),
-        created_at:       new Date(row['created_at']),
-        updated_at:       new Date(row['updated_at']),
+        created_at: new Date(row['created_at']),
+        updated_at: new Date(row['updated_at']),
     } as SolicitudOnboarding;
 }
 
