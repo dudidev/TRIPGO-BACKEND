@@ -10,6 +10,7 @@ import soporteEmailToTeamTemplate from "../templates/soporteEmailToTeam.template
 import soporteEmailToUserTemplate from "../templates/soporteEmailToUser.template.js";
 import verificationCodeEmailTemplate from "../templates/verificationCodeEmail.template.js";
 import onboardingEmailTemplate from "../templates/onboardingEmailTemplate.js";
+import rechazoOnboardingEmailTemplate from "../templates/rechazoOnboardingEmail.template.js";
 
 // ─── Cliente Resend ───────────────────────────────────────────────────────────
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -360,6 +361,41 @@ async function sendVerificationEmail(email: string, nombre: string, code: string
     }
 
 
+
+    // rechazo email 
+
+        async function sendRechazoOnboardingEmail({
+        email,
+        nombreContacto,
+        nombreEstablecimiento,
+        motivo,
+    }: {
+        email: string;
+        nombreContacto: string;
+        nombreEstablecimiento: string;
+        motivo?: string;
+    }): Promise<void> {
+
+        const html = rechazoOnboardingEmailTemplate(
+            nombreContacto,
+            nombreEstablecimiento,
+            motivo
+        );
+
+        await send({
+            from: FROM,
+            to: email,
+            replyTo: REPLY_TO,
+            subject: `Actualización de tu solicitud — TripGO`,
+            html,
+            text: [
+                `Hola ${nombreContacto},`,
+                `Tu solicitud para ${nombreEstablecimiento} no pudo ser aprobada.`,
+                motivo ? `Motivo: ${motivo}` : '',
+                `Para más información comunícate con TripGO.`,
+            ].join('\n'),
+        });
+    }
 // ─── Exports ──────────────────────────────────────────────────────────────────
 export {
     sendContactEmail,
@@ -371,4 +407,5 @@ export {
     sendSoporteToUser,
     sendVerificationEmail,
     sendOnboardingEmail,
+    sendRechazoOnboardingEmail,
 };

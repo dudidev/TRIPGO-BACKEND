@@ -85,3 +85,31 @@ export async function completarOnboarding(
         next(error);
     }
 }
+
+// ─── PATCH /onboarding/:id/rechazar ──────────────────────────────────
+
+export async function rechazarOnboarding(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+
+    try {
+
+        const idSolicitud = Number(req.params['id']);
+
+        const { motivo } = req.body;
+
+        await onboardingService.rechazarOnboarding(
+            idSolicitud,
+            motivo
+        );
+
+        res.status(200).json({
+            message: 'Solicitud rechazada correctamente.',
+        });
+
+    } catch (error) {
+        next(error);
+    }
+}

@@ -57,6 +57,35 @@ export async function buscarPorToken(token: string): Promise<SolicitudOnboarding
     } as SolicitudOnboarding;
 }
 
+export async function buscarPorId(
+    idSolicitud: number
+): Promise<SolicitudOnboarding | null> {
+
+    const [rows] = await pool.execute<RowDataPacket[]>(
+        `SELECT * FROM solicitudes_onboarding
+        WHERE id_solicitud = ?
+        LIMIT 1`,
+        [idSolicitud]
+    );
+
+    if (rows.length === 0) return null;
+
+    const [row] = rows;
+
+    if (!row) return null;
+
+    return {
+        ...row,
+        datos_completos: safeJsonParse(row['datos_completos']),
+        fotos: safeJsonParse(row['fotos']),
+        servicios: safeJsonParse(row['servicios']),
+        token_expiracion: new Date(row['token_expiracion']),
+        created_at: new Date(row['created_at']),
+        updated_at: new Date(row['updated_at']),
+    } as SolicitudOnboarding;
+}
+
+
 // ─── Actualizar solicitud a en_revision (paso 2) ─────────────────────────────
 
 export async function completarSolicitud(
@@ -70,5 +99,17 @@ export async function completarSolicitud(
         SET datos_completos = ?, fotos = ?, servicios = ?, estado = 'en_revision'
         WHERE token_formulario = ?`,
         [JSON.stringify(datos_completos), JSON.stringify(fotos), JSON.stringify(servicios), token]
+    );
+}
+
+
+export async function rechazarSolicitud(
+    idSolicitud: number
+): Promise<void> {
+    await pool.execute(
+        `UPDATE solicitudes_onboarding
+        SET estado = 'rechazado'
+        WHERE id_solicitud = ?`,
+        [idSolicitud]
     );
 }
