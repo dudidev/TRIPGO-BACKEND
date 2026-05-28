@@ -9,7 +9,8 @@
   "scripts": {
     "test": "echo No test",
     "dev": "cross-env NODE_ENV=development tsx watch src/server.ts",
-    "build": "tsc",
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc",
     "start": "cross-env NODE_ENV=production node dist/server.js"
   },
   "keywords": [],
