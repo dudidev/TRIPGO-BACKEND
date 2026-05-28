@@ -10,9 +10,11 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  ssl: process.env.NODE_ENV === 'production'  // ← SSL solo en producción
-    ? { rejectUnauthorized: false }
-    : undefined
+
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0,
+
+  connectTimeout: 10000,
 });
 
 export default pool;
