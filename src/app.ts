@@ -3,7 +3,6 @@ import cors, { CorsOptions } from "cors";
 import morgan from "morgan";
 
 import routes from "./routes/index.js";
-import authRoutes from "./routes/authRoutes.js";
 
 import { errorHandler } from "./middlewares/errorMiddleware.js";
 
@@ -66,8 +65,8 @@ app.use((req, res, next) => {
     res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
     next();
 });
+
 app.use("/", routes);
-app.use("/auth", authRoutes);
 
 app.get("/status", (_req: Request, res: Response) => {
     res.json({

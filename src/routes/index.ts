@@ -1,4 +1,5 @@
 import Router from "express"
+import authRoutes from "./authRoutes.js";
 import usuarioRoutes from "./usuarioRoutes.js";
 import tipoRoutes from"./tipoRoutes.js";
 import establecimientoRoutes from"./establecimientoRoutes.js";
@@ -21,6 +22,7 @@ import adminRoutes from "./adminRoutes.js";
 const router = Router();
 
 router.use("/usuarios", usuarioRoutes);
+router.use("/auth", authRoutes);
 router.use("/tipos", tipoRoutes);
 router.use("/establecimientos", establecimientoRoutes);
 router.use("/servicios", servicioRoutes);
