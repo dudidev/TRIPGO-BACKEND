@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import * as onboardingRepo from '../repositories/onboardingRepo.js';
-import { sendOnboardingEmail, sendRechazoOnboardingEmail } from './emailService.js';
+import { sendOnboardingEmail} from './emailService.js';
 import { CrearSolicitudDTO, CompletarSolicitudDTO, SolicitudOnboarding } from '../types/onboarding.types.js';
 
 const TOKEN_EXPIRACION_HORAS = 72;
@@ -103,39 +103,3 @@ export async function completarOnboarding(
     await onboardingRepo.completarSolicitud(token, datos_completos, fotos, servicios);
 }
 
-
-
-export async function rechazarOnboarding(
-    idSolicitud: number,
-    motivo?: string
-): Promise<void> {
-
-    const solicitud = await onboardingRepo.buscarPorId(idSolicitud);
-
-    if (!solicitud) {
-        const error = new Error('Solicitud no encontrada.') as Error & { status?: number };
-        error.status = 404;
-        throw error;
-    }
-
-    if (solicitud.estado === 'rechazado') {
-        const error = new Error('La solicitud ya fue rechazada.') as Error & { status?: number };
-        error.status = 409;
-        throw error;
-    }
-
-    if (solicitud.estado === 'aprobado') {
-        const error = new Error('No puedes rechazar una solicitud aprobada.') as Error & { status?: number };
-        error.status = 409;
-        throw error;
-    }
-
-    await onboardingRepo.rechazarSolicitud(idSolicitud);
-
-    await sendRechazoOnboardingEmail({
-        email: solicitud.correo_contacto,
-        nombreContacto: solicitud.nombre_contacto,
-        nombreEstablecimiento: solicitud.nombre_establecimiento,
-        motivo,
-    });
-}

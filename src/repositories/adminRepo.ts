@@ -70,3 +70,15 @@ export async function actualizarEstado(
         [estado, id]
     );
 }
+
+export async function rechazarSolicitud(
+    id: number
+): Promise<void> {
+
+    await pool.execute<ResultSetHeader>(
+        `UPDATE solicitudes_onboarding
+         SET estado = 'rechazado'
+         WHERE id_solicitud = ?`,
+        [id]
+    );
+}

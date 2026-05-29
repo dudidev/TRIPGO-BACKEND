@@ -5,7 +5,7 @@ import { verifyToken, requireAdmin } from '../middlewares/authMiddleware.js';
 import { validateRequest } from '../middlewares/validateRequest.js';
 
 import * as adminController from '../controllers/adminController.js';
-import * as onboardingController from '../controllers/onboardingController.js';
+
 
 const router = Router();
 
@@ -41,7 +41,7 @@ router.patch(
             .withMessage('Máximo 500 caracteres.')
     ],
     validateRequest,
-    onboardingController.rechazarOnboarding
+    adminController.rechazar
 );
 
 export default router;

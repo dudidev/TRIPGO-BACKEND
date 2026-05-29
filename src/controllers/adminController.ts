@@ -15,7 +15,7 @@ export async function listarSolicitudes(
         next(error);
     }
 }
-
+ 
 // ─── BE-08: POST /admin/solicitudes/:id/aprobar ──────────────────────────────
 
 export async function aprobar(
@@ -36,6 +36,42 @@ export async function aprobar(
         res.status(200).json({
             message: 'Solicitud aprobada. Credenciales enviadas al negocio.',
         });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+export async function rechazar(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+
+    try {
+
+        const idSolicitud = Number(req.params['id']);
+
+        if (!idSolicitud || isNaN(idSolicitud)) {
+
+            res.status(400).json({
+                message: 'ID de solicitud inválido.',
+            });
+
+            return;
+        }
+
+        const { motivo } = req.body;
+
+        await adminService.rechazarSolicitud(
+            idSolicitud,
+            motivo
+        );
+
+        res.status(200).json({
+            message: 'Solicitud rechazada correctamente.',
+        });
+
     } catch (error) {
         next(error);
     }

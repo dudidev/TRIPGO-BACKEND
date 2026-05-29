@@ -102,14 +102,3 @@ export async function completarSolicitud(
     );
 }
 
-
-export async function rechazarSolicitud(
-    idSolicitud: number
-): Promise<void> {
-    await pool.execute(
-        `UPDATE solicitudes_onboarding
-        SET estado = 'rechazado'
-        WHERE id_solicitud = ?`,
-        [idSolicitud]
-    );
-}

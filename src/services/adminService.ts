@@ -2,7 +2,7 @@ import * as adminRepo from '../repositories/adminRepo.js';
 import UsuarioRepo from '../repositories/usuarioRepo.js';
 import EstablecimientoRepo from '../repositories/establecimientoRepo.js';
 import { hashPassword, generateSecurePassword } from '../utils/password.js';
-import { sendWelcomeEmail } from './emailService.js';
+import { sendWelcomeEmail , sendRechazoOnboardingEmail} from './emailService.js';
 import { SolicitudOnboarding } from '../types/onboarding.types.js';
 
 // ─── Helper: generar email @tripgoapp.com ─────────────────────────────────────
@@ -85,4 +85,39 @@ export async function aprobarSolicitud(id: number): Promise<void> {
 
     // Marcar solicitud como aprobada
     await adminRepo.actualizarEstado(id, 'aprobado');
+}
+
+export async function rechazarSolicitud(
+    idSolicitud: number,
+    motivo?: string
+): Promise<void> {
+
+    const solicitud = await adminRepo.getSolicitudById(idSolicitud);
+
+    if (!solicitud) {
+        const error = new Error('Solicitud no encontrada.') as Error & { status?: number };
+        error.status = 404;
+        throw error;
+    }
+
+    if (solicitud.estado === 'rechazado') {
+        const error = new Error('La solicitud ya fue rechazada.') as Error & { status?: number };
+        error.status = 409;
+        throw error;
+    }
+
+    if (solicitud.estado === 'aprobado') {
+        const error = new Error('No puedes rechazar una solicitud aprobada.') as Error & { status?: number };
+        error.status = 409;
+        throw error;
+    }
+
+    await adminRepo.rechazarSolicitud(idSolicitud);
+
+    await sendRechazoOnboardingEmail({
+        email: solicitud.correo_contacto,
+        nombreContacto: solicitud.nombre_contacto,
+        nombreEstablecimiento: solicitud.nombre_establecimiento,
+        motivo,
+    });
 }
