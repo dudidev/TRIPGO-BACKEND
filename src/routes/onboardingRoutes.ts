@@ -75,20 +75,4 @@ router.post(
 
 
 
-router.patch(
-    '/:id/rechazar',
-    [
-        param('id')
-            .isInt().withMessage('ID inválido.'),
-
-        body('motivo')
-            .optional()
-            .isString()
-            .isLength({ max: 500 })
-            .withMessage('Máximo 500 caracteres.')
-    ],
-    validateRequest,
-    onboardingController.rechazarOnboarding
-);
-
 export default router;

@@ -1,8 +1,11 @@
 import { Router } from 'express';
-import { param } from 'express-validator';
+import { body, param } from 'express-validator';
+
 import { verifyToken, requireAdmin } from '../middlewares/authMiddleware.js';
 import { validateRequest } from '../middlewares/validateRequest.js';
+
 import * as adminController from '../controllers/adminController.js';
+import * as onboardingController from '../controllers/onboardingController.js';
 
 const router = Router();
 
@@ -22,6 +25,23 @@ router.post(
     ],
     validateRequest,
     adminController.aprobar
+);
+
+router.patch(
+    '/solicitudes/:id/rechazar',
+    [
+        param('id')
+            .isInt({ min: 1 })
+            .withMessage('ID inválido.'),
+
+        body('motivo')
+            .optional()
+            .isString()
+            .isLength({ max: 500 })
+            .withMessage('Máximo 500 caracteres.')
+    ],
+    validateRequest,
+    onboardingController.rechazarOnboarding
 );
 
 export default router;
