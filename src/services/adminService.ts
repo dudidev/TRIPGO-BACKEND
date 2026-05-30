@@ -4,6 +4,7 @@ import EstablecimientoRepo from '../repositories/establecimientoRepo.js';
 import { hashPassword, generateSecurePassword } from '../utils/password.js';
 import { sendWelcomeEmail , sendRechazoOnboardingEmail} from './emailService.js';
 import { SolicitudOnboarding } from '../types/onboarding.types.js';
+import { deleteImage } from './cloudinaryService.js';
 
 // ─── Helper: generar email @tripgoapp.com ─────────────────────────────────────
 
@@ -111,6 +112,27 @@ export async function rechazarSolicitud(
         error.status = 409;
         throw error;
     }
+
+    if (Array.isArray(solicitud.fotos)) {
+
+    for (const foto of solicitud.fotos as any[]) {
+
+        if (foto.public_id) {
+
+            try {
+                await deleteImage(foto.public_id);
+            } catch (error) {
+                console.error(
+                    `Error eliminando imagen ${foto.public_id}`,
+                    error
+                );
+            }
+
+        }
+
+    }
+
+}
 
     await adminRepo.rechazarSolicitud(idSolicitud);
 

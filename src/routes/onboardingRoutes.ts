@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import { body, param } from 'express-validator';
-import { validateRequest } from '../middlewares/validateRequest.js'; // helper que verifica validationResult
+
+import upload from '../middlewares/upload.js';
+import { validateRequest } from '../middlewares/validateRequest.js';
+
 import * as onboardingController from '../controllers/onboardingController.js';
 
 const router = Router();
@@ -37,7 +40,6 @@ router.post(
 );
 
 // ─── GET /onboarding/:token ──────────────────────────────────────────────────
-// Pública — valida token en el service
 
 router.get(
     '/:token',
@@ -48,8 +50,20 @@ router.get(
     onboardingController.getSolicitudPorToken
 );
 
+// ─── POST /onboarding/:token/fotos ───────────────────────────────────────────
+// Sube imágenes a Cloudinary y devuelve URLs
+
+router.post(
+    '/:token/fotos',
+    [
+        param('token').notEmpty().withMessage('Token requerido.'),
+    ],
+    validateRequest,
+    upload.array('imagenes', 8),
+    onboardingController.subirFotosOnboarding
+);
+
 // ─── POST /onboarding/:token/completar ──────────────────────────────────────
-// Pública — valida token en el service
 
 router.post(
     '/:token/completar',
@@ -61,18 +75,19 @@ router.post(
             .isObject().withMessage('datos_completos debe ser un objeto.'),
 
         body('fotos')
-            .isArray({ min: 3, max: 8 }).withMessage('Debes subir entre 3 y 8 fotos.'),
+            .isArray({ min: 3, max: 8 })
+            .withMessage('Debes subir entre 3 y 8 fotos.'),
 
         body('fotos.*')
-            .isURL().withMessage('Cada foto debe ser una URL válida.'),
+            .isURL()
+            .withMessage('Cada foto debe ser una URL válida.'),
 
         body('servicios')
-            .isArray().withMessage('servicios debe ser un array.'),
+            .isArray()
+            .withMessage('servicios debe ser un array.'),
     ],
     validateRequest,
     onboardingController.completarOnboarding
 );
-
-
 
 export default router;

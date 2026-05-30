@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as onboardingService from '../services/onboardingService.js';
+import { uploadToCloudinary } from '../services/cloudinaryService.js';
+
 
 // ─── BE-02: POST /onboarding/solicitud-inicial ───────────────────────────────
 
@@ -86,3 +88,58 @@ export async function completarOnboarding(
     }
 }
 
+// ─── POST /onboarding/:token/fotos ──────────────────────────────────────────
+
+export async function subirFotosOnboarding(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+
+    try {
+
+        const token = req.params['token'];
+
+        if (!token) {
+            res.status(400).json({
+                message: 'Token requerido.',
+            });
+            return;
+        }
+
+        const files = (req as any).files;
+
+        if (!files || files.length === 0) {
+            res.status(400).json({
+                message: 'Debes enviar al menos una imagen.',
+            });
+            return;
+        }
+
+        const fotos: {
+            url: string;
+            public_id: string;
+        }[] = [];
+
+        for (const file of files) {
+
+            const result: any = await uploadToCloudinary(
+                file.buffer,
+                'onboardingImages'
+            );
+
+            fotos.push({
+                url: result.secure_url,
+                public_id: result.public_id,
+            });
+        }
+
+        res.status(200).json({
+            message: 'Imágenes cargadas correctamente.',
+            fotos,
+        });
+
+    } catch (error) {
+        next(error);
+    }
+}
