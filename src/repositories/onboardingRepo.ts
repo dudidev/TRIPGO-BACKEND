@@ -1,6 +1,9 @@
 import pool from '../config/db.js';
 import { SolicitudOnboarding, CrearSolicitudDTO } from '../types/onboarding.types.js';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
+import {
+    DatosCompletos
+} from '../types/onboarding.types.js';
 
 // ─── Helper: safe JSON parse ─────────────────────────────────────────────────
 
@@ -90,7 +93,7 @@ export async function buscarPorId(
 
 export async function completarSolicitud(
     token: string,
-    datos_completos: Record<string, unknown>,
+    datos_completos: DatosCompletos,
     fotos: string[],
     servicios: string[]
 ): Promise<void> {

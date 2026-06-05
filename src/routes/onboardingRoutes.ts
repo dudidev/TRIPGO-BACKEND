@@ -68,23 +68,88 @@ router.post(
 router.post(
     '/:token/completar',
     [
-        param('token').notEmpty().withMessage('Token requerido.'),
+
+        param('token')
+            .notEmpty()
+            .withMessage('Token requerido.'),
 
         body('datos_completos')
-            .notEmpty().withMessage('Los datos del establecimiento son obligatorios.')
-            .isObject().withMessage('datos_completos debe ser un objeto.'),
+            .notEmpty()
+            .withMessage('Los datos del establecimiento son obligatorios.')
+            .isObject()
+            .withMessage('datos_completos debe ser un objeto.'),
+
+        // ─── Categoría ─────────────────────────────
+
+        body('datos_completos.categoria')
+            .trim()
+            .notEmpty()
+            .withMessage('La categoría es obligatoria.'),
+
+        // ─── Ubicación ─────────────────────────────
+
+        body('datos_completos.ubicacion.departamento')
+            .trim()
+            .notEmpty()
+            .withMessage('El departamento es obligatorio.'),
+
+        body('datos_completos.ubicacion.municipio')
+            .trim()
+            .notEmpty()
+            .withMessage('El municipio es obligatorio.'),
+
+        body('datos_completos.ubicacion.direccion')
+            .trim()
+            .notEmpty()
+            .withMessage('La dirección es obligatoria.'),
+
+        body('datos_completos.ubicacion.googleMaps')
+            .optional({ nullable: true, checkFalsy: true })
+            .isURL()
+            .withMessage('El enlace de Google Maps no es válido.'),
+
+        // ─── Contacto ──────────────────────────────
+
+        body('datos_completos.contacto.representante')
+            .trim()
+            .notEmpty()
+            .withMessage('El representante es obligatorio.'),
+
+        body('datos_completos.contacto.telefono')
+            .trim()
+            .notEmpty()
+            .withMessage('El teléfono es obligatorio.'),
+
+        body('datos_completos.contacto.whatsapp')
+            .optional({ nullable: true, checkFalsy: true }),
+
+        // ─── Experiencia ───────────────────────────
+
+        body('datos_completos.experiencia.descripcionCompleta')
+            .trim()
+            .notEmpty()
+            .withMessage('La descripción completa es obligatoria.')
+            .isLength({ min: 50 })
+            .withMessage('La descripción debe tener al menos 50 caracteres.'),
+
+        body('datos_completos.experiencia.queHaceUnico')
+            .trim()
+            .notEmpty()
+            .withMessage('Debes indicar qué hace único tu establecimiento.')
+            .isLength({ min: 20 })
+            .withMessage('Debe tener al menos 20 caracteres.'),
+
+        // ─── Fotos ─────────────────────────────────
 
         body('fotos')
             .isArray({ min: 3, max: 8 })
             .withMessage('Debes subir entre 3 y 8 fotos.'),
 
         body('fotos.*')
-            .isURL()
-            .withMessage('Cada foto debe ser una URL válida.'),
+            .isURL().withMessage('Cada foto debe ser una URL válida.'),
 
         body('servicios')
-            .isArray()
-            .withMessage('servicios debe ser un array.'),
+            .isArray().withMessage('servicios debe ser un array.'),
     ],
     validateRequest,
     onboardingController.completarOnboarding

@@ -46,12 +46,32 @@ export async function getSolicitudPorToken(
         const { solicitud } = await onboardingService.obtenerSolicitudPorToken(token);
 
         res.status(200).json({
-            nombre_establecimiento: solicitud.nombre_establecimiento,
-            nombre_contacto: solicitud.nombre_contacto,
-            correo_contacto: solicitud.correo_contacto,
-            descripcion: solicitud.descripcion,
-            estado: solicitud.estado,
-        });
+    id_solicitud: solicitud.id_solicitud,
+
+    nombre_establecimiento:
+        solicitud.nombre_establecimiento,
+
+    nombre_contacto:
+        solicitud.nombre_contacto,
+
+    correo_contacto:
+        solicitud.correo_contacto,
+
+    descripcion:
+        solicitud.descripcion,
+
+    estado:
+        solicitud.estado,
+
+    datos_completos:
+        solicitud.datos_completos,
+
+    servicios:
+        solicitud.servicios,
+
+    fotos:
+        solicitud.fotos
+});
     } catch (error) {
         next(error);
     }
