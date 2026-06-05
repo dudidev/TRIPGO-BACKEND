@@ -59,18 +59,18 @@ export async function aprobarSolicitud(id: number): Promise<void> {
 
     // Crear establecimiento vinculado al usuario
     const resultEstablecimiento = await EstablecimientoRepo.crear({
-        nombre_establecimiento: solicitud.nombre_establecimiento,
-        descripcion: solicitud.descripcion,
-        direccion: solicitud.datos_completos?.direccion ?? '',
-        ubicacion: solicitud.datos_completos?.ubicacion ?? '',
-        id_propietario: idUsuario,
-        estado: 'activo',
-        tipo: solicitud.datos_completos?.tipo ?? 1,
-        horario_apertura: solicitud.datos_completos?.horario_apertura ?? '08:00',
-        horario_cierre: solicitud.datos_completos?.horario_cierre ?? '18:00',
-        telefono: solicitud.datos_completos?.telefono ?? '',
-        correo: solicitud.correo_contacto,
-    } as any);
+    nombre_establecimiento: solicitud.nombre_establecimiento,
+    descripcion:            solicitud.descripcion,
+    direccion:              solicitud.datos_completos?.ubicacion?.direccion ?? '',
+    ubicacion:              solicitud.datos_completos?.ubicacion?.municipio ?? '',
+    id_propietario:         idUsuario,
+    estado:                 'activo',
+    tipo:                  1,
+     horario_apertura:       '08:00',
+    horario_cierre:         '18:00',
+    telefono:               solicitud.datos_completos?.contacto?.telefono ?? '',
+    correo:                 solicitud.correo_contacto,
+} as any);
 
     const idEstablecimiento = resultEstablecimiento.insertId;
 
